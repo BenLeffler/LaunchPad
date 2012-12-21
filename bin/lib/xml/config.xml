@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+	<value name="test1" value="You can retrieve this string in app by calling LaunchPad.getValue('test1')" />
+	
+	<asset url="lib/swf/asset1.swf" label="Loading Asset1" id="one" postload="false" />
+	<asset url="lib/xml/sample.xml" label="Loading XML" id="xml" postload="false" />
+	<asset url="lib/3rd/asset1.3rd" label="Loading Zip" id="zip" postload="false" />
+	<asset url="lib/json/sample.json" label="Loading JSON" id="json" postload="false" />
+	
+	<analytics tracking_id="" />
+	
+	<application name="LaunchPad Example" version="0.1.0" force_mobile_profile="false" />
+	
+</data>
