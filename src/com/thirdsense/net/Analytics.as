@@ -16,7 +16,7 @@ package com.thirdsense.net
 	{
 		private static var uuid:String;
 		
-		public static function trackScreen( screen:String ):Boolean
+		public static function trackScreen( screen_name:String ):Boolean
 		{
 			if ( !uuid || !uuid.length )
 			{
@@ -30,7 +30,7 @@ package com.thirdsense.net
 				cid:uuid,
 				an:LPSettings.APP_NAME,
 				av:LPSettings.APP_VERSION,
-				cd:screen,
+				cd:screen_name,
 				t:"appview"
 			}
 			
@@ -45,17 +45,27 @@ package com.thirdsense.net
 			url_request.data = vars;
 			url_request.url = "http://www.google-analytics.com/collect";
 			
+			var success:Boolean = true;
+			
 			try
 			{
 				sendToURL(url_request);
 			}
 			catch (e:*)
 			{
-				// return false;
+				success = false;
 			}
 			
-			trace( "Analytics screen tracked: " + screen );
-			return true;
+			if ( success )
+			{
+				trace( "LaunchPad", Analytics, "Analytics screen tracked: '" + screen_name + "'" );
+			}
+			else
+			{
+				trace( "LaunchPad", Analytics, "Analytics screen tracking failed: '" + screen_name + "'" );
+			}
+			
+			return success;
 		}
 		
 		public static function trackEvent( category:String, action:String, label:String = "", value:Number = 0 ):Boolean
@@ -94,16 +104,27 @@ package com.thirdsense.net
 			url_request.data = vars;
 			url_request.url = "http://www.google-analytics.com/collect";
 			
+			var success:Boolean = true;
+			
 			try
 			{
 				sendToURL(url_request);
 			}
 			catch (e:*)
 			{
-				// return false;
+				success = false;
 			}
 			
-			return true;
+			if ( success )
+			{
+				trace( "LaunchPad", Analytics, "Analytics event tracked: '" + action + "'" );
+			}
+			else
+			{
+				trace( "LaunchPad", Analytics, "Analytics event tracking failed: '" + action + "'" );
+			}
+			
+			return success;
 			
 		}
 		
@@ -113,7 +134,7 @@ package com.thirdsense.net
 			uuid = assignUUID();
 		}
 		
-		public static function assignUUID():String
+		private static function assignUUID():String
 		{
 			var hex:Array = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" ];
 			var str:String = "";
