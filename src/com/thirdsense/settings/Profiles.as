@@ -3,10 +3,12 @@ package com.thirdsense.settings
 	import flash.external.ExternalInterface;
 	import flash.net.LocalConnection;
 	import flash.system.Capabilities;
+	
 	/**
 	 * ...
 	 * @author Ben Leffler
 	 */
+	
 	public class Profiles 
 	{
 		public static const DEVICE_ANDROID_PHONE:String = "deviceAndroidPhone";
@@ -72,11 +74,11 @@ package com.thirdsense.settings
 					}
 				}
 				
-				trace( Profiles, "Device type detected and set to: " + _CURRENT_DEVICE );
+				trace( "LaunchPad", Profiles, "Device type detected and set to: " + _CURRENT_DEVICE );
 				
 			} else {
 				_CURRENT_DEVICE = val;				
-				trace( Profiles, "Device type set to: " + _CURRENT_DEVICE );
+				trace( "LaunchPad", Profiles, "Device type set to: " + _CURRENT_DEVICE );
 			}
 			
 			

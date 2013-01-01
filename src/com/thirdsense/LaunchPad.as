@@ -3,20 +3,13 @@ package com.thirdsense
 	import com.thirdsense.animation.BTween;
 	import com.thirdsense.core.Preload;
 	import com.thirdsense.data.LPAsset;
-	import com.thirdsense.data.LPAssetClient;
 	import com.thirdsense.data.LPValue;
 	import com.thirdsense.settings.LPSettings;
 	import com.thirdsense.settings.Profiles;
 	import com.thirdsense.utils.FlashVars;
-	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.display.Stage;
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.utils.getQualifiedClassName;
-	import flash.utils.getQualifiedSuperclassName;
-	import flash.utils.setTimeout;
 	
 	/**
 	 * LaunchPad Contructor
@@ -24,7 +17,7 @@ package com.thirdsense
 	 * @version 1.0.0
 	 */
 	
-	public class LaunchPad extends Sprite
+	public class LaunchPad
 	{
 		public static var instance:LaunchPad;
 		
@@ -62,7 +55,7 @@ package com.thirdsense
 			if ( live_extension != null ) LPSettings.LIVE_EXTENSION = String(live_extension);
 			
 			// Call a start to the engine
-			this.addEventListener(Event.ENTER_FRAME, this.processEngine, false, 0, true);
+			this._target.addEventListener(Event.ENTER_FRAME, this.processEngine, false, 0, true);
 			
 			// Call the preload on the next frame (because the stage size has to initialize first)
 			BTween.callOnNextFrame( Preload.load, [preloader, this.onPreloadComplete] );
