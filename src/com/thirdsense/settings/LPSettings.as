@@ -28,9 +28,29 @@ package com.thirdsense.settings
 		public static var APP_VERSION:String = "";
 		
 		/**
-		 * 
+		 * Application is forcing mobile profile (passed through from config.xml)
 		 */
 		public static var FORCE_MOBILE_PROFILE:Boolean = false;
+		
+		/**
+		 * Facebook application ID (passed through from config.xml)
+		 */
+		public static var FACEBOOK_APP_ID:String = "";
+		
+		/**
+		 * Facebook redirection URL as defined in the Facebook Developer portal (passed through from config.xml)
+		 */
+		public static var FACEBOOK_REDIRECT_URL:String = "";
+		
+		/**
+		 * The location of the Facebook wall picture to be used in stream posts (passed through from config.xml). This must exist within a domain that is listed in the FB Dev portal record for the app.
+		 */
+		public static var FACEBOOK_WALLPIC_URL:String = "";
+		
+		/**
+		 * An array of requested permissions the app will request upon a user's first connection to Facebook through the app. (passed through from config.xml)
+		 */
+		public static var FACEBOOK_PERMISSIONS:Array;
 		
 	}
 

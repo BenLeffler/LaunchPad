@@ -1,13 +1,9 @@
 ﻿package  
 {
 	import com.thirdsense.LaunchPad;
-	import com.thirdsense.settings.Profiles;
-	import com.thirdsense.sound.SoundShape;
-	import com.thirdsense.sound.SoundStream;
-	import com.thirdsense.utils.AdjustColors;
-	import com.thirdsense.utils.Trig;
+	import com.thirdsense.settings.LPSettings;
+	import com.thirdsense.social.FacebookInterface;
 	import flash.display.MovieClip;
-	import flash.media.SoundChannel;
 	
 	/**
 	 * ...
@@ -28,7 +24,6 @@
 		{
 			
 		}
-		
 		
 	}
 

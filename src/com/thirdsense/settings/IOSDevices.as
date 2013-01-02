@@ -77,6 +77,11 @@ package com.thirdsense.settings
 			return false;
 		}
 		
+		/**
+		 * Checks if the device utilises Ipad retina display
+		 * @return	Boolean value response
+		 */
+		
 		public static function checkIpadRetina():Boolean
 		{
 			if ( Profiles.isIOS() )

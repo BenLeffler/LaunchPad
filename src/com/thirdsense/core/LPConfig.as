@@ -4,6 +4,7 @@ package com.thirdsense.core
 	import com.thirdsense.data.LPValue;
 	import com.thirdsense.net.Analytics;
 	import com.thirdsense.settings.LPSettings;
+	import com.thirdsense.social.FacebookInterface;
 	/**
 	 * ...
 	 * @author Ben Leffler
@@ -20,7 +21,9 @@ package com.thirdsense.core
 		public final function parse( data:XML ):void
 		{
 			this.data = data;
+			
 			parseApplication();
+			parseFacebook();
 			parseAssets();
 			parseValues();
 			parseAnalytics();
@@ -57,6 +60,22 @@ package com.thirdsense.core
 			{
 				LPSettings.ANALYTICS_TRACKING_ID = String( this.data.analytics.@tracking_id );
 				Analytics.init();
+			}
+		}
+		
+		private function parseFacebook():void
+		{
+			if ( this.data.facebook && String(this.data.facebook.@appId).length )
+			{
+				LPSettings.FACEBOOK_APP_ID = String( this.data.facebook.@appId );
+				LPSettings.FACEBOOK_REDIRECT_URL = String( this.data.facebook.@redirect_url );
+				LPSettings.FACEBOOK_WALLPIC_URL = String( this.data.facebook.@wallpic_url );
+				LPSettings.FACEBOOK_PERMISSIONS = new Array();
+				for ( var i:uint = 0; this.data.facebook.permission[i]; i++ )
+				{
+					LPSettings.FACEBOOK_PERMISSIONS.push( this.data.facebook.permission[i] );
+				}
+				FacebookInterface.clearConstructors();
 			}
 		}
 		

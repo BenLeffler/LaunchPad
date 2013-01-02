@@ -58,12 +58,12 @@
     <element path="swc\thirdsense.swc" />
     <element path="swc\mute.swc" />
     <element path="swc\MonsterDebugger.swc" />
-    <element path="swc\GraphAPI_Mobile_1_8_1.swc" />
     <element path="swc\VibrationActionScriptLibrary.swc" />
     <element path="swc\analytics.swc" />
     <element path="swc\starling_1_2.swc" />
     <element path="swc\starling.swc" />
     <element path="swc\fzip.swc" />
+    <element path="swc\GraphAPI_Mobile_1_8_1.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

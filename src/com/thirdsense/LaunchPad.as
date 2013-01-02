@@ -9,6 +9,7 @@ package com.thirdsense
 	import com.thirdsense.utils.FlashVars;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.events.Event;
 	
 	/**
@@ -61,10 +62,16 @@ package com.thirdsense
 			BTween.callOnNextFrame( Preload.load, [preloader, this.onPreloadComplete] );
 		}
 		
+		/**
+		 * Callback to the completion function as passed through to init
+		 */
+		
 		private function onPreloadComplete():void
 		{
 			Profiles.CURRENT_DEVICE = Profiles.DEVICE_DETECT;
+			
 			this.onCompleteInit();
+			this.onCompleteInit = null;
 		}
 		
 		/**
@@ -75,6 +82,20 @@ package com.thirdsense
 		{
 			return this._target;
 		}
+		
+		/**
+		 * Returns the root clips native stage
+		 */
+		
+		public function get nativeStage():Stage
+		{
+			return this._target.stage;
+		}
+		
+		/**
+		 * Function called on an EnterFrame event to process the core engine (such as tweens)
+		 * @param	evt	EnterFrame event called on the launchpad target
+		 */
 		
 		private function processEngine(evt:Event):void
 		{
