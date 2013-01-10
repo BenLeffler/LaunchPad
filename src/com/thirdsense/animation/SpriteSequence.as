@@ -7,21 +7,60 @@ package com.thirdsense.animation
 	import flash.geom.Rectangle;
 	
 	/**
-	 * ...
+	 * A class that converts a classic display list MovieClip in to a sprite sequence (a vector of BitmapData snapshots) to be used with blitting or Starling texture packs
 	 * @author Ben Leffler
 	 */
 	
 	public class SpriteSequence 
 	{
+		/**
+		 * The pool group name for this object
+		 */
 		public var pool:String;
+		
+		/**
+		 * The sequence name for this object.
+		 */
 		public var sequence:String = "";
+		
+		/**
+		 * The vector of BitmapData snapshots of each frame of the source MovieClip
+		 */
 		public var sprites:Vector.<BitmapData>;
+		
+		/**
+		 * The cell width of the BitmapData instances that populate the <i>sprites</i> object
+		 */
 		public var cell_width:Number;
+		
+		/**
+		 * The cell height of the BitmapData instances that populate the <i>sprites</i> object
+		 */
 		public var cell_height:Number;
+		
+		/**
+		 * The offset to calculate the resulting sprite's pivot point
+		 */
 		public var cell_offset:Point;
+		
+		/**
+		 * The total number of cells in the sprite sequence
+		 */
 		public var total_cells:int;
+		
+		/**
+		 * The maximum number of cells in the width of a single spritesheet
+		 */
 		public var max_width:int;
+		
+		/**
+		 * The source MovieClip's originally reported width value
+		 */
 		public var source_width:Number;
+		
+		/**
+		 * The source MovieClip's originally reported height value
+		 */
 		public var source_height:Number;
 		
 		public function SpriteSequence() 
