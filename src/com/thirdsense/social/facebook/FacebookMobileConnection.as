@@ -36,11 +36,11 @@ package com.thirdsense.social.facebook
 		{
 			force_new = force_new_login;
 			auto_only = auto_login_only;
-			if ( browserInvoke ) callBrowser = browserInvoke;
+			if ( browserInvoke != null ) callBrowser = browserInvoke;
 			
 			var appId:String = LPSettings.FACEBOOK_APP_ID;
 			
-			if ( onComplete ) {
+			if ( onComplete != null ) {
 				FacebookMobileConnection.onComplete = onComplete;
 			}
 			
@@ -93,7 +93,7 @@ package com.thirdsense.social.facebook
 				trace( "Connection to Facebook failed. No existing session data" );
 			}
 			
-			if ( FacebookMobileConnection.onComplete && phase > 0 ) {
+			if ( FacebookMobileConnection.onComplete != null && phase > 0 ) {
 				var fn:Function = FacebookMobileConnection.onComplete;
 				FacebookMobileConnection.onComplete = null;
 				fn(connected);
@@ -216,15 +216,16 @@ package com.thirdsense.social.facebook
 			swv.assignFocus();
 			swv.loadURL( url );
 			
-			swv.addEventListener(LocationChangeEvent.LOCATION_CHANGE, inviteFriendsHandler, false, 0, true);
+			swv.addEventListener( LocationChangeEvent.LOCATION_CHANGE, inviteFriendsHandler, false, 0, true);
 			
 		}
 		
-		private static function inviteFriendsHandler(evt:LocationChangeEvent):void
+		private static function inviteFriendsHandler(evt:*):void
 		{
 			trace( "inviteFriendsHandler :", evt.location );
 			
 			if ( !evt.location.indexOf(LPSettings.FACEBOOK_REDIRECT_URL) && swv ) {
+				swv.removeEventListener( LocationChangeEvent.LOCATION_CHANGE, inviteFriendsHandler );
 				swv.dispose();
 				swv = null;
 			}

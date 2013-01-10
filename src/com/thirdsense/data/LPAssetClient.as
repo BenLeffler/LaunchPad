@@ -12,28 +12,50 @@ package com.thirdsense.data
 	import flash.utils.getQualifiedSuperclassName;
 	
 	/**
-	 * Client constructor class to be used with the Asset swf to allow access to the Launchpad Assets class
+	 * LaunchPad client class to be used with the Asset swf to allow access to the Launchpad Assets class. Simply create a new instance from your library swf ( eg var client:LPAssetClient = new LPAssetClient(this); )
 	 * @author Ben Leffler
 	 */
 	
 	public dynamic class LPAssetClient extends MovieClip 
 	{
-		public var assets:Object = new Object();
-		public var linkage:Array;
+		private var assets:Object;
+		private var linkage:Array;
 		
-		public function LPAssetClient() 
+		/**
+		 * Initializes the calling swf as a LaunchPad asset client
+		 * @param	target	The root of the swf to prepare as a client
+		 */
+		
+		public function LPAssetClient( target:MovieClip = null ) 
 		{
 			if ( ExternalInterface.available ) {
 				Security.allowDomain("*");
 			}
 			
-			this.linkage = getDefinitionNames( super.loaderInfo );
+			if ( !target ) target = this;
+			
+			if ( !target )
+			{
+				this.linkage = getDefinitionNames( super.loaderInfo );
+			}
+			else
+			{
+				this.linkage = getDefinitionNames( target.loaderInfo );
+			}
+			
+			this.assets = new Object();
 			
 			for (var i:uint=0; i<linkage.length; i++) {
 				var str:String = String(linkage[i]);
 				if (str != "Finder" && str != "SWFByteArray" && str.indexOf(":") < 0) {
 					this.addAsset( String(linkage[i]) );
 				}
+			}
+			
+			if ( target ) 
+			{
+				target.assets = this.assets;
+				target.listLibraryItems = this.listLibraryItems;
 			}
 		}
 		
@@ -68,6 +90,12 @@ package com.thirdsense.data
 			
 		}
 		
+		/**
+		 * Returns an item from the assets package
+		 * @param	linkage	The name of the item to retrieve (A call to listLibraryItems() will give you a list of what's available)
+		 * @return	The requested item. If no item exists with the passed name, returns null
+		 */
+		
 		public function getItem( linkage:String ):Object
 		{
 			if ( assets[linkage] )
@@ -78,6 +106,32 @@ package com.thirdsense.data
 			{
 				return null;
 			}
+		}
+		
+		/**
+		 * Lists the available library item names in the asset client
+		 * @param	omit_trace	Pass as true if you don't want to trace out the result
+		 * @return	An array of library item names available through the LaunchPad getAsset() call
+		 */
+		
+		public function listLibraryItems( omit_trace:Boolean = false ):Array
+		{
+			var arr:Array = new Array();
+			for (var i:uint = 0; i < this.linkage.length; i++) {
+				var str:String = String( this.linkage[i] );
+				if (str != "Finder" && str != "SWFByteArray" && str.indexOf(":") < 0) {
+					arr.push( str );
+				}
+			}
+			
+			arr.sort();
+			
+			if ( !omit_trace ) {
+				str = arr.join("\n");
+				trace( str );
+			}
+			
+			return arr;
 		}
 		
 	}

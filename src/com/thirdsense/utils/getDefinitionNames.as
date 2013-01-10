@@ -37,7 +37,10 @@ package com.thirdsense.utils
      *                         NB: "extended" parameter will be ignored if this argument is true.    
      */ 
     public function getDefinitionNames(data:Object, extended:Boolean = false, linkedOnly:Boolean = false):Array {
-        var bytes:ByteArray;
+        
+		if ( !data ) return null;
+		
+		var bytes:ByteArray;
         
         if (data is LoaderInfo) {
             bytes = (data as LoaderInfo).bytes;

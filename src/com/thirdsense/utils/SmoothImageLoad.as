@@ -441,7 +441,7 @@
 			myLoader.contentLoaderInfo.removeEventListener( IOErrorEvent.IO_ERROR, errorHandler );
 			myLoader.contentLoaderInfo.removeEventListener( SecurityErrorEvent.SECURITY_ERROR, securityHandler );
 			
-			var obj:Object = queue[0];
+			obj = queue[0];
 			
 			if ( queue.length > 1 ) {
 				queue.shift();

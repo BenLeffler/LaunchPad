@@ -90,7 +90,7 @@ package com.thirdsense.sound
 			tween.animate( attribute, target );
 			tween.onTween = shapeHandler;
 			tween.onTweenArgs = [ tween.target ];
-			if ( onShapeComplete )
+			if ( onShapeComplete != null )
 			{
 				tween.onComplete = onShapeComplete;
 			}

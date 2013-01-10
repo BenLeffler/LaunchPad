@@ -19,6 +19,8 @@
 		<permission>publish_stream</permission>
 	</facebook>
 	
-	<application name="LaunchPad Example" version="0.1.0" force_mobile_profile="true" />
+	<policy url="https://fbcdn-profile-a.akamaihd.net/crossdomain.xml" />
+	
+	<application name="LaunchPad Example" version="0.1.0" force_mobile_profile="false" />
 	
 </data>

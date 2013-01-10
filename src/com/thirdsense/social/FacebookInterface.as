@@ -44,7 +44,8 @@ package com.thirdsense.social
 		 * @param	onComplete	The callback function upon connection. This must accept a boolean parameter that indicates the connection success
 		 * @param	force_new_login	Pass as true if you wish to force a new login (if a session is detected, user is auto-logged-out)
 		 * @param	existing_session_only	If only a current session is to be used, pass this as true (does not allow a new log-in to occur)
-		 * @param	invokeBrowser	If a custom browser is to be used, the function to call the browser should be passed through here (only compatible with mobile app and the function MUST return a StageWebView instance to be used)
+		 * @param	invokeBrowser	If a customer browser or LPsWebBrowser interface is to be used, the function to call the browser should be passed through
+		 * here (only compatible with mobile app and the function MUST return a StageWebView instance to be used)
 		 * @see	flash.media.StageWebView
 		 */
 		
@@ -80,7 +81,8 @@ package com.thirdsense.social
 		
 		public static function getFriends( onComplete:Function = null, fields:Array = null ):void
 		{
-			getClass().getFriends( onComplete, fields );
+			var cl:Class = getClass();
+			cl.getFriends( onComplete, fields );
 		}
 		
 		/**
@@ -90,7 +92,8 @@ package com.thirdsense.social
 		
 		public static function logout( onComplete:Function ):void
 		{
-			getClass().logout( onComplete );
+			var cl:Class = getClass();
+			cl.logout( onComplete );
 		}
 		
 		/**
@@ -100,7 +103,8 @@ package com.thirdsense.social
 		
 		public static function isConnected():Boolean
 		{
-			return getClass().isConnected();
+			var cl:Class = getClass();
+			return cl.isConnected();
 		}
 		
 		/**
@@ -110,7 +114,8 @@ package com.thirdsense.social
 		
 		public static function getUserSession():FacebookSession
 		{
-			return getClass().getUserSession();
+			var cl:Class = getClass();
+			return cl.getUserSession();
 		}
 		
 		/**
@@ -122,7 +127,8 @@ package com.thirdsense.social
 		
 		public static function getUserAvatar( onComplete:Function, fbUserId:String = "" ):Boolean
 		{
-			return getClass().getUserAvatar(onComplete, fbUserId);
+			var cl:Class = getClass();
+			return cl.getUserAvatar(onComplete, fbUserId);
 		}
 		
 		/**
@@ -147,7 +153,8 @@ package com.thirdsense.social
 			if ( !picture.length && LPSettings.FACEBOOK_WALLPIC_URL.length ) picture = LPSettings.FACEBOOK_WALLPIC_URL;
 			if ( !link.length && LPSettings.FACEBOOK_WALLPIC_URL.length ) link = LPSettings.FACEBOOK_REDIRECT_URL;
 			
-			return getClass().postToWall( picture, postName, link, caption, description, message, onComplete );
+			var cl:Class = getClass();
+			return cl.postToWall( picture, postName, link, caption, description, message, onComplete );
 		}
 		
 	}

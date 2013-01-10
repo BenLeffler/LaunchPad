@@ -84,16 +84,23 @@ package com.thirdsense.utils
 			jsonLoadError(null);
 		}
 		
+		/**
+		 * Returns the number of milliseconds to wait before declaring a local timeout on a remote retrieval
+		 */
+		
 		public static function get timeout():Number
 		{
 			return _timeout;
 		}
 		
-		public static function set timeout(value:Number)
+		public static function set timeout(value:Number):void
 		{
 			_timeout = value;
 		}
 		
+		/**
+		 * Returns and sets the number of retries to attempt before declaring a failed remote retrieval
+		 */
 		public static function get retries():int 
 		{
 			return _retries;

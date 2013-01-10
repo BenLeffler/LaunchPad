@@ -58,7 +58,7 @@ package com.thirdsense.utils
 				case IOErrorEvent.IO_ERROR:
 				case SecurityErrorEvent.SECURITY_ERROR:
 					this.killListeners();
-					var fn:Function = this.onComplete;
+					fn = this.onComplete;
 					this.onComplete = null;
 					fn(null);
 					break;

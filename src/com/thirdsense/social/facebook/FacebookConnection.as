@@ -42,7 +42,7 @@ package com.thirdsense.social.facebook
 				FacebookConnection.force_new = force_new_login;
 				FacebookConnection.auto_only = auto_login_only;
 				
-				if ( onComplete )	FacebookConnection.onComplete = onComplete;
+				if ( onComplete != null )	FacebookConnection.onComplete = onComplete;
 				
 				Facebook.init( FacebookConnection.appId, FacebookConnection.onFacebookInit );
 				

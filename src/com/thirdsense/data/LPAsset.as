@@ -38,10 +38,35 @@ package com.thirdsense.data
 		private var onLoadComplete:Function;
 		private var fzip:FZipExtra;
 		
-		public function LPAssets() 
+		public function LPAssets():void 
 		{
 			
 		}
+		
+		
+		/**
+		 * Lists the assets available within a zip library or a library that has been setup with the LPAssetClient class
+		 * @return	An array of asset names that can be retrieved with a call to LaunchPad.getAsset()
+		 */
+		
+		public function listLibraryItems():Array
+		{
+			if ( this._type == LPAssetType.SWF && this.data && this.data.listLibraryItems != null )
+			{
+				return this.data.listLibraryItems(true);
+			}
+			else if ( this.fzip && (this._type == LPAssetType.THIRD || this._type == LPAssetType.ZIP) )
+			{
+				return this.fzip.listLibraryItems();
+			}
+			
+			return null;
+		}
+		
+		/**
+		 * The type as asset data contained in this object
+		 * @see	com.thirdsense.data.LPAssetType
+		 */
 		
 		public function get type():String 
 		{
@@ -328,6 +353,12 @@ package com.thirdsense.data
 			return null;
 		}
 		
+		/**
+		 * Returns the number of asset libraries to be used with LaunchPad
+		 * @param	unloaded_only	Only return the number of asset libraries that are yet to be loaded
+		 * @return	The number of asset libraries
+		 */
+		
 		public static function getNumAssets( unloaded_only:Boolean = false ):int
 		{
 			if ( !assets )
@@ -352,6 +383,13 @@ package com.thirdsense.data
 				return counter;
 			}
 		}
+		
+		/**
+		 * Retrieves either the library or a specified asset within the library
+		 * @param	id	The id of the library as setup in the project config.xml file. Leave as blank to search all libraries for the designated linkage asset
+		 * @param	linkage	The linkage name of the asset to retrieve. Leave as blank to retrieve the designated library in it's entirety.
+		 * @return	The library or the asset requested
+		 */
 		
 		public static function getAsset( id:String = "", linkage:String = "" ):*
 		{
@@ -400,10 +438,10 @@ package com.thirdsense.data
 				}
 				else
 				{
-					var class_name:String = getQualifiedClassName(lpasset.data)
+					var class_name:String = getQualifiedSuperclassName(lpasset.data)
 					class_name = class_name.substr( class_name.lastIndexOf("::") + 2 );
-					if ( class_name == "LPAssetClient" )
-					{
+					if ( class_name == "MovieClip" && lpasset.data.assets )
+					{	
 						if ( lpasset.data.assets[linkage] )
 						{
 							return duplicateDisplayObject( lpasset.data.assets[linkage] );
@@ -421,7 +459,7 @@ package com.thirdsense.data
 					}
 				}
 			}
-			else
+			else if ( linkage.length )
 			{
 				var assets:Vector.<LPAsset> = LPAsset.getAllAssets();
 				for ( var i:uint = 0; i < assets.length; i++ )
@@ -435,7 +473,7 @@ package com.thirdsense.data
 							asset = assets[i].fzip.getSoundData(linkage);
 							if ( asset )
 							{
-								var snd:Sound = new Sound();
+								snd = new Sound();
 								snd.loadCompressedDataFromByteArray( asset as ByteArray, (asset as ByteArray).length );
 								return snd;
 							}
@@ -450,14 +488,19 @@ package com.thirdsense.data
 					}
 					else
 					{
-						class_name = getQualifiedClassName(assets[i].data)
+						class_name = getQualifiedSuperclassName(assets[i].data)
 						class_name = class_name.substr( class_name.lastIndexOf("::") + 2 );
-						if ( class_name == "LPAssetClient" && assets[i].data.assets[linkage] )
+						if ( class_name == "MovieClip" && assets[i].data.assets && assets[i].data.assets[linkage] )
 						{
 							return duplicateDisplayObject( assets[i].data.assets[linkage] );
 						}
 					}
 				}
+			}
+			else
+			{
+				trace( "LaunchPad", LPAsset, "Retrieval of asset failed as id and linkage parameters were left as blank" );
+				return void;
 			}
 			
 			trace( "LaunchPad", LPAsset, "Retrieval of linkage '" + linkage + "' failed. Could not be found." );
@@ -482,7 +525,55 @@ package com.thirdsense.data
 			}
 		}
 		
+		/**
+		 * Lists the assets available in the designated library (If it is a zip library or the library has been set up with the LPAssetClient class)
+		 * @param	lib_id	The library id as designated in the project config.xml file
+		 * @return	An array of asset names which can be called with the LaunchPad.getAsset() call
+		 */
 		
+		public static function listAssetsInLibrary( lib_id:String ):Array
+		{
+			var asset:LPAsset = LPAsset.getAssetRecord( lib_id );
+			if ( asset )
+			{
+				return asset.listLibraryItems();
+			}
+			else
+			{
+				return null;
+			}
+		}
+		
+		/**
+		 * Retrieves a list of all currently available assets nestled within the project asset libraries
+		 * @param	omit_trace	Pass as true if you don't wish to trace out the result
+		 * @return	An object containing arrays of asset linkage names
+		 */
+		
+		public static function listAllLibraryAssets( omit_trace:Boolean = false ):Object
+		{
+			var obj:Object = new Object();
+			
+			for ( var i:uint = 0; i < assets.length; i++ )
+			{
+				var asset:LPAsset = assets[i];
+				obj[asset.id] = asset.listLibraryItems();
+			}
+			
+			if ( !omit_trace )
+			{
+				trace( "Available assets in this project are:" );
+				trace( "id : linkage names" );
+				trace( "----------------------------------------------------------------" );
+				for ( var str:String in obj )
+				{
+					trace( str, ":", obj[str] );
+				}
+				trace( "----------------------------------------------------------------" );
+			}
+			
+			return obj;
+		}
 	}
 
 }

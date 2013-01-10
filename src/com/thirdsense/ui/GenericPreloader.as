@@ -12,6 +12,7 @@ package com.thirdsense.ui
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import flash.utils.getDefinitionByName;
 	
 	/**
 	 * ...
@@ -76,6 +77,10 @@ package com.thirdsense.ui
 			this.addChild( this.bar );
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function createText():void
 		{
 			if ( LaunchPad.instance.target.stage.color < 0xFF777777 )
@@ -89,6 +94,7 @@ package com.thirdsense.ui
 				shadow_col = 0xFFFFFF;
 			}
 			
+			//var cl:Class = getDefinitionByName( "ArialRounded" ) as Class;
 			Font.registerFont( ArialRounded );
 			var tf:TextFormat = new TextFormat( "Arial Rounded MT Bold", 22, text_col );
 			

@@ -67,7 +67,7 @@ package com.thirdsense.social.facebook
 			{
 				var friend:FacebookFriend = new FacebookFriend();
 				var obj:Object = arr[i];
-				for ( var str in obj )
+				for ( var str:String in obj )
 				{
 					friend[str] = obj[str];
 				}

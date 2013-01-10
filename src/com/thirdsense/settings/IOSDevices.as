@@ -1,7 +1,7 @@
 package com.thirdsense.settings
 {
-	import com.benleffler.LaunchPad;
-	import com.benleffler.utils.getClassVariables;
+	import com.thirdsense.LaunchPad;
+	import com.thirdsense.utils.getClassVariables;
 	
 	/**
 	 * ...
@@ -87,7 +87,7 @@ package com.thirdsense.settings
 			if ( Profiles.isIOS() )
 			{
 				var device:String = Profiles.getIOSDeviceType();
-				if ( IOSDevices.isDeviceType(device, IOSDevices.FAMILY_IPAD) && LaunchPad.ROOT.stage.stageWidth > 1024 )
+				if ( IOSDevices.isDeviceType(device, IOSDevices.FAMILY_IPAD) && LaunchPad.instance.nativeStage.stageWidth > 1024 )
 				{
 					return true;
 				}

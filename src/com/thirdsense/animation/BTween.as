@@ -2,7 +2,9 @@ package com.thirdsense.animation
 {
 	
 	/**
-	 * ...
+	 * A frame-based tweening engine based on the Starling time-based tween engine. The obvious difference being that this is processed on an
+	 * EnterFrameEvent rather than timers. This class takes advantage of an asynchronus process which pauses the tween rather than jumping it 
+	 * in the event of high cpu load or delays in passing texture data to the GPU.
 	 * @author Ben Leffler
 	 */
 	
@@ -17,7 +19,7 @@ package com.thirdsense.animation
 		private var frame_counter:int;
 		private var transition_worker:Function;
 		private var frame_pause:int;
-		private var _paused:Boolean
+		private var _paused:Boolean;
 		
 		public static const LINEAR:String = "linear";
 		public static const EASE_OUT:String = "easeOut";
@@ -27,21 +29,33 @@ package com.thirdsense.animation
 		public static const EASE_OUT_ELASTIC:String = "easeOutElastic";
 		public static const EASE_IN_ELASTIC:String = "easeInElastic";
 		
+		public static const LOOPS_FOREVER:int = -1;
+		
 		public var onComplete:Function;
 		public var onCompleteArgs:Array;
 		public var onStart:Function;
 		public var onStartArgs:Array;
 		public var onTween:Function;
 		public var onTweenArgs:Array;
+		public var loops:int;
+		
+		/**
+		 * Creates a new frame-based (as opposed to timer based) Tween instance
+		 * @param	target	The target object to tween properties of
+		 * @param	frames	The number of frames to tween over. A minimum value of 2 is applicable (covering the initial state and end state frames)
+		 * @param	transition	The type of transition shape to apply to the tween (eg. BTween.LINEAR, BTween.EASE_OUT etc.)
+		 * @param	pause	The number of frames to pause before commencing the tween
+		 */
 		
 		public function BTween( target:Object, frames:int, transition:String="linear", pause:int=0 ) 
 		{
 			this._target = target;
-			this.frames = frames;
+			this.frames = Math.max( frames, 2 );
 			this.transition = transition;
 			this.frame_pause = pause;
 			this.frame_counter = 0;
 			this.transition_worker = this[transition];
+			this.loops = 0;
 			
 		}
 		
@@ -87,7 +101,7 @@ package com.thirdsense.animation
 		 * @param	applyNow	Should the initial translation be applied upon this call, pass as true
 		 */
 		
-		public function moveFromTo( from_x:Number, from_y:Number, dest_x:Number, dest_y:Number, applyNow:Boolean=false ):void
+		public function moveFromTo( from_x:Number, from_y:Number, dest_x:Number, dest_y:Number, applyNow:Boolean=true ):void
 		{
 			var ox:Number = this._target["x"];
 			var oy:Number = this._target["y"];
@@ -120,7 +134,7 @@ package com.thirdsense.animation
 		 * @param	applyNow	Should the start scale be immediately applied, pass as true
 		 */
 		
-		public function scaleFromTo( start_scale:Number, end_scale:Number, applyNow:Boolean = false ):void
+		public function scaleFromTo( start_scale:Number, end_scale:Number, applyNow:Boolean = true ):void
 		{
 			var oscalex:Number = this._target["scaleX"];
 			var oscaley:Number = this._target["scaleY"];
@@ -153,7 +167,7 @@ package com.thirdsense.animation
 		 * @param	applyNow	Should the target object immediately adopt the initial rotation, pass this as true
 		 */
 		
-		public function rotateFromTo( start_value:Number, end_value:Number, applyNow:Boolean=false ):void
+		public function rotateFromTo( start_value:Number, end_value:Number, applyNow:Boolean=true ):void
 		{
 			var orot:Number = this._target["rotation"];
 			this._target["rotation"] = start_value;
@@ -176,7 +190,7 @@ package com.thirdsense.animation
 			
 		}
 		
-		public function fadeFromTo( start_value:Number = 0, end_value:Number = 1, applyNow:Boolean = false ):void
+		public function fadeFromTo( start_value:Number = 0, end_value:Number = 1, applyNow:Boolean = true ):void
 		{
 			var oalpha:Number = this._target["alpha"];
 			this._target["alpha"] = start_value;
@@ -274,17 +288,24 @@ package com.thirdsense.animation
 				if ( perc > 1 ) {	// Tween completed
 					
 					this._target[ animation.property ] = animation.targetValue;
-					this.stop();
-					
 					this.frame_counter = 0;
 					
-					if ( this.onComplete != null ) {
-						fn = this.onComplete;
-						this.onComplete = null;
-						onCompleteArgs ? fn.apply( null, onCompleteArgs ) : fn();
+					if ( this.loops > 0 )
+					{
+						this.loops--;
 					}
+					else if ( this.loops == 0 )
+					{
+						this.stop();
 					
-					return true;
+						if ( this.onComplete != null ) {
+							fn = this.onComplete;
+							this.onComplete = null;
+							onCompleteArgs ? fn.apply( null, onCompleteArgs ) : fn();
+						}
+						
+						return true;
+					}
 					
 				} else {	// Tween continues
 					
@@ -375,20 +396,36 @@ package com.thirdsense.animation
 			
         }
 		
+		/**
+		 * The target object this tween instance applies to
+		 */
+		
 		public function get target():Object
 		{
 			return this._target;
 		}
+		
+		/**
+		 * Returns a boolean value indicating if the tween is in a state of pause
+		 */
 		
 		public function get paused():Boolean 
 		{
 			return _paused;
 		}
 		
+		/**
+		 * Pauses the tween in it's current place
+		 */
+		
 		public function pause():void
 		{
 			this._paused = true;
 		}
+		
+		/**
+		 * Resumes a tween that has been paused
+		 */
 		
 		public function resume():void
 		{
@@ -396,7 +433,7 @@ package com.thirdsense.animation
 		}
 		
 		/**
-		 * Controls the tweening process on any BTween objects in the static application tweening cue
+		 * Controls the tweening process on any BTween objects in the static application tweening cue. (In a LaunchPad framework, this is handled by the LaunchPad core)
 		 */
 		
 		public static function processCue():void
@@ -448,7 +485,7 @@ package com.thirdsense.animation
 			
 		}
 		
-		private static function removeFromCue( target:BTween ):void
+		public static function removeFromCue( target:BTween ):void
 		{
 			if ( !bTweeners ) {
 				return void;
@@ -463,6 +500,10 @@ package com.thirdsense.animation
 			}
 			
 		}
+		
+		/**
+		 * Removes and purges all tweens currently in the engine cue
+		 */
 		
 		public static function killCue():void 
 		{

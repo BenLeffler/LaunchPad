@@ -2,10 +2,12 @@ package com.thirdsense.data
 {
 	import com.thirdsense.utils.AccessorType;
 	import com.thirdsense.utils.StringTools;
+	
 	/**
-	 * ...
+	 * Retrieves a value as setup in the LaunchPad config.xml file
 	 * @author Ben Leffler
 	 */
+	
 	public class LPValue 
 	{
 		private static var values:Vector.<LPValue>
@@ -13,7 +15,7 @@ package com.thirdsense.data
 		public var name:String;
 		public var value:String;
 		
-		public function LPValues() 
+		public function LPValues():void
 		{
 			
 		}

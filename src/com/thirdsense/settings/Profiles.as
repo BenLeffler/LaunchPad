@@ -29,7 +29,7 @@ package com.thirdsense.settings
 		private static var _CURRENT_DEVICE:String = "";
 		
 		public static function get CURRENT_DEVICE():String	{	return _CURRENT_DEVICE	};
-		public static function set CURRENT_DEVICE( val:String )
+		public static function set CURRENT_DEVICE( val:String ):void
 		{
 			if ( val == DEVICE_DETECT ) {
 				

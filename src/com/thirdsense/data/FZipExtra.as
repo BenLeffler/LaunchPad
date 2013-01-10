@@ -148,6 +148,48 @@ package com.thirdsense.data {
 		}
 		
 		/**
+		 * Retrieves the names of all library items available in this zip library
+		 * @return	An array of library linkage names. Sorted by type and then alphabetically.
+		 */
+		
+		public function listLibraryItems():Array
+		{
+			var arr:Array = new Array();
+			
+			for ( var str:String in this.bitmapDataList )
+			{
+				arr.push( str );
+			}
+			arr.sort();
+			
+			var arr2:Array = new Array();
+			for ( str in this.displayObjectList )
+			{
+				arr2.push( str );
+			}
+			arr2.sort();
+			
+			var arr3:Array = new Array();
+			for ( str in this.soundDataList )
+			{
+				arr3.push( str );
+			}
+			arr3.sort();
+			
+			while ( arr2.length )
+			{
+				arr.push( arr2.shift() );
+			}
+			
+			while ( arr3.length )
+			{
+				arr.push( arr3.shift() );
+			}
+			
+			return arr;
+		}
+		
+		/**
 		 * @private
 		 */
 		private function addExtension(original:RegExp,ext:String):RegExp {

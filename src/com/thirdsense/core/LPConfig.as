@@ -5,6 +5,8 @@ package com.thirdsense.core
 	import com.thirdsense.net.Analytics;
 	import com.thirdsense.settings.LPSettings;
 	import com.thirdsense.social.FacebookInterface;
+	import flash.external.ExternalInterface;
+	import flash.system.Security;
 	/**
 	 * ...
 	 * @author Ben Leffler
@@ -24,6 +26,7 @@ package com.thirdsense.core
 			
 			parseApplication();
 			parseFacebook();
+			parsePolicies();
 			parseAssets();
 			parseValues();
 			parseAnalytics();
@@ -45,9 +48,11 @@ package com.thirdsense.core
 		
 		private function parseValues():void
 		{
+			var value:LPValue;
+			
 			for ( var i:uint = 0; this.data.value[i]; i++ )
 			{
-				var value:LPValue = new LPValue();
+				value = new LPValue();
 				value.name = String( this.data.value[i].@name );
 				value.value = String( this.data.value[i].@value );
 				LPValue.addValue( value );
@@ -79,13 +84,25 @@ package com.thirdsense.core
 			}
 		}
 		
+		private function parsePolicies():void
+		{
+			if ( ExternalInterface.available )
+			{
+				for ( var i:uint = 0; this.data.policy[i]; i++ )
+				{
+					trace( "LaunchPad", LPConfig, "Loading policy from " + this.data.policy[i].@url );
+					Security.loadPolicyFile( this.data.policy[i].@url );
+				}
+			}
+		}
+		
 		private function parseApplication():void
 		{
 			if ( this.data.application )
 			{
 				LPSettings.APP_NAME = String( this.data.application.@name );
 				LPSettings.APP_VERSION = String( this.data.application.@version );
-				LPSettings.FORCE_MOBILE_PROFILE = Boolean( this.data.application.@force_mobile_profile );
+				LPSettings.FORCE_MOBILE_PROFILE = ( String(this.data.application.@force_mobile_profile) == "true" );
 			}
 		}
 		

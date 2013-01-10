@@ -1,6 +1,7 @@
 package com.thirdsense 
 {
 	import com.thirdsense.animation.BTween;
+	//import com.thirdsense.core.LPManifest;
 	import com.thirdsense.core.Preload;
 	import com.thirdsense.data.LPAsset;
 	import com.thirdsense.data.LPValue;
@@ -11,6 +12,8 @@ package com.thirdsense
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
+	import flash.geom.Rectangle;
+	import starling.core.Starling;
 	
 	/**
 	 * LaunchPad Contructor
@@ -24,6 +27,8 @@ package com.thirdsense
 		
 		private var _target:MovieClip;
 		private var onCompleteInit:Function;
+		//private var manifest:LPManifest;
+		private var _starling:Starling;
 		
 		public function LaunchPad() 
 		{
@@ -36,7 +41,7 @@ package com.thirdsense
 		 * @param	onComplete	The function to call once the application has completed initializing
 		 * @param	preloader	The sprite to use for the preloading user interface. Pass as null to use the default generic loader.
 		 * @param	profile	The profile of the device to use for this build.
-		 * @see	com.thirdsense.profiles
+		 * @see	com.thirdsense.settings.Profiles
 		 */
 		
 		public function init( target:MovieClip, onComplete:Function, preloader:Sprite=null ):void
@@ -93,6 +98,15 @@ package com.thirdsense
 		}
 		
 		/**
+		 * Returns the starling instance if startStarlingSession has previously been called.
+		 */
+		
+		public function get starling():Starling 
+		{
+			return _starling;
+		}
+		
+		/**
 		 * Function called on an EnterFrame event to process the core engine (such as tweens)
 		 * @param	evt	EnterFrame event called on the launchpad target
 		 */
@@ -100,6 +114,28 @@ package com.thirdsense
 		private function processEngine(evt:Event):void
 		{
 			BTween.processCue();
+		}
+		
+		/**
+		 * Starts a Starling framework session
+		 * @param	rootClass	The root class of the starling container that gets called upon initialisation
+		 * @param	handleLostContext	Handles the device losing Stage3D context (requires more device memory)
+		 * @param	showStats	Show a stats dialogue in the top-left corner of the stage
+		 * @param	enableMultiTouch	Enable multitouch within the project
+		 * @return	The resulting Starling instance.
+		 */
+		
+		public final function startStarlingSession( rootClass:Class, handleLostContext:Boolean=false, showStats:Boolean=false, enableMultiTouch:Boolean=false ):Starling
+		{
+			trace( "LaunchPad", LaunchPad, "Starling session started." );
+			Starling.handleLostContext = handleLostContext;
+			Starling.multitouchEnabled = enableMultiTouch;
+			
+			this._starling = new Starling( rootClass, this.nativeStage, new Rectangle(0, 0, this.nativeStage.stageWidth, this.nativeStage.stageHeight) );
+			this._starling.showStats = showStats;
+			this._starling.start();
+			
+			return this._starling;
 		}
 		
 		/**
