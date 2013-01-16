@@ -7,10 +7,12 @@ package com.thirdsense.utils
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	
 	/**
-	 * ...
+	 * A loader to help with the retrieval of a remote XML data object
 	 * @author Ben Leffler
 	 */
+	
 	public class XMLLoader 
 	{
 		private var url:String;
@@ -26,7 +28,7 @@ package com.thirdsense.utils
 		/**
 		 * Loads an XML file located at a URL.
 		 * @param	url	The location of the XML file to import
-		 * @param	onComplete	The callback function upon load. It should accept an xml object parameter
+		 * @param	onComplete	The callback function upon load. It should accept an xml object parameter (null is returned in the event of an error)
 		 */
 		
 		public function load( url:String, onComplete:Function ):void
@@ -44,6 +46,10 @@ package com.thirdsense.utils
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function loaderHandler(evt:Event):void
 		{
 			switch ( evt.type )
@@ -57,6 +63,7 @@ package com.thirdsense.utils
 					
 				case IOErrorEvent.IO_ERROR:
 				case SecurityErrorEvent.SECURITY_ERROR:
+					trace( "LaunchPad", XMLLoader, "Error retrieving XML object. Error type: " + evt.type );
 					this.killListeners();
 					fn = this.onComplete;
 					this.onComplete = null;
@@ -68,6 +75,10 @@ package com.thirdsense.utils
 					break;
 			}
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function killListeners():void
 		{

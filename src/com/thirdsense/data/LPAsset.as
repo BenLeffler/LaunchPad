@@ -11,28 +11,47 @@ package com.thirdsense.data
 	import flash.display.Loader;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
-	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.media.Sound;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
-	import flash.utils.getQualifiedClassName;
 	import flash.utils.getQualifiedSuperclassName;
+	
 	/**
-	 * ...
+	 * The LaunchPad asset library manager. This class is used to control availability of runtime-loaded assets to LaunchPad projects
 	 * @author Ben Leffler
 	 */
+	
 	public class LPAsset 
 	{
 		private static var assets:Vector.<LPAsset>;
 		
+		/**
+		 * The relative url of the asset
+		 */
 		public var url:String;
+		
+		/**
+		 * The loading label of the asset
+		 */
 		public var label:String;
+		
+		/**
+		 * The id to be used to call upon the asset from the LaunchPad project
+		 */
 		public var id:String;
+		
+		/**
+		 * The actual asset. Can be multiple types such as MovieClip, Sprite, Sound etc.
+		 */
 		public var data:Object;
-		private var _type:String;
+		
+		/**
+		 * Indicates if an asset is marked for postload by the LaunchPad config.xml file
+		 */
 		public var postload:Boolean;
 		
+		private var _type:String;
 		private var loader:Loader;
 		private var xmlloader:XMLLoader;
 		private var onLoadComplete:Function;
@@ -78,6 +97,27 @@ package com.thirdsense.data
 			return this._type;
 		}
 		
+		/**
+		 * @private
+		 */
+		
+		public function set type( val:String ):void
+		{
+			var arr:Array = getClassVariables(LPAssetType, AccessorType.NONE, true);
+			for ( var j:uint = 0; j < arr.length; j++ )
+			{
+				if ( val.toLowerCase() == arr[j].toLowerCase() )
+				{
+					this._type = val;
+				}
+			}
+		}
+		
+		/**
+		 * @private	Determines the type of asset
+		 * @see	com.thirdsense.data.LPAssetType
+		 */
+		
 		private function determineType():void
 		{
 			var arr:Array = getClassVariables(LPAssetType, AccessorType.NONE, true);
@@ -97,13 +137,18 @@ package com.thirdsense.data
 			this._type = LPAssetType.UNKNOWN;
 		}
 		
+		/**
+		 * Concats the LPAsset object children to a string
+		 * @return	String representation of the object
+		 */
+		
 		public function toString():String
 		{
 			return StringTools.toString(this, AccessorType.READ_ONLY);
 		}
 		
 		/**
-		 * Loads the asset from the current url associated with this asset data object
+		 * Loads the asset in to the LaunchPad asset library from the current url associated with this asset data object
 		 */
 		
 		public function loadToAsset( onComplete:Function=null ):void
@@ -148,6 +193,10 @@ package com.thirdsense.data
 			}
 		}
 		
+		/**
+		 * @private	Gets called on the load of a JSON asset
+		 */
+		
 		private function onJSONLoad( success:Boolean, data:Object ):void
 		{
 			this.data = data;
@@ -169,6 +218,10 @@ package com.thirdsense.data
 			}
 		}
 		
+		/**
+		 * @private	Gets called on the load of a zip library
+		 */
+		
 		private function onZipLoad( evt:Event ):void
 		{
 			evt.currentTarget.removeEventListener(Event.COMPLETE, this.onZipLoad);
@@ -183,6 +236,10 @@ package com.thirdsense.data
 				fn( true );
 			}
 		}
+		
+		/**
+		 * @private	Gets called on the load of an XML asset
+		 */
 		
 		private function onXMLLoad( data:XML ):void
 		{
@@ -207,6 +264,10 @@ package com.thirdsense.data
 				fn( success );
 			}
 		}
+		
+		/**
+		 * @private	Handler for non-data type assets such as swf libraries
+		 */
 		
 		private function loadHandler(evt:Event):void
 		{
@@ -234,6 +295,10 @@ package com.thirdsense.data
 				fn( success );
 			}
 		}
+		
+		/**
+		 * @private	Kills the load listeners associated with this Asset load
+		 */
 		
 		private function killListeners():void
 		{
@@ -474,7 +539,9 @@ package com.thirdsense.data
 							if ( asset )
 							{
 								snd = new Sound();
-								snd.loadCompressedDataFromByteArray( asset as ByteArray, (asset as ByteArray).length );
+								var bytearray:ByteArray = asset as ByteArray;
+								bytearray.position = 0;
+								snd.loadCompressedDataFromByteArray( bytearray, bytearray.length );
 								return snd;
 							}
 						}
@@ -507,6 +574,10 @@ package com.thirdsense.data
 			
 			return null;
 		}
+		
+		/**
+		 * @private	Used to duplicate a display object when retrieving it. If the object is not a MovieClip, Sprite or DisplayObject, the passed asset is returned unaltered
+		 */
 		
 		private static function duplicateDisplayObject( asset:* ):*
 		{

@@ -13,8 +13,8 @@ package com.thirdsense.social.facebook
 	import flash.media.StageWebView;
 	
 	/**
-	 * ...
-	 * @author ...
+	 * @private	Handles Facebook connectivity for mobile based applications
+	 * @author Ben Leffler
 	 */
 	
 	public class FacebookMobileConnection 
@@ -32,6 +32,16 @@ package com.thirdsense.social.facebook
 		private static var onWallPost:Function;
 		private static var phase:int = 0;
 		
+		/**
+		 * Initializes a connection to the Facebook API and begins the login process. Facebook permissions are set up in the LaunchPad config.xml file.
+		 * @param	onComplete	Function that gets called upon a result of this process
+		 * @param	force_new_login	Pass as true if you wish to force a new Facebook login (instead of using an existing session)
+		 * @param	auto_login_only	Pass as true if you only wish to use an existing saved session
+		 * @param	browserInvoke	If you wish to use a custom browser window, pass the browser invoke function. This function MUST return a StageWebView object.
+		 * @see	com.thirdsense.ui.starling.LPsWebBrowser
+		 * @see	flash.media.StageWebView
+		 */
+		
 		public static function init( onComplete:Function=null, force_new_login:Boolean=false, auto_login_only:Boolean=false, browserInvoke:Function=null ):void
 		{
 			force_new = force_new_login;
@@ -48,6 +58,10 @@ package com.thirdsense.social.facebook
 			
 			phase = 0;
 		}
+		
+		/**
+		 * @private	Init handler
+		 */
 		
 		private static function onFacebookInit( success:Object, fail:Object ):void
 		{
@@ -80,6 +94,10 @@ package com.thirdsense.social.facebook
 			
 		}
 		
+		/**
+		 * @private	Facebook login handler
+		 */
+		
 		private static function onFacebookLogin( success:Object, fail:Object ):void
 		{
 			( success == null || !success ) ? connected = false : connected = true;
@@ -100,6 +118,11 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * Because of oAuth issues, FacebookMobile.logout no longer works. This function is a hack way of forcing a logout and is not likely to work forever (once Facebook inevitably updates it's HTML structure)
+		 * @param	onComplete	The function to call upon a successful logout
+		 */
+		
 		public static function logout( onComplete:Function ):void
 		{
 			FacebookMobileConnection.onLogoutComplete = onComplete;
@@ -111,6 +134,10 @@ package com.thirdsense.social.facebook
 			swv.loadURL( "http://www.facebook.com/jkfjaksdjflsa" );
 			swv.addEventListener( Event.COMPLETE, logoutHandler, false, 0, true );
 		}
+		
+		/**
+		 * @private	Hacky Facebook logout handler
+		 */
 		
 		private static function logoutHandler( evt:Event ):void
 		{
@@ -138,14 +165,25 @@ package com.thirdsense.social.facebook
 			
 		}
 		
+		/**
+		 * @private	Hacky Facebook logout handler part deux
+		 */
+		
 		private static function onFacebookLogout( success:Boolean ):void
 		{
 			trace( "onFacebookLogout" );
+			
+			FacebookMobileConnection.connected = false;
 			
 			var fn:Function = FacebookMobileConnection.onLogoutComplete;
 			FacebookMobileConnection.onLogoutComplete = null;
 			fn();
 		}
+		
+		/**
+		 * Obtains a Facebook connection status
+		 * @return	True if currently connected
+		 */
 		
 		public static function isConnected():Boolean
 		{
@@ -156,36 +194,57 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * Obtains the currently connected user's Facebook friends
+		 * @param	onComplete	The function to call upon a result. Must accept a boolean value that indicates success
+		 * @param	fields	The fields to include in the result data packet from Facebook. If left as null, FacebookFriendField.INSTALLED and FacebookFriendField.NAME are used
+		 * @see com.thirdsense.social.facebook.FacebookFriend
+		 * @see	com.thirdsense.social.facebook.FacebookFriendField
+		 */
+		
 		public static function getFriends( onComplete:Function, fields:Array=null ):void
 		{
 			FacebookMobileConnection.onComplete = onComplete;
 			
-			if ( fields )
+			var session:FacebookSession = FacebookMobile.getSession();
+			if ( session )
 			{
-				var field_str:String = fields.join(",");
+				if ( fields )
+				{
+					var field_str:String = fields.join(",");
+				}
+				else
+				{
+					field_str = "installed,name";
+				}
+				
+				FacebookMobile.api( "/me/friends", onGetFriends, { fields:field_str } );
+				
+				var user:Object = session.user;
+				var friend:FacebookFriend = new FacebookFriend();
+				friend.id = user.id;
+				friend.name = user.name;
+				friend.installed = true;
+				for ( var str:String in user )
+				{
+					if ( !friend[str] )
+					{
+						friend[str] = user[str];
+					}
+				}
+				FacebookFriend.addMe( friend );
 			}
 			else
 			{
-				field_str = "installed,name";
+				trace( "LaunchPad", FacebookMobileConnection, "Error calling getFriends. You must be connecte to Facebook first in order to call this" );
+				onGetFriends( null, true );
 			}
-			
-			FacebookMobile.api( "/me/friends", onGetFriends, { fields:field_str } );
-			
-			var user:Object = FacebookMobile.getSession().user;
-			var friend:FacebookFriend = new FacebookFriend();
-			friend.id = user.id;
-			friend.name = user.name;
-			friend.installed = true;
-			for ( var str:String in user )
-			{
-				if ( !friend[str] )
-				{
-					friend[str] = user[str];
-				}
-			}
-			FacebookFriend.addMe( friend );
 			
 		}
+		
+		/**
+		 * @private	Handler for getFriends
+		 */
 		
 		private static function onGetFriends( success:Object, fail:Object ):void
 		{
@@ -200,6 +259,12 @@ package com.thirdsense.social.facebook
 			fn( (success != null) );
 			
 		}
+		
+		/**
+		 * Allows the currently connected Facebook user to invite friends to the application
+		 * @param	message	The message to append to the invitation
+		 * @param	prompt_title	The title of the prompt that the user will see when asked to select the friends to invite
+		 */
 		
 		public static function inviteFriends( message:String, prompt_title:String ):void
 		{
@@ -220,6 +285,10 @@ package com.thirdsense.social.facebook
 			
 		}
 		
+		/**
+		 * @private	Invite friends handler. Closes the StageWebView instance down when the redirect location has been detected (as set up in config.xml)
+		 */
+		
 		private static function inviteFriendsHandler(evt:*):void
 		{
 			trace( "inviteFriendsHandler :", evt.location );
@@ -231,10 +300,22 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * Retrieves the current user session
+		 * @return	FacebookSession object, fully populated
+		 */
+		
 		public static function getUserSession():FacebookSession
 		{
 			return FacebookMobile.getSession();
 		}
+		
+		/**
+		 * Loads a user's 50x50 pixel Facebook avatar
+		 * @param	onComplete	The function to call upon a result. Must accept a Bitmap object as it's parameter. This will be passed as null if the call failed
+		 * @param	fbUserId	The requested Facebook user id. If left as a blank string, the currently logged in user's id is passed.
+		 * @return	A boolean value that indicates if the call was successfully made
+		 */
 		
 		public static function getUserAvatar( onComplete:Function, fbUserId:String="" ):Boolean
 		{
@@ -259,6 +340,10 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * @private	Avatar load cancelled handler. Usually triggered by calling SmoothImageLoad.killCue()
+		 */
+		
 		private static function cancelFbUserAvatarLoad( evt:Event ):void
 		{
 			var container:MovieClip = evt.currentTarget as MovieClip;
@@ -270,6 +355,10 @@ package com.thirdsense.social.facebook
 			fn( null );
 			
 		}
+		
+		/**
+		 * @private	Avatar loaded handler. Passes the result through to the onAvatarLoad function as a Bitmap object and disposes of the local bitmapData object
+		 */
 		
 		private static function fbUserAvatarLoaded( evt:Event ):void
 		{
@@ -288,7 +377,7 @@ package com.thirdsense.social.facebook
 		}
 		
 		/**
-		* Post to the FB wall
+		* Posts to the currently connect Facebook user's wall
 		 * 
 		 * @param	picture		An image to attach to the post
 		 * @param	postName	The name of the post
@@ -297,8 +386,7 @@ package com.thirdsense.social.facebook
 		 * @param	description	The text that sits right afer the post caption
 		 * @param	message		An optional field that was be used to add a message typed by the user
 		 * @param	onComplete	The function to return the result of the post to. Function must include a parameter that accepts a boolean value - true if successful, false otherwise
-		 * 
-		 * @return
+		 * @return	A boolean value that indicates the success of the call
 		 */
 		
 		public static function postToWall(picture:String, postName:String, link:String, caption:String, description:String, message:String = null, onComplete:Function=null):Boolean
@@ -317,6 +405,10 @@ package com.thirdsense.social.facebook
 			return true;
 		}
 		
+		/**
+		 * @private	Handler for the postToWall call
+		 */
+		
 		private static function onFacebookPost(result:Object, fail:Object):void
 		{
 			if ( result )
@@ -333,11 +425,7 @@ package com.thirdsense.social.facebook
 				var fn:Function = onWallPost;
 				onWallPost = null;
 				
-				if ( result != null ) {
-					fn( true );
-				} else {
-					fn( false );
-				}
+				fn( (result != null) );
 				
 			}
 		}

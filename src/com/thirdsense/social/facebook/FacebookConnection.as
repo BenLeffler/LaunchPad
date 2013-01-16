@@ -9,10 +9,12 @@ package com.thirdsense.social.facebook
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.external.ExternalInterface;
+	import flash.net.navigateToURL;
+	import flash.net.URLRequest;
 	import flash.utils.setTimeout;
 	
 	/**
-	 * ...
+	 * @private	Handles Facebook connectivity functionality for web based projects
 	 * @author Ben Leffler
 	 */
 	
@@ -30,6 +32,13 @@ package com.thirdsense.social.facebook
 		private static var container:MovieClip;
 		private static var ping:uint;
 		private static var ping_counter:int;
+		
+		/**
+		 * Initializes a connection to the Facebook API and begins the login process
+		 * @param	onComplete	A function to call back to upon a login result. Must accept a boolean param that indicates the success of the login
+		 * @param	force_new_login	If a new login is to be called, pass this as true
+		 * @param	auto_login_only	To check for and use an existing session from the browser cookies, pass this as true
+		 */
 		
 		public static function init( onComplete:Function=null, force_new_login:Boolean=false, auto_login_only:Boolean=false ):void
 		{
@@ -55,6 +64,10 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function onFacebookInit( success:Object, fail:Object ):void
 		{
 			trace( "FacebookConnection.onFacebookInit", success, fail );
@@ -70,7 +83,7 @@ package com.thirdsense.social.facebook
 			{
 				trace( "FacebookConnection.onFacebookInit - calling for login" );
 				
-				Facebook.login( FacebookConnection.onFacebookLogin, { scope:'email,publish_stream' } );
+				Facebook.login( FacebookConnection.onFacebookLogin, { scope:String(LPSettings.FACEBOOK_PERMISSIONS) } );
 			}
 			else if ( FacebookConnection.force_new && !FacebookConnection.auto_only )
 			{
@@ -83,12 +96,21 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * Calls a logout of an existing Facebook session
+		 * @param	onComplete	The function to call back to. Must accept a boolean value that indicates the success of the call
+		 */
+		
 		public static function logout( onComplete:Function ):void
 		{
 			if ( onComplete != null )	FacebookConnection.onLogoutComplete = onComplete;
 			
 			Facebook.logout( FacebookConnection.onFacebookLogout );
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function onFacebookLogin( success:Object, fail:Object ):void
 		{
@@ -143,6 +165,10 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * @private	The Facebook API for some reason doesn't call back upon connection. This pings the session until a connection is found or until it times out
+		 */
+		
 		private static function pingSession():void
 		{
 			var session:FacebookSession = getUserSession();
@@ -170,10 +196,17 @@ package com.thirdsense.social.facebook
 				trace( "Session pinged. Connection found!" );
 				FacebookConnection.connected = true;
 				
+				// Upon a connection, calls to get user as FacebookSession object doesn't auto-populate with user details like it does in the mobile version.
+				
 				FacebookConnection.getUser( FacebookConnection.onComplete );
 			}
 			
 		}
+		
+		/**
+		 * Retrieves a severly depleted version of a FacebookSession object. Only the auth response, access token and uid is populated in this object
+		 * @return	A FacebookSession object (severly depleted)
+		 */
 		
 		public static function getUserSession():FacebookSession
 		{
@@ -191,9 +224,14 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * @private	Called on a Facebook logout being successful
+		 */
+		
 		private static function onFacebookLogout():void
 		{
 			FacebookFriend.clear();
+			FacebookConnection.connected = false;
 			
 			if ( FacebookConnection.onLogoutComplete != null )
 			{
@@ -204,47 +242,73 @@ package com.thirdsense.social.facebook
 			
 		}
 		
+		/**
+		 * Checks if the app has been Facebook connected
+		 * @return
+		 */
+		
 		public static function isConnected():Boolean
 		{
 			return ( FacebookConnection.connected == true );
 			
 		}
 		
+		/**
+		 * Retrieves the connected Facebook user's friend list an populates the FacebookFriend class with resulting data
+		 * @param	onComplete	The function to call back to. Must accept a boolean parameter that indicates the success of the call
+		 * @param	fields	The fields to include in the result data packet from Facebook. If left as null, FacebookFriendField.INSTALLED and FacebookFriendField.NAME are used
+		 * @see com.thirdsense.social.facebook.FacebookFriend
+		 * @see	com.thirdsense.social.facebook.FacebookFriendField
+		 */
+		
 		public static function getFriends( onComplete:Function, fields:Array = null ):void
 		{
 			FacebookConnection.onComplete = onComplete;
 			
-			if ( fields )
+			var session:FacebookSession = FacebookConnection.getUserSession();
+			
+			if ( session )
 			{
-				var field_str:String = fields.join(",");
+				if ( fields )
+				{
+					var field_str:String = fields.join(",");
+				}
+				else
+				{
+					field_str = "installed,name"
+				}
+				
+				Facebook.api( "/me/friends", onGetFriends, { fields:field_str } );
+				
+				
+				if ( session.user && !FacebookFriend.getMe() )
+				{
+					var user:Object = session.user;
+					var friend:FacebookFriend = new FacebookFriend();
+					friend.id = user.id;
+					friend.name = user.name;
+					friend.installed = true;
+					for ( var str:String in user )
+					{
+						if ( !friend[str] )
+						{
+							friend[str] = user[str];
+						}
+					}
+					FacebookFriend.addMe( friend );
+				}
 			}
 			else
 			{
-				field_str = "installed,name"
-			}
-			
-			Facebook.api( "/me/friends", onGetFriends, { fields:field_str } );
-			
-			var session:FacebookSession = FacebookConnection.getUserSession();
-			
-			if ( session.user && !FacebookFriend.getMe() )
-			{
-				var user:Object = session.user;
-				var friend:FacebookFriend = new FacebookFriend();
-				friend.id = user.id;
-				friend.name = user.name;
-				friend.installed = true;
-				for ( var str:String in user )
-				{
-					if ( !friend[str] )
-					{
-						friend[str] = user[str];
-					}
-				}
-				FacebookFriend.addMe( friend );
+				trace( "LaunchPad", FacebookConnection, "Error calling getFriends. You must be connecte to Facebook first in order to call this" );
+				onGetFriends( null, true );
 			}
 			
 		}
+		
+		/**
+		 * @private	Called on a result from a getFriends retrieval. If successful, the FacebookFriend class is populated with data.
+		 */
 		
 		private static function onGetFriends( success:Object, fail:Object ):void
 		{
@@ -260,12 +324,21 @@ package com.thirdsense.social.facebook
 			
 		}
 		
+		/**
+		 * Retrieves the current Facebook user's available data
+		 * @param	onComplete	The function that gets called on a result. Must accept a boolean parameter that indicates the call's success.
+		 */
+		
 		public static function getUser( onComplete:Function ):void
 		{
 			FacebookConnection.onComplete = onComplete;
 			Facebook.api( "me", onGetUser );
 			
 		}
+		
+		/**
+		 * @private	Handler for the getUser call. If successful, a FacebookFriend object is populated with the user's data and added to the class.
+		 */
 		
 		private static function onGetUser( success:Object, fail:Object ):void
 		{
@@ -295,6 +368,13 @@ package com.thirdsense.social.facebook
 			fn( (success != null) );
 		}
 		
+		/**
+		 * Loads a user's 50x50 pixel Facebook avatar
+		 * @param	onComplete	The function to call upon a result. Must accept a Bitmap object as it's parameter. This will be passed as null if the call failed
+		 * @param	fbUserId	The requested Facebook user id. If left as a blank string, the currently logged in user's id is passed.
+		 * @return	A boolean value that indicates if the call was successfully made
+		 */
+		
 		public static function getUserAvatar( onComplete:Function, fbUserId:String="" ):Boolean
 		{
 			var session:FacebookSession = FacebookConnection.getUserSession();
@@ -319,6 +399,10 @@ package com.thirdsense.social.facebook
 			}
 		}
 		
+		/**
+		 * @private	Avatar load cancelled handler. Usually triggered by calling SmoothImageLoad.killCue()
+		 */
+		
 		private static function cancelFbUserAvatarLoad( evt:Event ):void
 		{
 			var container:MovieClip = evt.currentTarget as MovieClip;
@@ -330,6 +414,10 @@ package com.thirdsense.social.facebook
 			fn( null );
 			
 		}
+		
+		/**
+		 * @private	Avatar loaded handler. Passes the result through to the onAvatarLoad function as a Bitmap object and disposes of the local bitmapData object
+		 */
 		
 		private static function fbUserAvatarLoaded( evt:Event ):void
 		{
@@ -346,8 +434,9 @@ package com.thirdsense.social.facebook
 			FacebookConnection.onAvatarLoad = null;
 			fn( bmp );
 		}
+		
 		/**
-		* Post to the FB wall
+		* Posts to the currently connected user's Facebook wall
 		 * 
 		 * @param	picture		An image to attach to the post
 		 * @param	postName	The name of the post
@@ -374,6 +463,10 @@ package com.thirdsense.social.facebook
 			return true;
 		}
 		
+		/**
+		 * @private	Handler for the Facebook wall post call
+		 */
+		
 		private static function onFacebookPost(result:Object, fail:Object):void
 		{
 			if ( FacebookConnection.onWallPost != null ) {
@@ -381,13 +474,27 @@ package com.thirdsense.social.facebook
 				var fn:Function = FacebookConnection.onWallPost;
 				FacebookConnection.onWallPost = null;
 				
-				if ( result != null ) {
-					fn( true );
-				} else {
-					fn( false );
-				}
+				fn( (result != null) );
 				
 			}
+		}
+		
+		/**
+		 * Allows the currently connected Facebook user to invite friends to the application
+		 * @param	message	The message to append to the invitation
+		 * @param	prompt_title	The title of the prompt that the user will see when asked to select the friends to invite
+		 */
+		
+		public static function inviteFriends( message:String, prompt_title:String ):void
+		{
+			var url:String = "https://www.facebook.com/dialog/apprequests?";
+			url += "app_id=" + LPSettings.FACEBOOK_APP_ID;
+			url += "&message=" + escape( message );
+			url += "&redirect_uri=" + LPSettings.FACEBOOK_REDIRECT_URL;
+			url += "&title=" + escape( prompt_title );
+			
+			navigateToURL( new URLRequest(url), "_blank" );
+			
 		}
 		
 	}

@@ -4,12 +4,17 @@ package com.thirdsense.utils
 	import flash.geom.Rectangle;
 	
 	/**
-	 * Display Object duplicator
+	 * Duplicates a display object
 	 * @author Ben Leffler
 	 */
 	
 	public class DuplicateDisplayObject
 	{
+		/**
+		 * Creates an exact replica of the desired DisplayObject
+		 * @param	target	The display object to replicate
+		 * @return	The replicated DisplayObject
+		 */
 		
 		public static function duplicate( target:DisplayObject ):DisplayObject 
 		{

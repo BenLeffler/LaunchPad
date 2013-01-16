@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../override.css" type="text/css"><meta name="keywords" content="LPLocalData,com.thirdsense.data.LPLocalData,LPAssets,LPValues,addAsset,addValue,addZip,deleteData,formatAsBitmapData,formatAsDisplayObject,formatAsSoundData,getAllAssets,getAsset,getAssetRecord,getBitmapData,getDefinition,getDisplayObject,getInstance,getItem,getLoadProgress,getNextUnloadedAsset,getNumAssets,getSoundData,getTimeSinceSave,getTimestamp,getValue,listAllLibraryAssets,listAssetsInLibrary,listLibraryItems,listLibraryItems,listLibraryItems,loadToAsset,record,recordAll,registerClass,retrieve,toString,toString"><title>com.thirdsense.data.LPLocalData</title></head><body><script language="javascript" type="text/javascript" src="../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'LPLocalData - API Documentation';
+				var baseRef = '../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">LaunchPad v0.1.0 Framework</td><td class="titleTableTopNav" align="right"><a href="../../../package-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../class-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../all-index-A.html" onclick="loadClassListFrame('../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../index.html?com/thirdsense/data/LPLocalData.html&amp;com/thirdsense/data/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">LPLocalData</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("LPLocalData"); titleBar_setSubNav(false,false,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.thirdsense.data</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  LPLocalData</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">LPLocalData  <img src="../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> Object</td></tr></table><p></p><p></p><p></p>
+	              <p>LaunchPad shared object scaffold for locally stored app data. Data storage requirements differ on a project-by-project basis, so a typical implementation would
+	 see a developer creating an extension class for this LPLocalData class</p>
+	 
+	              <p>Firstly a user will create a custom class that extends this LPLocalData class. Each variable will need to be made public.</p>
+	 
+	              <div class="listing"><pre>
+     package classes {
+     import com.thirdsense.data.LPLocalData;
+     
+         public class AppData extends LPLocalData {
+     
+             public var myVar1:String;
+             public var myVar2:Number;
+             public var myVar3:Array;
+     
+             public function AppData() {
+     
+             }
+         }
+     }</pre></div>
+	 
+	              <p>Next, you will need to register this class for use with the framework from somewhere within the project (a good place would be in your root project class)</p>
+	 
+	              <div class="listing"><pre>
+     import classes.AppData;
+     
+     var appdata:AppData = LPLocalData.registerClass( AppData );</pre></div>
+	 
+	              <p>If you have saved to local data previously, the appdata object above will be auto-populated with the appropriate values. You can retrieve these values as follows:</p>
+	 
+	              <div class="listing"><pre>
+     // I can reference these values directly like this:
+     
+     trace( appdata.myVar1, appdata.myVar2, appdata.myVar3 );
+     
+     // Or I can call a static reference from anywhere in my project like this:
+     
+     trace( LPLocalData.retrieve("myVar1"), LPLocalData.retrieve("myVar2"), LPLocalData.retrieve("myVar3") );</pre></div>
+	 
+	              <p>If you want to save new values to local data, you can do it as follows:</p>
+	 
+	              <div class="listing"><pre>
+     // I can record new data to a local shared object like this:
+     
+     LpLocalData.record( "myVar1", "My new data" );
+     LPLocalData.record( "myVar2", 1234567890 );
+     LPLocalData.record( "myVar3", ["My", "New", "Data"] );</pre></div>
+	 
+	              <p>Alternatively you can make a batch record call if you have multiple variables that need recording:</p>
+	 
+	              <div class="listing"><pre>
+     var appdata:AppData = LPLocalData.getInstance();
+     appdata.myVar1 = "My newer data";
+     appdata.myVar2 = 987654321;
+     appdata.myVar3 = [ "My", "Newer", "Data" ];
+     LPLocalData.recordAll();</pre></div>
+	 
+	              <p>You can also retrieve a timestamp of when a data packet was saved to a local shared object like this:</p>
+	 
+	              <div class="listing"><pre>
+     var time:Number = LPLocalData.getTimestamp( "myVar1" );</pre></div>
+	 
+	              <p>You can even retrieve how much time (in milliseconds) has elapsed since the last save on a variable</p>
+	 
+	              <div class="listing"><pre>
+     var elapsed:Number = LPLocalData.getTimeSinceSave( "myVar1" );</pre></div>
+	 
+	           <p></p><br/><hr></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#LPLocalData()" class="signatureLink">LPLocalData</a>()</div><div class="summaryTableDescription">
+		 The constructor for this scaffold.</div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#deleteData()" class="signatureLink">deleteData</a>():void</div><div class="summaryTableDescription">[static] 
+		 Deletes the all of the app's locally shared data, the instance object's variable values and associated timestamp data
+		 </div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getInstance()" class="signatureLink">getInstance</a>():*</div><div class="summaryTableDescription">[static] 
+		 Retrieves the singleton instance of the class that was registered
+		 </div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getTimeSinceSave()" class="signatureLink">getTimeSinceSave</a>(name:String):Number</div><div class="summaryTableDescription">[static] 
+		 Gets the number of milliseconds that have elapsed since the designated variable was saved to a local shared object
+		 </div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getTimestamp()" class="signatureLink">getTimestamp</a>(name:String):Number</div><div class="summaryTableDescription">[static] 
+		 Retrieves a timestamp for when the designated variable was saved to the local shared object
+		 </div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#record()" class="signatureLink">record</a>(name:String, value:*):void</div><div class="summaryTableDescription">[static] 
+		 Records a variable to the app local shared object
+		 </div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#recordAll()" class="signatureLink">recordAll</a>():void</div><div class="summaryTableDescription">[static] 
+		 Records all variables in the registered class instance to the local shared object
+		 </div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#registerClass()" class="signatureLink">registerClass</a>(extended_class:Class):*</div><div class="summaryTableDescription">[static] 
+		 Registers the app specific class that extends a LPLocalData object.</div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#retrieve()" class="signatureLink">retrieve</a>(name:String):*</div><div class="summaryTableDescription">[static] 
+		 Retrieves the value of a given variable within the locally saved data
+		 </div></td><td class="summaryTableOwnerCol">LPLocalData</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="LPLocalData()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">LPLocalData</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function LPLocalData()</code><p></p><p>
+		 The constructor for this scaffold. It's best practise for your app to extend this class with it's own variable structure, and to register that class with 
+		 a call to LPLocalData.registerClass()
+		 </p></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="deleteData()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">deleteData</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public static function deleteData():void</code><p></p><p></p><p>
+		 Deletes the all of the app's locally shared data, the instance object's variable values and associated timestamp data
+		 </p></div><a name="getInstance()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getInstance</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getInstance():*</code><p></p><p></p><p>
+		 Retrieves the singleton instance of the class that was registered
+		 </p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>*</code> &mdash; The result instance of the class that extends the LPLocalData object
+		 </td></tr></table></div><a name="getTimeSinceSave()"></a><a name="getTimeSinceSave(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getTimeSinceSave</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getTimeSinceSave(name:String):Number</code><p></p><p></p><p>
+		 Gets the number of milliseconds that have elapsed since the designated variable was saved to a local shared object
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the variable to check
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Number</code> &mdash; The number of milliseconds since the object was saved locally
+		 </td></tr></table></div><a name="getTimestamp()"></a><a name="getTimestamp(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getTimestamp</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getTimestamp(name:String):Number</code><p></p><p></p><p>
+		 Retrieves a timestamp for when the designated variable was saved to the local shared object
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the variable to check.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Number</code> &mdash; The number of milliseconds representation of the Date object
+		 </td></tr></table></div><a name="record()"></a><a name="record(String,any)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">record</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function record(name:String, value:*):void</code><p></p><p></p><p>
+		 Records a variable to the app local shared object
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the variable to save. It must be available as a var within your class that extends the LPLocalData class
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">value</span>:*</code> &mdash; The value of the variable
+		 </td></tr></table></p></div><a name="recordAll()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">recordAll</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function recordAll():void</code><p></p><p></p><p>
+		 Records all variables in the registered class instance to the local shared object
+		 </p></div><a name="registerClass()"></a><a name="registerClass(Class)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">registerClass</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function registerClass(extended_class:Class):*</code><p></p><p></p><p>
+		 Registers the app specific class that extends a LPLocalData object. Only one class can be registered per app.
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">extended_class</span>:Class</code> &mdash; The class that extends a LPLocalData object to use as the local data interface.
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>*</code> &mdash; The resulting instance of the class that extends the LPLocalData object
+		 </td></tr></table></div><a name="retrieve()"></a><a name="retrieve(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">retrieve</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function retrieve(name:String):*</code><p></p><p></p><p>
+		 Retrieves the value of a given variable within the locally saved data
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the variable to retrieve
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>*</code> &mdash; The value of the variable
+		 </td></tr></table></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Thu Jan 17 2013, 10:32 AM +11:00  </center></div></body></html><!--<br/>Thu Jan 17 2013, 10:32 AM +11:00  -->

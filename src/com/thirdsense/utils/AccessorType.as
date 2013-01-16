@@ -1,9 +1,11 @@
 package com.thirdsense.utils 
 {
 	/**
-	 * ...
+	 * Accessor Types defined for use with the getClassVariables call
 	 * @author Ben Leffler
+	 * @see	com.thirdsense.utils.getClassVariables
 	 */
+	
 	public class AccessorType 
 	{
 		public static const READ_WRITE:String = "readwrite";

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../override.css" type="text/css"><meta name="keywords" content="FacebookInterface,com.thirdsense.social.FacebookInterface,clearConstructors,getCurrentUser,getFriends,getUserAvatar,getUserSession,init,isConnected,logout,postToWall"><title>com.thirdsense.social.FacebookInterface</title></head><body><script language="javascript" type="text/javascript" src="../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../override.css" type="text/css"><meta name="keywords" content="FacebookInterface,com.thirdsense.social.FacebookInterface,getCurrentUser,getFriends,getUserAvatar,getUserSession,init,inviteFriends,isConnected,logout,postToWall"><title>com.thirdsense.social.FacebookInterface</title></head><body><script language="javascript" type="text/javascript" src="../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
 				asdocTitle = 'FacebookInterface - API Documentation';
 				var baseRef = '../../../';
 				window.onload = configPage;
@@ -11,8 +11,50 @@
 					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("FacebookInterface"); titleBar_setSubNav(false,false,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
 				-->
 			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.thirdsense.social</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  FacebookInterface</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">FacebookInterface  <img src="../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> Object</td></tr></table><p></p><p></p><p></p>
-	 ...
-	 <p></p><br/><hr></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#clearConstructors()" class="signatureLink">clearConstructors</a>():void</div><div class="summaryTableDescription">[static] </div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getCurrentUser()" class="signatureLink">getCurrentUser</a>(onComplete:Function = null):void</div><div class="summaryTableDescription">[static] 
+	              <p>Allows both mobile and web integration of Facebook connectivity. Whilst oAuth requires differing approaches of connectivity
+	 depending on platform, this class consolidates functionality and allow a code once - deploy everywhere approach when it comes
+	 to Facebook Graph API integration.</p>
+	              <p>It is recommended that this class is to be used for all Facebook calls, no matter what platform you are developing for.</p>
+	              <p>The following is an example of a Facebook connection process for a starling based mobile app:</p>
+	              <div class="listing"><pre>
+     import com.thirdsense.social.FacebookInterface;
+     import com.thirdsense.ui.starling.LPsWebBrowser;
+     import com.thirdsense.social.facebook.FacebookFriend;
+     import com.thirdsense.social.facebook.FacebookFriendField;
+     
+     FacebookInterface.init( this.onFacebookConnect, false, false, LPsWebBrowser.invoke );
+     
+     function onFacebookConnect( success:Boolean ):void
+     {
+         if ( success )
+         {
+             trace( "Facebook connection successful!" );
+             FacebookInterface.getFriends( this.onGetFriends, [FacebookFriendField.INSTALLED, FacebookFriendField.EMAIL, FacebookFriendField.NAME] );
+         }
+         else
+         {
+             trace( "Facebook connection failed" );
+         }
+     }
+     
+     function onGetFriends( success:Boolean ):void
+     {
+         if ( success )
+         {
+             trace( "Facebook friends retrieved" );
+     
+             // Get the list of friends that have installed this application
+             var installs:Vector&lt;FacebookFriend&gt; = FacebookFriend.getFriends(true);
+             trace( installs );
+         }
+         else
+         {
+             trace( "Retrieval of Facebook friends failed" );
+         }
+     }
+     </pre></div>
+	 		
+	           <p></p><br/><hr></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getCurrentUser()" class="signatureLink">getCurrentUser</a>(onComplete:Function = null):void</div><div class="summaryTableDescription">[static] 
 		 Calls to Facebook to retrieve the current user (Only compatible with web app)
 		 </div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getFriends()" class="signatureLink">getFriends</a>(onComplete:Function = null, fields:Array = null):void</div><div class="summaryTableDescription">[static] 
 		 Places a call to Facebook to retrieve a user's friends list
@@ -20,13 +62,14 @@
 		 Obtains a user's 50x50 pixel Facebook avatar.</div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getUserSession()" class="signatureLink">getUserSession</a>():FacebookSession</div><div class="summaryTableDescription">[static] 
 		 Retrieves the current user Facebook session
 		 </div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#init()" class="signatureLink">init</a>(onComplete:Function = null, force_new_login:Boolean = false, existing_session_only:Boolean = false, invokeBrowser:Function = null):void</div><div class="summaryTableDescription">[static] 
-		 Initializes a Facebook connection to the project.</div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#isConnected()" class="signatureLink">isConnected</a>():Boolean</div><div class="summaryTableDescription">[static] 
+		 Initializes a Facebook connection to the project.</div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#inviteFriends()" class="signatureLink">inviteFriends</a>(message:String, prompt_title:String):void</div><div class="summaryTableDescription">[static] 
+		 Allows the currently connected Facebook user to invite friends to the application.</div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#isConnected()" class="signatureLink">isConnected</a>():Boolean</div><div class="summaryTableDescription">[static] 
 		 Indicates if the project is currently connected to Facebook.</div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#logout()" class="signatureLink">logout</a>(onComplete:Function):void</div><div class="summaryTableDescription">[static] 
 		 Calls a log out of the current Facebook session.</div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#postToWall()" class="signatureLink">postToWall</a>(picture:String, postName:String, link:String, caption:String, description:String, message:String = null, onComplete:Function = null):Boolean</div><div class="summaryTableDescription">[static] 
 		 Posts a picture and message to the currently connected user's Facebook wall
 		 </div></td><td class="summaryTableOwnerCol">FacebookInterface</td></tr></table></div><script language="javascript" type="text/javascript"><!--
 										showHideInherited();
-										--></script><div class="MainContent"><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="clearConstructors()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">clearConstructors</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public static function clearConstructors():void</code><p></p></div><a name="getCurrentUser()"></a><a name="getCurrentUser(Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getCurrentUser</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getCurrentUser(onComplete:Function = null):void</code><p></p><p></p><p>
+										--></script><div class="MainContent"><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="getCurrentUser()"></a><a name="getCurrentUser(Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getCurrentUser</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public static function getCurrentUser(onComplete:Function = null):void</code><p></p><p></p><p>
 		 Calls to Facebook to retrieve the current user (Only compatible with web app)
 		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">onComplete</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; A callback function that accepts a boolean response (to indicate success). You can then call FacebookFriend.getMe() to retrieve the new data.
 		 </td></tr></table></p></div><a name="getFriends()"></a><a name="getFriends(Function,Array)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getFriends</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getFriends(onComplete:Function = null, fields:Array = null):void</code><p></p><p></p><p>
@@ -48,7 +91,11 @@
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">existing_session_only</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; If only a current session is to be used, pass this as true (does not allow a new log-in to occur)
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">invokeBrowser</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; If a customer browser or LPsWebBrowser interface is to be used, the function to call the browser should be passed through
 		 here (only compatible with mobile app and the function MUST return a StageWebView instance to be used)
-		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso">flash.media.StageWebView</div></div><a name="isConnected()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">isConnected</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function isConnected():Boolean</code><p></p><p></p><p>
+		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso">flash.media.StageWebView<br/><a href="../../../com/thirdsense/ui/starling/LPsWebBrowser.html" target="">com.thirdsense.ui.starling.LPsWebBrowser</a></div></div><a name="inviteFriends()"></a><a name="inviteFriends(String,String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">inviteFriends</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function inviteFriends(message:String, prompt_title:String):void</code><p></p><p></p><p>
+		 Allows the currently connected Facebook user to invite friends to the application. (Web app users must have pop-ups enabled for this call to not be blocked)
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">message</span>:String</code> &mdash; The message to append to the invitation
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">prompt_title</span>:String</code> &mdash; The title of the prompt that the user will see when asked to select the friends to invite
+		 </td></tr></table></p></div><a name="isConnected()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">isConnected</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function isConnected():Boolean</code><p></p><p></p><p>
 		 Indicates if the project is currently connected to Facebook.
 		 </p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Boolean</code> &mdash; Boolean response
 		 </td></tr></table></div><a name="logout()"></a><a name="logout(Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">logout</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function logout(onComplete:Function):void</code><p></p><p></p><p>
@@ -64,4 +111,4 @@
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">message</span>:String</code> (default = <code>null</code>)<code></code> &mdash; 	An optional field that was be used to add a message typed by the user
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">onComplete</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; The function to return the result of the post to. Function must include a parameter that accepts a boolean value - true if successful, false otherwise
 		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Boolean</code> &mdash; A boolean value to indicate if the call was made. It will return false if a Facebook connection hasn't been made before this call.
-		 </td></tr></table></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Thu Jan 10 2013, 11:26 AM +11:00  </center></div></body></html><!--<br/>Thu Jan 10 2013, 11:26 AM +11:00  -->
+		 </td></tr></table></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Thu Jan 17 2013, 10:32 AM +11:00  </center></div></body></html><!--<br/>Thu Jan 17 2013, 10:32 AM +11:00  -->

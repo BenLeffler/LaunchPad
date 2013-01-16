@@ -22,7 +22,7 @@ package com.thirdsense.ui.starling
 	import starling.utils.VAlign;
 	
 	/**
-	 * ...
+	 * Custom web browser widget for use with a Starling based project. (Only compatible with Air)
 	 * @author Ben Leffler
 	 */
 	public class LPsWebBrowser extends Sprite 
@@ -92,6 +92,10 @@ package com.thirdsense.ui.starling
 			this.createBorder();
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function createBackground():void
 		{
 			var quad:Quad = new Quad( Starling.current.stage.stageWidth, Starling.current.stage.stageHeight, 0x000000 );
@@ -103,6 +107,10 @@ package com.thirdsense.ui.starling
 			tween.fadeFromTo(0, 0.75, true);
 			tween.start();
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function createBorder():void
 		{
@@ -151,7 +159,8 @@ package com.thirdsense.ui.starling
 			
 			this.viewport = new Rectangle( quad.x, quad.y, quad.width, quad.height );
 			
-			var tp:TexturePack = TexturePack.createFromMovieClip( new lp_loadingicon(), "LPsWebBrowser", "loading_icon", null, 0, 0, null, 2 );
+			var cl:Class = getDefinitionByName( "lp_loadingicon" ) as Class;
+			var tp:TexturePack = TexturePack.createFromMovieClip( new cl(), "LPsWebBrowser", "loading_icon", null, 0, 0, null, 2 );
 			this.loading_icon = tp.getImage();
 			this.loading_icon.x = padding + 12 + (tp.source_width / 2);
 			this.loading_icon.y = stage_height - padding - 10 - (tp.source_height / 2);
@@ -174,7 +183,8 @@ package com.thirdsense.ui.starling
 			this.address_text.vAlign = VAlign.CENTER;
 			this.border.addChild( this.address_text );
 			
-			var mc:MovieClip = new lp_button1();
+			cl = getDefinitionByName( "lp_button1" ) as Class;
+			var mc:MovieClip = new cl();
 			mc.label_txt.text = "CLOSE";
 			tp = TexturePack.createFromMovieClip( mc, "LPsWebBrowser", "close_button", null, 0, 0, null, 1 );
 			this.close_button = new LPsButton( tp, this.closeHandler );
@@ -186,9 +196,8 @@ package com.thirdsense.ui.starling
 			tween.fadeFromTo( 0, 1 );
 			tween.start();
 			
-			this.loading_icon_tween = new BTween( this.loading_icon, 30 );
+			this.loading_icon_tween = new BTween( this.loading_icon, 30, BTween.LOOPS_FOREVER );
 			this.loading_icon_tween.rotateFromTo( 0, Trig.toRadians(359) );
-			this.loading_icon_tween.loops = BTween.LOOPS_FOREVER;
 			this.loading_icon_tween.start();
 			
 		}
@@ -246,6 +255,22 @@ package com.thirdsense.ui.starling
 		}
 		
 		/**
+		 * Obtains the current URL if a browser session exists
+		 */
+		
+		public function get current_url():String
+		{
+			if ( this.swv )
+			{
+				return this.swv.location;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		
+		/**
 		 * Redirects the current browser session to the designated url
 		 * @param	url	The url to navigate to. Must be prefaced with a "http://", "https://" etc. or an error is thrown
 		 */
@@ -298,6 +323,10 @@ package com.thirdsense.ui.starling
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function addToStage( url:String ):void
 		{
 			if ( !this.swv )
@@ -307,6 +336,10 @@ package com.thirdsense.ui.starling
 			
 			this.swv.loadURL( url );
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function createStageWebView():void
 		{
@@ -350,6 +383,10 @@ package com.thirdsense.ui.starling
 			
 			this.loading_icon.visible = false;
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function updateAddressText( copy:String = "" ):void
 		{

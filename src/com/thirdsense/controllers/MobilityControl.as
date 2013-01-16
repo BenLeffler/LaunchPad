@@ -15,7 +15,7 @@ package com.thirdsense.controllers
 	import flash.utils.setTimeout;
 	
 	/**
-	 * ...
+	 * Utility set to allow specific functions within a Mobile environment (such as smart phone and tablet)
 	 * @author Ben Leffler
 	 */
 	
@@ -26,10 +26,12 @@ package com.thirdsense.controllers
 		private static var onDeactive:Function;
 		private static var keep_awake:Boolean = false;
 		private static var onBackButton:Function;
-		private static var notification_manager:*;
-		private static var onNotificationRegister:Function;
-		public static var notification_ids:Array;
 		private static var fps:int;
+		private static var gc_timer:uint;
+		
+		/**
+		 * Does the mobile device currently have focus? False is returned if the app is running in the background.
+		 */
 		
 		public static function get has_focus():Boolean
 		{
@@ -41,10 +43,18 @@ package com.thirdsense.controllers
 			
 		}
 		
+		/**
+		 * Enables the iPhone/iPad mute button to mute the app.
+		 */
 		public static function initAudioMode():void
 		{
 			SoundMixer.audioPlaybackMode = AudioPlaybackMode.AMBIENT;
 		}
+		
+		/**
+		 * Set the app to exit completely if focus is lost (Compatible only with Android)
+		 * @param	enabled	Set to true if the app is to shut down on loss of focus. Set to false if it is to remain operating in the background.
+		 */
 		
 		public static function exitIfInactive( enabled:Boolean=true ):void
 		{
@@ -65,12 +75,21 @@ package com.thirdsense.controllers
 			
 		}
 		
+		/**
+		 * Removes any activate control listeners and returns the device to the default state
+		 */
+		
 		public static function killActivationControl():void
 		{
 			NativeApplication.nativeApplication.removeEventListener(Event.DEACTIVATE, MobilityControl.activationHandler);
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE, MobilityControl.activationHandler);
 		}
 		
+		/**
+		 * Handles the activation process for the device if it loses or regains focus (Android only)
+		 * @param	onActivate	Function to call upon the app regaining focus
+		 * @param	onDeactivate	Function to call upon the app losing focus
+		 */
 		public static function initActivationControl( onActivate:Function=null, onDeactivate:Function=null ):void
 		{
 			if ( Capabilities.cpuArchitecture != "x86" ) {
@@ -89,6 +108,10 @@ package com.thirdsense.controllers
 			
 		}
 		
+		/**
+		 * Prevents the device from entering a sleep state. (Android requires the KEEP_AWAKE permission to be enabled to use this feature)
+		 */
+		
 		public static function preventFromSleep():void
 		{
 			if ( Profiles.mobile ) {
@@ -97,6 +120,11 @@ package com.thirdsense.controllers
 			}
 			
 		}
+		
+		/**
+		 * Allows the device to enter a sleep state if no interaction is detected for a user-determined amount of time
+		 * @param	save_state	Retains the allow sleep state in memory until overriden.
+		 */
 		
 		public static function allowSleep( save_state:Boolean = true ):void
 		{
@@ -109,10 +137,13 @@ package com.thirdsense.controllers
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function activationHandler(evt:Event):void
 		{
 			if ( evt.type == Event.ACTIVATE ) {
-				//LaunchPad.ROOT.stage.frameRate = MobilityControl.fps;
 				
 				_has_focus = true;
 				
@@ -129,7 +160,6 @@ package com.thirdsense.controllers
 			}
 			
 			if ( evt.type == Event.DEACTIVATE ) {
-				//LaunchPad.ROOT.stage.frameRate = 4;
 				
 				_has_focus = false;
 				
@@ -144,6 +174,11 @@ package com.thirdsense.controllers
 			
 		}
 		
+		/**
+		 * Exits the application (Android only)
+		 * @param	evt	Event object to allow a listener to invoke this method
+		 */
+		
 		public static function exitApplication( evt:Event = null ):void
 		{
 			trace( "exitApplication" );
@@ -156,11 +191,18 @@ package com.thirdsense.controllers
 			
 		}
 		
+		/**
+		 * Starts a routine garbage collection every 5 seconds
+		 */
 		public static function initTimedGarbageCollect():void
 		{
-			setTimeout( garbageCollect, 5000 );
+			gc_timer = setTimeout( garbageCollect, 5000 );
 			
 		}
+		
+		/**
+		 * 
+		 */
 		
 		private static function garbageCollect():void
 		{
@@ -190,11 +232,19 @@ package com.thirdsense.controllers
 			
 		}
 		
+		/**
+		 * Returns the back button to it's default state (Android only)
+		 */
+		
 		public static function killBackButton():void
 		{
 			LaunchPad.instance.nativeStage.stage.removeEventListener( KeyboardEvent.KEY_DOWN, backButtonHandler );
 			onBackButton = null;
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function backButtonHandler(evt:KeyboardEvent):void
 		{
@@ -206,6 +256,11 @@ package com.thirdsense.controllers
 				}
 			}
 		}
+		
+		/**
+		 * Returns the back button handler that is currently in use (use for temporary override of button functions such as application ui alerts)
+		 * @return	The function that is currently being called upon a back-button being pressed
+		 */
 		
 		public static function getBackButtonHandler():Function
 		{

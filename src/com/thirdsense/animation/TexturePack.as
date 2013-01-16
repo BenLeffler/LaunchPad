@@ -12,7 +12,8 @@ package com.thirdsense.animation
 	import starling.textures.TextureAtlas;
 	
 	/**
-	 * ...
+	 * The TexturePack class enables you to convert during runtime a MovieClip to a texture packed object primarily for use with the Starling Framework. This class also
+	 * acts as a psuedo-asset management sytem for textures, texture atlases, source bitmapdata and render textures.
 	 * @author Ben Leffler
 	 */
 	
@@ -20,17 +21,57 @@ package com.thirdsense.animation
 	{
 		private var _spritesheet:BitmapData;
 		private var _sparrow_xml:XML;
+		
+		/**
+		 * The pool name of the TexturePack object
+		 */
 		public var pool:String = "";
+		
+		/**
+		 * The sequence name of the TexturePack object
+		 */
 		public var sequence:String = "";
+		
+		/**
+		 * The texture object representation of the source sprite sheet
+		 */
 		public var texture:Texture;
+		
+		/**
+		 * The dynamic render texture object if the TexturePack object has been slated to use it
+		 */
 		public var render_texture:RenderTexture;
+		
+		/**
+		 * The texture atlas to be used by the Starling framework
+		 */
 		public var atlas:TextureAtlas;
+		
+		/**
+		 * The x/y co-ordinate offset of the source sprite. Use the to correctly calculate the pivot point
+		 */
 		public var offset:Point;
+		
+		/**
+		 * The original MovieClip's source width
+		 */
 		public var source_width:Number;
+		
+		/**
+		 * The original MovieClip's source height
+		 */
 		public var source_height:Number;
+		
+		/**
+		 * Dynamic metadata that can be configured to carry any kind of data to be attached with this specific TexturePack object
+		 */
 		public var metadata:Object;
 		
 		private static var texture_packs:Vector.<TexturePack>;
+		
+		/**
+		 * Indicates if mipmaps are to be generated when converting from a MovieClip/SpriteSequence to a TexturePack object
+		 */
 		public static var generate_mipmaps:Boolean = false;
 		
 		/**
@@ -338,14 +379,18 @@ package com.thirdsense.animation
 		
 		/**
 		 * Traces out the list of texture pack objects that currently exist in the application library.
+		 * @param	pool	If you wish to limit the traced results to a specific pool, pass through the pool name
 		 */
 		
-		public static function traceAllTexturePacks():void
+		public static function traceAllTexturePacks( pool:String = "" ):void
 		{
 			for ( var i:uint = 0; i < texture_packs.length; i++ )
 			{
 				var tp:TexturePack = texture_packs[i];
-				trace( "TEXTURE PACK - POOL:", tp.pool, ", SEQ:", tp.sequence );
+				if ( pool == "" || tp.pool == pool )
+				{
+					trace( "TEXTURE PACK - POOL:", tp.pool, ", SEQ:", tp.sequence );
+				}
 			}
 		}
 		

@@ -54,6 +54,10 @@ package com.thirdsense.utils
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function imageCaptured(evt:MediaEvent):void
 		{
 			var imagePromise:MediaPromise = media = evt.data;
@@ -75,12 +79,20 @@ package com.thirdsense.utils
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function asyncImageLoaded(evt:Event):void 
 		{
 			onComplete( imageLoader );
 			
 			dispose();
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function captureCanceled( evt:Event ):void
 		{
@@ -93,6 +105,10 @@ package com.thirdsense.utils
 			onFailure( DeviceCamera.CAMERA_ERROR );
 			dispose();
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function dispose():void
 		{

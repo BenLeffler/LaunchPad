@@ -102,6 +102,10 @@ package com.thirdsense.ui.starling
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function mouseWheelHandler( evt:MouseEvent ):void
 		{
 			var pt:Point = new Point( LaunchPad.instance.target.mouseX, LaunchPad.instance.target.mouseY );
@@ -117,6 +121,10 @@ package com.thirdsense.ui.starling
 				}
 			}
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function removeHandler( evt:Event ):void
 		{
@@ -140,6 +148,10 @@ package com.thirdsense.ui.starling
 				Starling.current.nativeStage.removeEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
 			}
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function touchHandler( evt:TouchEvent ):void
 		{
@@ -186,12 +198,16 @@ package com.thirdsense.ui.starling
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function timeline(evt:EnterFrameEvent):void
 		{
 			if ( this.offset ) 
 			{
-				this.vx = (this.dx - this.target.x) / 5;
-				this.vy = (this.dy - this.target.y) / 5;
+				this.vx = (this.dx - this.target.x) / 8;
+				this.vy = (this.dy - this.target.y) / 8;
 				
 				if ( Math.abs(this.vx) > 5 && this.type == ScrollType.HORIZONTAL )
 				{

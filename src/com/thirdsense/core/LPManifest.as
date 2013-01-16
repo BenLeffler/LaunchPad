@@ -2,6 +2,8 @@ package com.thirdsense.core
 {
 	import com.thirdsense.animation.SpriteSequence;
 	import com.thirdsense.animation.TexturePack;
+	import com.thirdsense.data.LPLocalData;
+	import com.thirdsense.display.Logo;
 	import com.thirdsense.LaunchPad;
 	import com.thirdsense.settings.IOSDevices;
 	import com.thirdsense.social.facebook.FacebookFriendField;
@@ -9,7 +11,9 @@ package com.thirdsense.core
 	import com.thirdsense.sound.SoundShape;
 	import com.thirdsense.sound.SoundStream;
 	import com.thirdsense.ui.starling.LPsButton;
+	import com.thirdsense.ui.starling.LPsCheckList;
 	import com.thirdsense.ui.starling.LPsRadioButton;
+	import com.thirdsense.ui.starling.LPsSelectList;
 	import com.thirdsense.ui.starling.LPsWebBrowser;
 	import com.thirdsense.ui.starling.menu.LPMenuTransition;
 	import com.thirdsense.ui.starling.menu.LPsBaseMenu;
@@ -19,9 +23,8 @@ package com.thirdsense.core
 	import com.thirdsense.utils.getDefinitionNames;
 	import com.thirdsense.utils.IsoTools;
 	import com.thirdsense.utils.Landscape;
+	import com.thirdsense.utils.StringTools;
 	import com.thirdsense.utils.Trig;
-	import flash.display.MovieClip;
-	import flash.text.Font;
 	
 	/**
 	 * @private
@@ -45,9 +48,14 @@ package com.thirdsense.core
 		private var lps_base_menu:LPsBaseMenu;
 		private var lps_button:LPsButton;
 		private var scroll_control:ScrollControl;
-		private var lps_radio_button:LPsRadioButton;
 		private var device_camera:DeviceCamera;
 		private var lps_web_browser:LPsWebBrowser;
+		private var lps_check_list:LPsCheckList;
+		private var lps_select_list:LPsSelectList;
+		private var lps_radio_button:LPsRadioButton;
+		private var string_tools:StringTools;
+		private var logos:Logo;
+		private var lp_local_data:LPLocalData;
 		
 		public function LPManifest() 
 		{

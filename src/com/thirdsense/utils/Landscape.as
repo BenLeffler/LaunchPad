@@ -3,7 +3,7 @@ package com.thirdsense.utils
 	import flash.display.BitmapData;
 	
 	/**
-	 * Class to assist with the generation of random landscape
+	 * Class to assist with the generation of random landscape based on perlin noise
 	 * @author Ben Leffler
 	 */
 	
@@ -30,6 +30,10 @@ package com.thirdsense.utils
 			return Landscape.autoLevel( bmpdata, min_limit, max_limit );
 			
 		}
+		
+		/**
+		 * @private	Applies a level so values are equalised between 0 (min) and 1 (max)
+		 */
 		
 		private static function autoLevel( bmd:BitmapData, min:Number, max:Number ):Array
 		{

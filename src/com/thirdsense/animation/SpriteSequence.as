@@ -141,6 +141,9 @@ package com.thirdsense.animation
 				rect = crop;
 			}
 			
+			rect.width = Math.ceil(rect.width);
+			rect.height = Math.ceil(rect.height);
+			
 			var twidth:Number = rect.width;
 			var theight:Number = rect.height;
 			
@@ -192,7 +195,7 @@ package com.thirdsense.animation
 					
 					return bmpdata;
 					
-				} else if ( this.sprites.length ) {
+				} else if ( this.sprites.length == 1 ) {
 					
 					bmpdata = new BitmapData( sprites[0].width, sprites[0].height, true, 0 );
 					bmpdata.copyPixels( sprites[0], sprites[0].rect, new Point() );

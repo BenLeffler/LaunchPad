@@ -5,7 +5,7 @@ package com.thirdsense.settings
 	import flash.system.Capabilities;
 	
 	/**
-	 * ...
+	 * Device type management for the LaunchPad framework
 	 * @author Ben Leffler
 	 */
 	
@@ -27,6 +27,10 @@ package com.thirdsense.settings
 		public static const DEVICE_DETECT:String = "deviceDetect";
 		
 		private static var _CURRENT_DEVICE:String = "";
+		
+		/**
+		 * Detects the type of device being used
+		 */
 		
 		public static function get CURRENT_DEVICE():String	{	return _CURRENT_DEVICE	};
 		public static function set CURRENT_DEVICE( val:String ):void
@@ -84,6 +88,10 @@ package com.thirdsense.settings
 			
 		}
 		
+		/**
+		 * Returns an indication on if the user is running a mobile device. If the config.xml file is forcing a mobile profile, this will return as true.
+		 */
+		
 		public static function get mobile():Boolean
 		{
 			if ( LPSettings.FORCE_MOBILE_PROFILE ) {
@@ -109,6 +117,10 @@ package com.thirdsense.settings
 			
 		}
 		
+		/**
+		 * Indicates if this is a desktop Air app. A forced mobile profile in config.xml sets this value to false
+		 */
+		
 		public static function get desktop():Boolean
 		{
 			if ( LPSettings.FORCE_MOBILE_PROFILE ) {
@@ -123,6 +135,10 @@ package com.thirdsense.settings
 			
 		}
 		
+		/**
+		 * Indicates if this is a web app. A forced mobile profile in config.xml does not affect this value
+		 */
+		
 		public static function get web():Boolean
 		{
 			if ( ExternalInterface.available || (!mobile && !desktop) ) {
@@ -132,6 +148,11 @@ package com.thirdsense.settings
 			return false;
 			
 		}
+		
+		/**
+		 * Determines if this app is being run on an Apple mobile device
+		 * @return
+		 */
 		
 		public static function isIOS():Boolean
 		{
@@ -151,6 +172,11 @@ package com.thirdsense.settings
 			
 		}
 		
+		/**
+		 * Determines if this app is being run on an Android mobile device
+		 * @return
+		 */
+		
 		public static function isAndroid():Boolean
 		{
 			if ( !mobile ) {
@@ -168,6 +194,12 @@ package com.thirdsense.settings
 			return false;
 			
 		}
+		
+		/**
+		 * Returns a string representation of the IOS device being used. Specific details can be obtained on model and make etc. by calling on IOSDevices.isDeviceType on this function
+		 * @return	A string representation of the in use IOS device. If not an IOS device, an empty string is returned.
+		 * @see	com.thirdsense.settings.IOSDevices
+		 */
 		
 		public static function getIOSDeviceType():String
 		{

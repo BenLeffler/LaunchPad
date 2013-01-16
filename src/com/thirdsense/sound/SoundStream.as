@@ -7,8 +7,9 @@ package com.thirdsense.sound
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
 	import flash.net.URLRequest;
+	
 	/**
-	 * ...
+	 * Static class that plays a sound from either LaunchPad asset library or the LaunchPad lib/mp3/ folder
 	 * @author Ben Leffler
 	 */
 	
@@ -21,6 +22,18 @@ package com.thirdsense.sound
 		{
 			
 		}
+		
+		/**
+		 * Plays a a designated sound. This function will first check the availability of a sound within the runtime loaded
+		 * LaunchPad asset library - if one does not exist, it will attempt to load the sound from the lib/mp3/ folder
+		 * @param	file	The asset name or the file name of the sound to play
+		 * @param	volume	The volume at which to play the sound
+		 * @param	loops	The number of loops to play the sound for
+		 * @param	label	The type of sound this is labelled as (as defined by the SoundLabel class). The sound will be assigned a volume multiplier based on type
+		 * @return	The SoundChannel object of the sound. This object can be used to apply a SoundShape to for fade effects and panning
+		 * @see	com.thirdsense.sound.SoundShape
+		 * @see com.thirdsense.sound.SoundLabel
+		 */
 		
 		public static function play( file:String, volume:Number = 1, loops:int = 0, label:String="sound" ):SoundChannel
 		{
@@ -42,6 +55,11 @@ package com.thirdsense.sound
 			}
 		}
 		
+		/**
+		 * Sets the volume multiplier for a sound tagged with a SoundLabel.SOUND label
+		 * @see	com.thirdsense.sound.SoundLabel
+		 */
+		
 		static public function get sound_volume():Number 
 		{
 			return _sound_volume;
@@ -51,6 +69,11 @@ package com.thirdsense.sound
 		{
 			_sound_volume = value;
 		}
+		
+		/**
+		 * Sets the volume multiplier for a sound tagged with a SoundLabel.MUSIC label
+		 * @see	com.thirdsense.sound.SoundLabel
+		 */
 		
 		static public function get music_volume():Number 
 		{

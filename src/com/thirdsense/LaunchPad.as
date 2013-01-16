@@ -1,37 +1,82 @@
 package com.thirdsense 
 {
 	import com.thirdsense.animation.BTween;
-	//import com.thirdsense.core.LPManifest;
+	import com.thirdsense.controllers.MobilityControl;
 	import com.thirdsense.core.Preload;
 	import com.thirdsense.data.LPAsset;
 	import com.thirdsense.data.LPValue;
 	import com.thirdsense.settings.LPSettings;
 	import com.thirdsense.settings.Profiles;
 	import com.thirdsense.utils.FlashVars;
+	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
+	import flash.text.Font;
 	import starling.core.Starling;
 	
 	/**
-	 * LaunchPad Contructor
+	 * <p>LaunchPad application framework and asset management toolset. For mobile, desktop and web based projects.</p>
+	 * 
+	 * <p>The following example shows how to initialize the framework from within the base constructor class of your project:</p>
+	 * 
+	 * <listing>
+	 * package {
+	 * 	import flash.display.MovieClip;
+	 * 	import com.thirdsense.LaunchPad;
+	 * 	
+	 * 	public class Example extends MovieClip {
+	 * 		private var launchpad:LaunchPad;
+	 * 		
+	 * 		public function Example() {
+	 * 			launchpad.init( this, this.onLaunchPadInit );
+	 * 		}
+	 * 
+	 * 		private function onLaunchPadInit() {
+	 * 			trace( "LaunchPad has loaded my assets and now I'm ready to rumble!" );
+	 * 		}
+	 * 	}
+	 * }</listing>
+	 * 
 	 * @author Ben Leffler
 	 * @version 1.0.0
 	 */
 	
 	public class LaunchPad
 	{
+		/**
+		 * Singleton instance of the LaunchPad framework
+		 */
 		public static var instance:LaunchPad;
 		
 		private var _target:MovieClip;
 		private var onCompleteInit:Function;
-		//private var manifest:LPManifest;
 		private var _starling:Starling;
+		
+		/**
+		 * The base constructor of the LaunchPad framework. Where all good things must come from.
+		 */
 		
 		public function LaunchPad() 
 		{
+			this.loadLaunchPadLibrary();
+		}
+		
+		/**
+		 * @private
+		 */
+		
+		private function loadLaunchPadLibrary():void
+		{
+			var mc:MovieClip = new lp_button1();
+			mc = new lp_loadingicon();
+			var spr:Sprite = new lp_launchpadlight();
+			spr = new lp_launchpaddark();
+			var font:Font = new ArialRounded();
+			var bmd:BitmapData = new lp_starlinglight();
+			bmd = new lp_starlingdark();
 			
 		}
 		
@@ -41,7 +86,6 @@ package com.thirdsense
 		 * @param	onComplete	The function to call once the application has completed initializing
 		 * @param	preloader	The sprite to use for the preloading user interface. Pass as null to use the default generic loader.
 		 * @param	profile	The profile of the device to use for this build.
-		 * @see	com.thirdsense.settings.Profiles
 		 */
 		
 		public function init( target:MovieClip, onComplete:Function, preloader:Sprite=null ):void
@@ -74,6 +118,11 @@ package com.thirdsense
 		private function onPreloadComplete():void
 		{
 			Profiles.CURRENT_DEVICE = Profiles.DEVICE_DETECT;
+			
+			if ( Profiles.mobile )
+			{
+				MobilityControl.initAudioMode();
+			}
 			
 			this.onCompleteInit();
 			this.onCompleteInit = null;
@@ -117,7 +166,7 @@ package com.thirdsense
 		}
 		
 		/**
-		 * Starts a Starling framework session
+		 * Starts a Starling framework session (v1.3) - It is still recommended that you add the starling.swc to your project for access to all Starling classes
 		 * @param	rootClass	The root class of the starling container that gets called upon initialisation
 		 * @param	handleLostContext	Handles the device losing Stage3D context (requires more device memory)
 		 * @param	showStats	Show a stats dialogue in the top-left corner of the stage
@@ -142,6 +191,18 @@ package com.thirdsense
 		 * Obtains a value as defined by the LaunchPad config.xml
 		 * @param	name	The name of the value to retrieve
 		 * @return	The value as a String
+		 * @example	<p>Firstly you must have appropriate values established in your project config.xml file:</p>
+		 * <listing>
+		 * &lt;data&gt;
+		 *  &lt;value name="firstName" value="Ben" &#47;&gt;
+		 *  &lt;value name="lastName" value="Leffler" &#47;&gt;
+		 * &lt;&#47;data&gt;
+		 * </listing>
+		 * <p>The values set out above will then become available through your project by calling getValue as follows:</p>
+		 * <listing>
+		 * var firstName:String = LaunchPad.getValue( "firstName" );
+		 * var lastName:String = LaunchPad.getValue( "lastName" );
+		 * </listing>
 		 */
 		
 		public static function getValue( name:String ):String
@@ -150,10 +211,56 @@ package com.thirdsense
 		}
 		
 		/**
-		 * Obtains an asset that has been loaded in to the LaunchPad framework during the preload stage.
-		 * @param	id	(Optional) Designates which asset library to retrieve
-		 * @param	linkage	(Optional) Designates the specific linkage name of an asset, if the asset library is of the LPAssetClient qualified class type
+		 * Obtains an asset that has been loaded in to the LaunchPad framework during the preload (and postload) stage.
+		 * @param	id	(Optional) Designates which asset library to retrieve (or to retrieve from)
+		 * @param	linkage	(Optional) Designates the specific linkage name of an asset, if the source library instance is a zip or a swf that has been set up with the LPAssetClient class
 		 * @return	Null if item unfound. Otherwise it will return a variety of object types
+		 * @example	<p>The assets to be loaded (both pre and post load) need to be set up in the project config.xml file as follows:</p>
+		 * <listing>
+		 * &lt;data&gt;
+		 *  &lt;asset url="lib/swf/mySWFAsset1.swf" label="Loading Asset 1" id="first_asset" postload="false" &#47;&gt;
+		 *  &lt;asset url="lib/swf/mySWFAsset2.swf" label="Loading Asset 2" id="second_asset" postload="true" &#47;&gt;
+		 *  &lt;asset url="lib/swf/myZipAsset.zip" label="Loading Asset 3" id="third_asset" postload="false" &#47;&gt;
+		 *  &lt;asset url="lib/swf/myXMLAsset.xml" label="Loading Asset 4" id="fourth_asset" postload="true" &#47;&gt;
+		 *  &lt;asset url="lib/swf/myJSONAsset.json" label="Loading Asset 5" id="fifth_asset" postload="false" &#47;&gt;
+		 * &lt;&#47;data&gt;
+		 * </listing>
+		 * <p>Notice that some assets aren't labelled as post-load, therefore these assets will get loaded in to memory during the LaunchPad.init call at the start
+		 * and will be availble to call with the LaunchPad.getAsset call at any point. The other assets will need to be loaded with the LaunchPad.loadLibrary call 
+		 * before you can access them.</p>
+		 * <p>To load the asset with id 'first_asset' as a MovieClip (as the source asset is a swf), simply call:</p>
+		 * <listing>
+		 * var mc:MovieClip = LaunchPad.getAsset( "first_asset" ) as MovieClip;
+		 * </listing>
+		 * <p>However if 'first_asset' has it's own library items (set up with Actionscript linkage identifiers) that you wish to access, the source library 
+		 * (ie mySWFAsset1.swf) will need to be compiled with a reference to the LPAssetClient class on it's main timeline as follows:</p>
+		 * <listing>
+		 * var client:LPAssetClient = new LPAssetClient(this);
+		 * </listing>
+		 * <p>You can now call upon any linkage within it's library from your LaunchPad project as follows:</p>
+		 * <listing>
+		 * var mc:MovieClip = LaunchPad.getAsset( "first_asset", "asset_linkage_name" );
+		 * </listing>
+		 * <p>You can also search your entire LaunchPad asset library for the linkage name, without knowing the id of the asset library. The first encountered match 
+		 * will always be returned:</p>
+		 * <listing>
+		 * var mc:MovieClip = LaunchPad.getAsset( "", "asset_linkage_name" );
+		 * </listing>
+		 * <p>This call handles a multitude of different asset types. If you wanted to call on the library marked with id 'fifth_asset' (a JSON object):</p>
+		 * <listing>
+		 * var obj:Object = LaunchPad.getAsset( "fifth_asset" );
+		 * </listing>
+		 * <p>LaunchPad can also handle compressed library files such as zip and 3rd (same as zip, but with an altered extension). These libs are handy when you want
+		 * to combine sound, images and movieclips in to a single compressed file without having to use Flash to compile the assets in to a swf library. File types 
+		 * within the zip file should be limited to swf, mp3, jpg, png and gif</p>
+		 * <p>The following example takes the asset marked with id 'third_asset' above and retrieves various assets from the zip file.</p>
+		 * <listing>
+		 * var mc:MovieClip = LaunchPad.getAsset( "third_asset", "my_swf.swf" );
+		 * var sound:Sound = LaunchPad.getAsset( "third_asset", "my_sound.mp3" );
+		 * var bmpdata1:BitmapData = LaunchPad.getAsset( "third_asset", "my_image.jpg" );
+		 * var bmpdata2:BitmapData = LaunchPad.getAsset( "third_asset", "my_image.png" );
+		 * var bmpdata3:BitmapData = LaunchPad.getAsset( "third_asset", "my_image.gif" );
+		 * </listing>
 		 */
 		
 		public static function getAsset( id:String = "", linkage:String = "" ):*
@@ -166,6 +273,36 @@ package com.thirdsense
 		 * @param	id_array	An array of library id's to load one-by-one
 		 * @param	onComplete	The callback function once the procedure has reached it's end
 		 * @param	preloader	The preloader ui element to use. If left as null, the LaunchPad generic loader element is used. For no loader bar, pass this as an empty movieclip.
+		 * @example	<p>When an asset has been tagged in the project config.xml as a postload asset, it will not be loaded by the framework until you call this function. So firstly,
+		 * make sure that the asset has been correctly referenced in the config.xml</p>
+		 * <listing>
+		 * &lt;data&gt;
+		 *  &lt;asset url="lib/swf/mySWFAsset1.swf" label="Loading Asset 1" id="first_asset" postload="false" &#47;&gt;
+		 *  &lt;asset url="lib/swf/mySWFAsset2.swf" label="Loading Asset 2" id="second_asset" postload="true" &#47;&gt;
+		 *  &lt;asset url="lib/swf/myZIPAsset.3rd" label="Loading Asset 3" id="third_asset" postload="true" &#47;&gt;
+		 * &lt;&#47;data&gt;
+		 * </listing>
+		 * <p>As you can see, there are three assets that have been referenced above. The first has a postload value of 'false' which means it will load in to the LaunchPad asset
+		 * library during the LaunchPad.init phase at the start of your application. However, the other assets are marked for postload and can be loaded in to the LaunchPad asset
+		 * library as follows:</p>
+		 * <listing>
+		 * var asset_ids:Array = [ "second_asset", "third_asset" ] // Array of asset id's to be loaded
+		 * 
+		 * LaunchPad.loadLibrary( asset_ids, this.onAssetLoadComplete );
+		 * 
+		 * function onAssetLoadComplete():void
+		 * {
+		 *  // You can now access the postload marked assets that you have just loaded
+		 * 
+		 *  var mc:MovieClip = LaunchPad.getAsset( "second_asset" );
+		 *  this.addChild( mc );
+		 * }
+		 * </listing>
+		 * <p>The above example uses the generic LaunchPad loader bar as the 'preloader' param was left as null (by default). You can use your own custom loader ui by passing 
+		 * through your own MovieClip. Or, if you prefer to not have any ui show during this load process, pass through an empty MovieClip:</p>
+		 * <listing>
+		 * LaunchPad.loadLibrary( asset_ids, this.onAssetLoadComplete, new MovieClip() );
+		 * </listing>
 		 */
 		
 		public static function loadLibrary( id_array:Array, onComplete:Function=null, preloader:MovieClip=null ):void

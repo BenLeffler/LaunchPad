@@ -9,12 +9,39 @@ package com.thirdsense.ui.starling.menu
 	
 	public class LPMenuTransition 
 	{
+		/**
+		 * Causes a menu to transition from right to left
+		 */
 		public static const TO_LEFT:String = "L";
+		
+		/**
+		 * Causes a menu to transition from left to right
+		 */
 		public static const TO_RIGHT:String = "R";
+		
+		/**
+		 * Causes a menu to transition from left to right
+		 */
 		public static const FROM_LEFT:String = "R";
+		
+		/**
+		 * Causes a menu to transition from right to left
+		 */
 		public static const FROM_RIGHT:String = "L";
+		
+		/**
+		 * Causes a menu to immediately appear with no transition
+		 */
 		public static const NONE:String = "";
+		
+		/**
+		 * Causes a menu to transition in an upward direction
+		 */
 		public static const UP:String = "T";
+		
+		/**
+		 * Causes a menu to transition in a downward direction
+		 */
 		public static const DOWN:String = "B";
 		
 		public function LPMenuTransition() 
@@ -22,11 +49,19 @@ package com.thirdsense.ui.starling.menu
 			
 		}
 		
+		/**
+		 * Causes a menu to transition in a random direction
+		 */
+		
 		public static function get RANDOM():String
 		{
 			var arr:Array = [ "L", "R", "T", "B" ];
 			return arr[ Math.floor(Math.random() * arr.length) ];
 		}
+		
+		/**
+		 * @private	Translates a transition in to a point co-ordinate for use with the tweening engine
+		 */
 		
 		public static function translate( transition:String ):Point
 		{

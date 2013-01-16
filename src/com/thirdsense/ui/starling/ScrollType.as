@@ -8,7 +8,14 @@ package com.thirdsense.ui.starling
 	
 	public class ScrollType 
 	{
+		/**
+		 * Sets scrolling to horizontal type
+		 */
 		public static const HORIZONTAL:String = "horizontal";
+		
+		/**
+		 * Sets scrolling to vertical type
+		 */
 		public static const VERTICAL:String = "vertical";
 		
 	}

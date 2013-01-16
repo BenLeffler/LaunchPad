@@ -8,10 +8,12 @@ package com.thirdsense.utils
 	import flash.net.URLRequestMethod;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
+	
 	/**
-	 * ...
+	 * Loads remote JSON files and parses the out for use
 	 * @author Ben Leffler
 	 */
+	
 	public class JSONUtils 
 	{
 		private static var url:String;
@@ -21,6 +23,13 @@ package com.thirdsense.utils
 		private static var _retries:int = 3;
 		private static var retry_counter:int;
 		private static var timer:uint;
+		
+		/**
+		 * Initiates a remote load of a JSON object
+		 * @param	url	The url location of the JSON object to load (either from cloud or local)
+		 * @param	onResponse	The function to call upon a result. This must accept a boolean param (indicates success) and an object param (the parsed response)
+		 * @return	A boolean value of the call to load's success. If a load is already happening when this is called, false will be returned
+		 */
 		
 		public static function loadRemoteJSON( url:String, onResponse:Function ):Boolean
 		{
@@ -44,6 +53,10 @@ package com.thirdsense.utils
 			return true;
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function jsonLoaded( evt:Event ):void
 		{
 			clearTimeout(timer);
@@ -58,6 +71,10 @@ package com.thirdsense.utils
 			onResponse = null;
 			fn( true, data );
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function jsonLoadError( evt:IOErrorEvent ):void
 		{
@@ -79,13 +96,17 @@ package com.thirdsense.utils
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function jsonTimeout():void
 		{
 			jsonLoadError(null);
 		}
 		
 		/**
-		 * Returns the number of milliseconds to wait before declaring a local timeout on a remote retrieval
+		 * The number of milliseconds to wait before declaring a local timeout on a remote retrieval
 		 */
 		
 		public static function get timeout():Number
@@ -110,6 +131,11 @@ package com.thirdsense.utils
 		{
 			_retries = value;
 		}
+		
+		/**
+		 * Checks if the utility is currently in a call
+		 * @return
+		 */
 		
 		public static function inCall():Boolean
 		{

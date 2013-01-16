@@ -11,7 +11,7 @@ package com.thirdsense.ui.starling
 	import starling.events.TouchPhase;
 	
 	/**
-	 * Create a button from a TexturePack
+	 * Creates a button from a TexturePack object
 	 * @author Ben Leffler
 	 */
 	
@@ -21,6 +21,10 @@ package com.thirdsense.ui.starling
 		private var _source_height:Number;
 		private var onRelease:Function;
 		private var disabled:Boolean;
+		
+		/**
+		 * The local tween instance that can be used for transitions and animation of this button
+		 */
 		public var tween:BTween;
 		
 		/**
@@ -104,7 +108,7 @@ package com.thirdsense.ui.starling
 		}
 		
 		/**
-		 * Enables a button if previously disabled (and turns it fully visable)
+		 * Enables a button if previously disabled and turns it fully visable or multiplies it's alpha by 4 (whatever is less in value)
 		 */
 		
 		public function enable():void
@@ -120,12 +124,20 @@ package com.thirdsense.ui.starling
 			
 		}
 		
+		/**
+		 * @private	Adds the listeners necessary for this to become a button
+		 */
+		
 		private function addListeners():void
 		{
 			this.addEventListener( TouchEvent.TOUCH, this.touchHandler );
 			this.addEventListener( Event.REMOVED_FROM_STAGE, this.removeHandler );
 			
 		}
+		
+		/**
+		 * @private	Handler for the TouchEvent listener
+		 */
 		
 		private function touchHandler( evt:TouchEvent ):void
 		{
@@ -179,6 +191,10 @@ package com.thirdsense.ui.starling
 			}
 			
 		}
+		
+		/**
+		 * @private	Removes listeners from memory upon the removal of this button from the stage
+		 */
 		
 		private function removeHandler( evt:Event ):void
 		{

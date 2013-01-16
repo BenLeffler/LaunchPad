@@ -11,52 +11,168 @@
 					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("LaunchPad"); titleBar_setSubNav(false,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
 				-->
 			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.thirdsense</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  LaunchPad</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">LaunchPad  <img src="../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> Object</td></tr></table><p></p><p></p><p></p>
-	 LaunchPad Contructor
-	 <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#instance" class="signatureLink">instance</a> : <a href="../../com/thirdsense/LaunchPad.html">LaunchPad</a><div class="summaryTableDescription">[static] </div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#nativeStage" class="signatureLink">nativeStage</a> : Stage<div class="summaryTableDescription">[read-only] 
+	              <p>LaunchPad application framework and asset management toolset. For mobile, desktop and web based projects.</p>
+	 
+	              <p>The following example shows how to initialize the framework from within the base constructor class of your project:</p>
+	 
+	              <div class="listing"><pre>
+     package {
+         import flash.display.MovieClip;
+         import com.thirdsense.LaunchPad;
+         
+         public class Example extends MovieClip {
+             private var launchpad:LaunchPad;
+             
+             public function Example() {
+                 launchpad.init( this, this.onLaunchPadInit );
+             }
+     
+             private function onLaunchPadInit() {
+                 trace( "LaunchPad has loaded my assets and now I'm ready to rumble!" );
+             }
+         }
+     }</pre></div>
+	 
+	           <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#instance" class="signatureLink">instance</a> : <a href="../../com/thirdsense/LaunchPad.html">LaunchPad</a><div class="summaryTableDescription">[static] 
+		 Singleton instance of the LaunchPad framework
+		 </div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#nativeStage" class="signatureLink">nativeStage</a> : Stage<div class="summaryTableDescription">[read-only] 
 		 Returns the root clips native stage
 		 </div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#starling" class="signatureLink">starling</a> : Starling<div class="summaryTableDescription">[read-only] 
 		 Returns the starling instance if startStarlingSession has previously been called.</div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#target" class="signatureLink">target</a> : MovieClip<div class="summaryTableDescription">[read-only] 
 		 The root movieclip that was passed through in the LaunchPad.init call
-		 </div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#LaunchPad()" class="signatureLink">LaunchPad</a>()</div><div class="summaryTableDescription"></div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getAsset()" class="signatureLink">getAsset</a>(id:String, linkage:String):*</div><div class="summaryTableDescription">[static] 
-		 Obtains an asset that has been loaded in to the LaunchPad framework during the preload stage.</div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getValue()" class="signatureLink">getValue</a>(name:String):String</div><div class="summaryTableDescription">[static] 
+		 </div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#LaunchPad()" class="signatureLink">LaunchPad</a>()</div><div class="summaryTableDescription">
+		 The base constructor of the LaunchPad framework.</div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getAsset()" class="signatureLink">getAsset</a>(id:String, linkage:String):*</div><div class="summaryTableDescription">[static] 
+		 Obtains an asset that has been loaded in to the LaunchPad framework during the preload (and postload) stage.</div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getValue()" class="signatureLink">getValue</a>(name:String):String</div><div class="summaryTableDescription">[static] 
 		 Obtains a value as defined by the LaunchPad config.xml
 		 </div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#init()" class="signatureLink">init</a>(target:MovieClip, onComplete:Function, preloader:Sprite = null):void</div><div class="summaryTableDescription">
 		 Initializes and starts application load procedure.</div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#loadLibrary()" class="signatureLink">loadLibrary</a>(id_array:Array, onComplete:Function = null, preloader:MovieClip = null):void</div><div class="summaryTableDescription">[static] 
 		 Starts a post load procedure of LaunchPad library assets
 		 </div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#startStarlingSession()" class="signatureLink">startStarlingSession</a>(rootClass:Class, handleLostContext:Boolean = false, showStats:Boolean = false, enableMultiTouch:Boolean = false):Starling</div><div class="summaryTableDescription">
-		 Starts a Starling framework session
+		 Starts a Starling framework session (v1.3) - It is still recommended that you add the starling.swc to your project for access to all Starling classes
 		 </div></td><td class="summaryTableOwnerCol">LaunchPad</td></tr></table></div><script language="javascript" type="text/javascript"><!--
 										showHideInherited();
-										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="instance"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">instance</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>public static var instance:<a href="../../com/thirdsense/LaunchPad.html">LaunchPad</a></code><p></p></div><a name="propertyDetail"></a><a name="nativeStage"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">nativeStage</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>nativeStage:Stage</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="instance"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">instance</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>public static var instance:<a href="../../com/thirdsense/LaunchPad.html">LaunchPad</a></code><p></p><p></p><p>
+		 Singleton instance of the LaunchPad framework
+		 </p></div><a name="propertyDetail"></a><a name="nativeStage"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">nativeStage</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>nativeStage:Stage</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
 		 Returns the root clips native stage
 		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get nativeStage():Stage</code><br/></div><a name="propertyDetail"></a><a name="starling"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">starling</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>starling:Starling</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
 		 Returns the starling instance if startStarlingSession has previously been called.
 		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get starling():Starling</code><br/></div><a name="propertyDetail"></a><a name="target"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">target</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>target:MovieClip</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
 		 The root movieclip that was passed through in the LaunchPad.init call
-		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get target():MovieClip</code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="LaunchPad()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">LaunchPad</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function LaunchPad()</code><p></p><br/><br/></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="getAsset()"></a><a name="getAsset(String,String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getAsset</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public static function getAsset(id:String, linkage:String):*</code><p></p><p></p><p>
-		 Obtains an asset that has been loaded in to the LaunchPad framework during the preload stage.
-		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">id</span>:String</code> &mdash; (Optional) Designates which asset library to retrieve
-		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">linkage</span>:String</code> &mdash; (Optional) Designates the specific linkage name of an asset, if the asset library is of the LPAssetClient qualified class type
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get target():MovieClip</code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="LaunchPad()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">LaunchPad</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function LaunchPad()</code><p></p><p>
+		 The base constructor of the LaunchPad framework. Where all good things must come from.
+		 </p></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="getAsset()"></a><a name="getAsset(String,String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getAsset</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public static function getAsset(id:String, linkage:String):*</code><p></p><p></p><p>
+		 Obtains an asset that has been loaded in to the LaunchPad framework during the preload (and postload) stage.
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">id</span>:String</code> &mdash; (Optional) Designates which asset library to retrieve (or to retrieve from)
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">linkage</span>:String</code> &mdash; (Optional) Designates the specific linkage name of an asset, if the source library instance is a zip or a swf that has been set up with the LPAssetClient class
 		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>*</code> &mdash; Null if item unfound. Otherwise it will return a variety of object types
-		 </td></tr></table></div><a name="getValue()"></a><a name="getValue(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getValue</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getValue(name:String):String</code><p></p><p></p><p>
+		 </td></tr></table><br/><span class="label"> Example </span><br/><div class="detailBody"><p>The assets to be loaded (both pre and post load) need to be set up in the project config.xml file as follows:</p>
+		 <div class="listing"><pre>
+         &lt;data&gt;
+          &lt;asset url="lib/swf/mySWFAsset1.swf" label="Loading Asset 1" id="first_asset" postload="false" /&gt;
+          &lt;asset url="lib/swf/mySWFAsset2.swf" label="Loading Asset 2" id="second_asset" postload="true" /&gt;
+          &lt;asset url="lib/swf/myZipAsset.zip" label="Loading Asset 3" id="third_asset" postload="false" /&gt;
+          &lt;asset url="lib/swf/myXMLAsset.xml" label="Loading Asset 4" id="fourth_asset" postload="true" /&gt;
+          &lt;asset url="lib/swf/myJSONAsset.json" label="Loading Asset 5" id="fifth_asset" postload="false" /&gt;
+         &lt;/data&gt;
+         </pre></div>
+		 <p>Notice that some assets aren't labelled as post-load, therefore these assets will get loaded in to memory during the LaunchPad.init call at the start
+		 and will be availble to call with the LaunchPad.getAsset call at any point. The other assets will need to be loaded with the LaunchPad.loadLibrary call 
+		 before you can access them.</p>
+		 <p>To load the asset with id 'first_asset' as a MovieClip (as the source asset is a swf), simply call:</p>
+		 <div class="listing"><pre>
+         var mc:MovieClip = LaunchPad.getAsset( "first_asset" ) as MovieClip;
+         </pre></div>
+		 <p>However if 'first_asset' has it's own library items (set up with Actionscript linkage identifiers) that you wish to access, the source library 
+		 (ie mySWFAsset1.swf) will need to be compiled with a reference to the LPAssetClient class on it's main timeline as follows:</p>
+		 <div class="listing"><pre>
+         var client:LPAssetClient = new LPAssetClient(this);
+         </pre></div>
+		 <p>You can now call upon any linkage within it's library from your LaunchPad project as follows:</p>
+		 <div class="listing"><pre>
+         var mc:MovieClip = LaunchPad.getAsset( "first_asset", "asset_linkage_name" );
+         </pre></div>
+		 <p>You can also search your entire LaunchPad asset library for the linkage name, without knowing the id of the asset library. The first encountered match 
+		 will always be returned:</p>
+		 <div class="listing"><pre>
+         var mc:MovieClip = LaunchPad.getAsset( "", "asset_linkage_name" );
+         </pre></div>
+		 <p>This call handles a multitude of different asset types. If you wanted to call on the library marked with id 'fifth_asset' (a JSON object):</p>
+		 <div class="listing"><pre>
+         var obj:Object = LaunchPad.getAsset( "fifth_asset" );
+         </pre></div>
+		 <p>LaunchPad can also handle compressed library files such as zip and 3rd (same as zip, but with an altered extension). These libs are handy when you want
+		 to combine sound, images and movieclips in to a single compressed file without having to use Flash to compile the assets in to a swf library. File types 
+		 within the zip file should be limited to swf, mp3, jpg, png and gif</p>
+		 <p>The following example takes the asset marked with id 'third_asset' above and retrieves various assets from the zip file.</p>
+		 <div class="listing"><pre>
+         var mc:MovieClip = LaunchPad.getAsset( "third_asset", "my_swf.swf" );
+         var sound:Sound = LaunchPad.getAsset( "third_asset", "my_sound.mp3" );
+         var bmpdata1:BitmapData = LaunchPad.getAsset( "third_asset", "my_image.jpg" );
+         var bmpdata2:BitmapData = LaunchPad.getAsset( "third_asset", "my_image.png" );
+         var bmpdata3:BitmapData = LaunchPad.getAsset( "third_asset", "my_image.gif" );
+         </pre></div>
+		 </div></div><a name="getValue()"></a><a name="getValue(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getValue</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function getValue(name:String):String</code><p></p><p></p><p>
 		 Obtains a value as defined by the LaunchPad config.xml
 		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the value to retrieve
 		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>String</code> &mdash; The value as a String
-		 </td></tr></table></div><a name="init()"></a><a name="init(flash.display.MovieClip,Function,flash.display.Sprite)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">init</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function init(target:MovieClip, onComplete:Function, preloader:Sprite = null):void</code><p></p><p></p><p>
+		 </td></tr></table><br/><span class="label"> Example </span><br/><div class="detailBody"><p>Firstly you must have appropriate values established in your project config.xml file:</p>
+		 <div class="listing"><pre>
+         &lt;data&gt;
+          &lt;value name="firstName" value="Ben" /&gt;
+          &lt;value name="lastName" value="Leffler" /&gt;
+         &lt;/data&gt;
+         </pre></div>
+		 <p>The values set out above will then become available through your project by calling getValue as follows:</p>
+		 <div class="listing"><pre>
+         var firstName:String = LaunchPad.getValue( "firstName" );
+         var lastName:String = LaunchPad.getValue( "lastName" );
+         </pre></div>
+		 </div></div><a name="init()"></a><a name="init(flash.display.MovieClip,Function,flash.display.Sprite)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">init</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function init(target:MovieClip, onComplete:Function, preloader:Sprite = null):void</code><p></p><p></p><p>
 		 Initializes and starts application load procedure.
 		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">target</span>:MovieClip</code> &mdash; The root class for the application. This can be accessed from calling LaunchPad.root
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">onComplete</span>:Function</code> &mdash; The function to call once the application has completed initializing
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">preloader</span>:Sprite</code> (default = <code>null</code>)<code></code> &mdash; The sprite to use for the preloading user interface. Pass as null to use the default generic loader.
-		 </td></tr></table></p><p><span class="label">See also</span></p><div class="seeAlso"><a href="../../com/thirdsense/settings/Profiles.html" target="">com.thirdsense.settings.Profiles</a></div></div><a name="loadLibrary()"></a><a name="loadLibrary(Array,Function,flash.display.MovieClip)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">loadLibrary</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function loadLibrary(id_array:Array, onComplete:Function = null, preloader:MovieClip = null):void</code><p></p><p></p><p>
+		 </td></tr></table></p></div><a name="loadLibrary()"></a><a name="loadLibrary(Array,Function,flash.display.MovieClip)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">loadLibrary</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function loadLibrary(id_array:Array, onComplete:Function = null, preloader:MovieClip = null):void</code><p></p><p></p><p>
 		 Starts a post load procedure of LaunchPad library assets
 		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">id_array</span>:Array</code> &mdash; An array of library id's to load one-by-one
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">onComplete</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; The callback function once the procedure has reached it's end
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">preloader</span>:MovieClip</code> (default = <code>null</code>)<code></code> &mdash; The preloader ui element to use. If left as null, the LaunchPad generic loader element is used. For no loader bar, pass this as an empty movieclip.
-		 </td></tr></table></p></div><a name="startStarlingSession()"></a><a name="startStarlingSession(Class,Boolean,Boolean,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">startStarlingSession</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public final function startStarlingSession(rootClass:Class, handleLostContext:Boolean = false, showStats:Boolean = false, enableMultiTouch:Boolean = false):Starling</code><p></p><p></p><p>
-		 Starts a Starling framework session
+		 </td></tr></table></p><br/><span class="label"> Example </span><br/><div class="detailBody"><p>When an asset has been tagged in the project config.xml as a postload asset, it will not be loaded by the framework until you call this function. So firstly,
+		 make sure that the asset has been correctly referenced in the config.xml</p>
+		 <div class="listing"><pre>
+         &lt;data&gt;
+          &lt;asset url="lib/swf/mySWFAsset1.swf" label="Loading Asset 1" id="first_asset" postload="false" /&gt;
+          &lt;asset url="lib/swf/mySWFAsset2.swf" label="Loading Asset 2" id="second_asset" postload="true" /&gt;
+          &lt;asset url="lib/swf/myZIPAsset.3rd" label="Loading Asset 3" id="third_asset" postload="true" /&gt;
+         &lt;/data&gt;
+         </pre></div>
+		 <p>As you can see, there are three assets that have been referenced above. The first has a postload value of 'false' which means it will load in to the LaunchPad asset
+		 library during the LaunchPad.init phase at the start of your application. However, the other assets are marked for postload and can be loaded in to the LaunchPad asset
+		 library as follows:</p>
+		 <div class="listing"><pre>
+         var asset_ids:Array = [ "second_asset", "third_asset" ] // Array of asset id's to be loaded
+         
+         LaunchPad.loadLibrary( asset_ids, this.onAssetLoadComplete );
+         
+         function onAssetLoadComplete():void
+         {
+          // You can now access the postload marked assets that you have just loaded
+         
+          var mc:MovieClip = LaunchPad.getAsset( "second_asset" );
+          this.addChild( mc );
+         }
+         </pre></div>
+		 <p>The above example uses the generic LaunchPad loader bar as the 'preloader' param was left as null (by default). You can use your own custom loader ui by passing 
+		 through your own MovieClip. Or, if you prefer to not have any ui show during this load process, pass through an empty MovieClip:</p>
+		 <div class="listing"><pre>
+         LaunchPad.loadLibrary( asset_ids, this.onAssetLoadComplete, new MovieClip() );
+         </pre></div>
+		 </div></div><a name="startStarlingSession()"></a><a name="startStarlingSession(Class,Boolean,Boolean,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">startStarlingSession</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public final function startStarlingSession(rootClass:Class, handleLostContext:Boolean = false, showStats:Boolean = false, enableMultiTouch:Boolean = false):Starling</code><p></p><p></p><p>
+		 Starts a Starling framework session (v1.3) - It is still recommended that you add the starling.swc to your project for access to all Starling classes
 		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">rootClass</span>:Class</code> &mdash; The root class of the starling container that gets called upon initialisation
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">handleLostContext</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; Handles the device losing Stage3D context (requires more device memory)
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">showStats</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; Show a stats dialogue in the top-left corner of the stage
 		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">enableMultiTouch</span>:Boolean</code> (default = <code>false</code>)<code></code> &mdash; Enable multitouch within the project
 		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Starling</code> &mdash; The resulting Starling instance.
-		 </td></tr></table></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Thu Jan 10 2013, 11:26 AM +11:00  </center></div></body></html><!--<br/>Thu Jan 10 2013, 11:26 AM +11:00  -->
+		 </td></tr></table></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Thu Jan 17 2013, 10:32 AM +11:00  </center></div></body></html><!--<br/>Thu Jan 17 2013, 10:32 AM +11:00  -->

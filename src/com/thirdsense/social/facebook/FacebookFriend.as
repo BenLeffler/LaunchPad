@@ -3,8 +3,9 @@ package com.thirdsense.social.facebook
 	import com.thirdsense.utils.getClassVariables;
 	import com.thirdsense.utils.StringTools;
 	import flash.display.BitmapData;
+	
 	/**
-	 * Facebook Friends data repo that in most cases will be populated upon a call to FacebookInterface.getFriends
+	 * Facebook Friends data that in most cases will be populated upon a call to FacebookInterface.getFriends
 	 * @author Ben Leffler
 	 */
 	
@@ -27,7 +28,7 @@ package com.thirdsense.social.facebook
 		public var installed:Boolean;
 		private var isMe:Boolean;
 		
-		public static var friends:Vector.<FacebookFriend>;
+		private static var friends:Vector.<FacebookFriend>;
 		
 		public function FacebookFriend() 
 		{
@@ -40,6 +41,11 @@ package com.thirdsense.social.facebook
 		{
 			return StringTools.toString(this);
 		}
+		
+		/**
+		 * Creates a 2D Array of all session stored Facebook Friends.
+		 * @return	An array containing an untyped object representation of the FacebookFriend object
+		 */
 		
 		public static function to2DArray():Array
 		{
@@ -59,7 +65,7 @@ package com.thirdsense.social.facebook
 			return arr;
 		}
 		
-		public static function from2DArray( arr:Array ):void
+		/*public static function from2DArray( arr:Array ):void
 		{
 			friends = new Vector.<FacebookFriend>;
 			
@@ -75,7 +81,12 @@ package com.thirdsense.social.facebook
 			}
 			
 			friends.sort( friendSort );
-		}
+		}*/
+		
+		/**
+		 * Adds or updates an existing FacebookFriend object to session stored data from an untyped object representation of a FacebookFriend object
+		 * @param	data	untyped object representation of a FacebookFriend object
+		 */
 		
 		public static function addFriendFromObject( data:Object ):void
 		{
@@ -106,6 +117,11 @@ package com.thirdsense.social.facebook
 			friends.push( fr );
 		}
 		
+		/**
+		 * Adds or replaces a session stored FacebookFriend object
+		 * @param	friend	A FacebookFriend object to add or replace an existing record (based on the 'id' value)
+		 */
+		
 		public static function addFriend( friend:FacebookFriend ):void
 		{
 			if ( !friends )
@@ -127,6 +143,11 @@ package com.thirdsense.social.facebook
 			friends.sort( friendSort );
 		}
 		
+		/**
+		 * Adds data to the session stored Facebook friend data
+		 * @param	data	The 2D array consisting of untyped objects representing the FacebookFriend object
+		 */
+		
 		public static function processFromArray( data:Array ):void
 		{
 			for ( var i:uint = 0; i < data.length; i++ ) {
@@ -136,6 +157,10 @@ package com.thirdsense.social.facebook
 			friends.sort( friendSort );
 			
 		}
+		
+		/**
+		 * @private	Sort function for the Facebook friend session data (alphabetically)
+		 */
 		
 		private static function friendSort( a:FacebookFriend, b:FacebookFriend ):int
 		{
@@ -173,6 +198,12 @@ package com.thirdsense.social.facebook
 			
 		}
 		
+		/**
+		 * Obtains all Facebook friends (or just those that have installed this app)
+		 * @param	installs_only	Pass as true if the resulting data is to only include those friends that have installed this app
+		 * @return	Vector of FacebookFriend objects
+		 */
+		
 		public static function getFriends( installs_only:Boolean=false ):Vector.<FacebookFriend>
 		{
 			if ( !installs_only ) {
@@ -189,6 +220,12 @@ package com.thirdsense.social.facebook
 			
 		}
 		
+		/**
+		 * Retrieves the FacebookFriend object of a specific friend based on facebook id
+		 * @param	facebook_id	The facebook id of the specified friend
+		 * @return	A FacebookFriend object of the requested friend. If not found, null is returned.
+		 */
+		
 		public static function getFriendFromID( facebook_id:String ):FacebookFriend
 		{
 			if ( friends )
@@ -204,6 +241,11 @@ package com.thirdsense.social.facebook
 			
 			return null;
 		}
+		
+		/**
+		 * Adds the passed FacebookFriend object and flags this record as the current user
+		 * @param	me	FacebookFriend object to be flagged as the current user
+		 */
 		
 		public static function addMe( me:FacebookFriend ):void
 		{
@@ -226,6 +268,11 @@ package com.thirdsense.social.facebook
 			friends.push(me);
 		}
 		
+		/**
+		 * Obtains the session stored FacebookFriend object that is flagged as the current user
+		 * @return	A FacebookFriend object of the current user
+		 */
+		
 		public static function getMe():FacebookFriend
 		{
 			if ( friends ) {
@@ -240,6 +287,11 @@ package com.thirdsense.social.facebook
 			
 			return null;
 		}
+		
+		/**
+		 * Obtains a 2D array of all current Facebook friend id's
+		 * @return
+		 */
 		
 		public static function getAllFriendIDs():Array
 		{
@@ -257,6 +309,10 @@ package com.thirdsense.social.facebook
 			
 			return arr;
 		}
+		
+		/**
+		 * Clears all session stored FacebookFriend data
+		 */
 		
 		public static function clear():void
 		{

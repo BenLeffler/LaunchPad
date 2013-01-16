@@ -51,7 +51,7 @@ package com.thirdsense.data {
 	 * <p>The following example loads an external zip file, outputs the
 	 * width and height of an image and then loads a sound from a SWF file.</p>
 	 * 
-	 * <pre>
+	 * <listing>
 	 * package {
 	 * 	import flash.events.*;
 	 * 	import flash.display.BitmapData;
@@ -81,7 +81,7 @@ package com.thirdsense.data {
 	 * 			var snd:Sound = new importedSound() as Sound;
 	 * 		}
 	 * 	}
-	 * }</pre>
+	 * }</listing>
 	 * 
 	 * @see http://livedocs.macromedia.com/flex/201/langref/flash/display/Loader.html
 	 */

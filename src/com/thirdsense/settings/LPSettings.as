@@ -1,7 +1,7 @@
 package com.thirdsense.settings 
 {
 	/**
-	 * ...
+	 * Global LaunchPad project settings. Most of the elements within this class are predetermined in the parsing process of the config.xml file
 	 * @author Ben Leffler
 	 */
 	

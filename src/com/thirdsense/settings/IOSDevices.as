@@ -4,7 +4,7 @@ package com.thirdsense.settings
 	import com.thirdsense.utils.getClassVariables;
 	
 	/**
-	 * ...
+	 * Tools for identifying type of IOS device
 	 * @author Ben Leffler
 	 */
 	
@@ -50,8 +50,6 @@ package com.thirdsense.settings
 		public static function isDeviceType(device:String, family:String, model:String = ""):Boolean
 		{
 			var arr:Array = getClassVariables(IOSDevices);
-			
-			trace( device, family, model );
 			
 			if (!model.length)
 			{

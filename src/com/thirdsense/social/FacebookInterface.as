@@ -8,12 +8,58 @@ package com.thirdsense.social
 	import flash.utils.getDefinitionByName;
 	
 	/**
-	 * ...
+	 * <p>Allows both mobile and web integration of Facebook connectivity. Whilst oAuth requires differing approaches of connectivity
+	 * depending on platform, this class consolidates functionality and allow a code once - deploy everywhere approach when it comes
+	 * to Facebook Graph API integration.</p>
+	 * <p>It is recommended that this class is to be used for all Facebook calls, no matter what platform you are developing for.</p>
+	 * <p>The following is an example of a Facebook connection process for a starling based mobile app:</p>
+	 * <listing>
+	 * import com.thirdsense.social.FacebookInterface;
+	 * import com.thirdsense.ui.starling.LPsWebBrowser;
+	 * import com.thirdsense.social.facebook.FacebookFriend;
+	 * import com.thirdsense.social.facebook.FacebookFriendField;
+	 * 
+	 * FacebookInterface.init( this.onFacebookConnect, false, false, LPsWebBrowser.invoke );
+	 * 
+	 * function onFacebookConnect( success:Boolean ):void
+	 * {
+	 * 	if ( success )
+	 * 	{
+	 * 		trace( "Facebook connection successful!" );
+	 * 		FacebookInterface.getFriends( this.onGetFriends, [FacebookFriendField.INSTALLED, FacebookFriendField.EMAIL, FacebookFriendField.NAME] );
+	 * 	}
+	 * 	else
+	 * 	{
+	 * 		trace( "Facebook connection failed" );
+	 * 	}
+	 * }
+	 * 
+	 * function onGetFriends( success:Boolean ):void
+	 * {
+	 * 	if ( success )
+	 * 	{
+	 * 		trace( "Facebook friends retrieved" );
+	 * 
+	 * 		// Get the list of friends that have installed this application
+	 * 		var installs:Vector&lt;FacebookFriend&gt; = FacebookFriend.getFriends(true);
+	 * 		trace( installs );
+	 * 	}
+	 * 	else
+	 * 	{
+	 * 		trace( "Retrieval of Facebook friends failed" );
+	 * 	}
+	 * }
+	 * </listing>
+	 * 		
 	 * @author Ben Leffler
 	 */
 	
 	public class FacebookInterface 
 	{
+		/**
+		 * @private Clears the mobile and web connection constructors from memory (Housekeeping)
+		 */
+		
 		public static function clearConstructors():void
 		{
 			var constructors:Array = [ FacebookMobileConnection, FacebookConnection ];
@@ -47,6 +93,7 @@ package com.thirdsense.social
 		 * @param	invokeBrowser	If a customer browser or LPsWebBrowser interface is to be used, the function to call the browser should be passed through
 		 * here (only compatible with mobile app and the function MUST return a StageWebView instance to be used)
 		 * @see	flash.media.StageWebView
+		 * @see	com.thirdsense.ui.starling.LPsWebBrowser
 		 */
 		
 		public static function init( onComplete:Function=null, force_new_login:Boolean=false, existing_session_only:Boolean=false, invokeBrowser:Function = null ):void
@@ -155,6 +202,18 @@ package com.thirdsense.social
 			
 			var cl:Class = getClass();
 			return cl.postToWall( picture, postName, link, caption, description, message, onComplete );
+		}
+		
+		/**
+		 * Allows the currently connected Facebook user to invite friends to the application. (Web app users must have pop-ups enabled for this call to not be blocked)
+		 * @param	message	The message to append to the invitation
+		 * @param	prompt_title	The title of the prompt that the user will see when asked to select the friends to invite
+		 */
+		
+		public static function inviteFriends( message:String, prompt_title:String ):void
+		{
+			var cl:Class = getClass();
+			cl.inviteFriends( message, prompt_title );
 		}
 		
 	}

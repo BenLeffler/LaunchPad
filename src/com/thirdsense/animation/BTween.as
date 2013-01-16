@@ -21,22 +21,79 @@ package com.thirdsense.animation
 		private var frame_pause:int;
 		private var _paused:Boolean;
 		
+		/**
+		 * Applies a linear transformation
+		 */
 		public static const LINEAR:String = "linear";
+		
+		/**
+		 * Applies a gradual ease-out transformation
+		 */
 		public static const EASE_OUT:String = "easeOut";
+		
+		/**
+		 * Applies a gradual ease-in transformation
+		 */
 		public static const EASE_IN:String = "easeIn";
+		
+		/**
+		 * Applies an ease-out transformation for the first 50% of the tween duration, then a ease-in transformation for the remaining duration
+		 */
 		public static const EASE_OUT_IN:String = "easeOutIn";
+		
+		/**
+		 * Applies an ease-in transformation for the first 50% of the tween duration, then a ease-out transformation for the remaining duration
+		 */
 		public static const EASE_IN_OUT:String = "easeInOut";
+		
+		/**
+		 * Applies an ease-out transformation which then elasticises as it approaches the destination
+		 */
 		public static const EASE_OUT_ELASTIC:String = "easeOutElastic";
+		
+		/**
+		 * Applies an elasticised transformation initially and transitions to an ease-in transformation as it approaches the destination
+		 */
 		public static const EASE_IN_ELASTIC:String = "easeInElastic";
 		
-		public static const LOOPS_FOREVER:int = -1;
+		/**
+		 * Applies a linear tween loop to continue until the tween is removed from the cue with the BTween.removeFromCue() call
+		 */
+		public static const LOOPS_FOREVER:String = "loopsForever";
 		
+		/**
+		 * A function that is called upon the tween reaching it's completed phase
+		 */
 		public var onComplete:Function;
+		
+		/**
+		 * An array of arguments to be applied to the onComplete function if it is called
+		 */
 		public var onCompleteArgs:Array;
+		
+		/**
+		 * A function that is called upon the tween starting (will be called immediately if that pause value is 0)
+		 */
 		public var onStart:Function;
+		
+		/**
+		 * An array of arguments to be applied to the onStart function if it is called
+		 */
 		public var onStartArgs:Array;
+		
+		/**
+		 * A function that is called on each frame whilst a tweening transformation is occuring
+		 */
 		public var onTween:Function;
+		
+		/**
+		 * An array of arguments to be applied to the onTween function if it is called
+		 */
 		public var onTweenArgs:Array;
+		
+		/**
+		 * The number of times a tween will loop for. (Default is 0) To loop infinitely, set this value to -1 or set a tween transition to BTween.LOOPS_FOREVER
+		 */
 		public var loops:int;
 		
 		/**
@@ -190,6 +247,13 @@ package com.thirdsense.animation
 			
 		}
 		
+		/**
+		 * Fades an object's alpha between a start and an end value
+		 * @param	start_value	The start value of the object alpha
+		 * @param	end_value	The destination value of the object alpha
+		 * @param	applyNow	Pass as true if the start_value is to be applied immediately
+		 */
+		
 		public function fadeFromTo( start_value:Number = 0, end_value:Number = 1, applyNow:Boolean = true ):void
 		{
 			var oalpha:Number = this._target["alpha"];
@@ -221,6 +285,11 @@ package com.thirdsense.animation
 			removeFromCue(this);
 			
 		}
+		
+		/**
+		 * @private
+		 * @return	A boolean value indicating if the tween has reached it's final frame
+		 */
 		
 		private function timeline():Boolean
 		{
@@ -268,6 +337,11 @@ package com.thirdsense.animation
 			
 			return finished;
 		}
+		
+		/**
+		 * @private
+		 * @return	A boolean value indicating if the tween has reached it's final frame
+		 */
 		
 		private function makeMove():Boolean
 		{
@@ -329,11 +403,29 @@ package com.thirdsense.animation
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function linear( ratio:Number ):Number
 		{
 			return ratio;
 			
 		}
+		
+		/**
+		 * @private
+		 */
+		
+		private function loopsForever( ratio:Number ):Number
+		{
+			if ( this.loops >= 0 ) this.loops = -1;
+			return linear( ratio );
+		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function easeOut( ratio:Number ):Number
 		{
@@ -342,11 +434,19 @@ package com.thirdsense.animation
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function easeIn( ratio:Number ):Number
 		{
 			return Math.pow( ratio, 3 );
 			
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function easeOutIn( ratio:Number ):Number
 		{
@@ -354,11 +454,19 @@ package com.thirdsense.animation
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function easeInOut( ratio:Number ):Number
 		{
 			return easeCombined( this.easeIn, this.easeOut, ratio);
 			
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function easeOutElastic(ratio:Number):Number
         {
@@ -370,6 +478,10 @@ package com.thirdsense.animation
                 return Math.pow(2.0, -10.0 * ratio) * Math.sin((ratio - s) * (2.0 * Math.PI) / p) + 1;
             }            
         }
+		
+		/**
+		 * @private
+		 */
 		
 		private function easeInElastic(ratio:Number):Number
 		{
@@ -385,6 +497,10 @@ package com.thirdsense.animation
                 return -1.0 * Math.pow(2.0, 10.0*invRatio) * Math.sin((invRatio-s)*(2.0*Math.PI)/p);                
             }
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function easeCombined(startFunc:Function, endFunc:Function, ratio:Number):Number
         {
@@ -454,6 +570,12 @@ package com.thirdsense.animation
 			}
 		}
 		
+		/**
+		 * Checks if a tween exists in the current tween cue
+		 * @param	target	The BTween object to check for
+		 * @return	An integer value of the index in the tween cue of where the BTween object exists. A value of -1 will be returned if the tween is not in the cue.
+		 */
+		
 		private static function existsInCue( target:BTween ):int
 		{
 			if ( !bTweeners ) {
@@ -473,6 +595,11 @@ package com.thirdsense.animation
 			
 		}
 		
+		/**
+		 * Adds a BTween object to the cue if it doesn't already exist in cue
+		 * @param	target	The BTween object to add
+		 */
+		
 		private static function addToCue( target:BTween ):void
 		{
 			if ( !bTweeners ) {
@@ -484,6 +611,11 @@ package com.thirdsense.animation
 			}
 			
 		}
+		
+		/**
+		 * If a BTween object exists in the cue, this function removes it
+		 * @param	target	The BTween object to remove from the cue
+		 */
 		
 		public static function removeFromCue( target:BTween ):void
 		{

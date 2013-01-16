@@ -17,32 +17,61 @@
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	
+	/**
+	 * Allows remote loading of images in to a bitmap instance utilising dynamic smoothing. Also acts as a load cue manager for multiple image loads.
+	 */
+	
 	public class SmoothImageLoad {
 		
-		public var urlrequest:URLRequest;
-		public var target:DisplayObjectContainer;
-		public var maxwidth:Number;
-		public var maxheight:Number;
-		public var requiresPolicyFile:Boolean;
-		public var scaletype:String;
-		public var bmpdata:BitmapData;
-		public var cache:Boolean;
+		private var urlrequest:URLRequest;
+		private var target:DisplayObjectContainer;
+		private var maxwidth:Number;
+		private var maxheight:Number;
+		private var requiresPolicyFile:Boolean;
+		private var scaletype:String;
+		private var bmpdata:BitmapData;
+		private var cache:Boolean;
 		
+		/**
+		 * Constrains an image to a maximum width or maximum height while retaining the ratio of width to height (Only applies if the loaded image is larger than the max_width or max_height values)
+		 */
 		public static const CONSTRAIN:String = "constrain";
+		
+		/**
+		 * The image is cropped to the maximum width and height from the center of the image
+		 */
 		public static const CROP_TO_CENTER:String = "cropToCenter";
+		
+		/**
+		 * The image is cropped to the maximum width and height from the top left of the image
+		 */
 		public static const CROP_TO_TOP_LEFT:String = "cropToTopLeft";
+		
+		/**
+		 * If the image is wider than the maximum width, it is set at the maximum width. The same applies to the height of the image
+		 */
 		public static const STRETCH:String = "stretch";
+		
+		/**
+		 * No matter what, the image will be displayed at the exact width and height of the max_width and max_height values
+		 */
 		public static const EXACT:String = "exact";
 		
+		/**
+		 * The event type that gets thrown if a call to killCue gets made while the cue is populated. This event gets dispatched to each object in the cue.
+		 */
 		public static const CANCEL_LOAD:String = "cancelLoad";
 		
 		private static var myLoader:Loader;
 		private static var myURLRequest:URLRequest;
 		private static var queue:Vector.<SmoothImageLoad>;
 		private static var cache:Array;
-		public static var progress:Number = 0;
 		private static var timeout:uint;
 		
+		/**
+		 * The progress of the current image being loaded (between 0 and 1)
+		 */
+		public static var progress:Number = 0;
 		
 		public function SmoothImageLoad():void
 		{
@@ -56,8 +85,45 @@
 		 * @param	maxwidth	The maximum width of the image. Leave as 0 for the native size to be used
 		 * @param	maxheight	The maximum height of the image. Leave as 0 for the native size to be used
 		 * @param	scale_type	Determines the scale type to be used. Defaults to SmoothImageLoad.CONSTRAIN.
-		 * @param	requiresPolicyFile	If a crossdomain load is required, pass this as true and ensure you have loaded the appropriate context security policy first.
+		 * @param	requiresPolicyFile	If a crossdomain load is required, pass this as true and ensure you have loaded the appropriate security context policy first.
 		 * @param	cacheImage	If the image should be cached for later use in the session, pass this as true. Defaults to false.
+		 * @see	flash.system.Security
+		 * @example	<p>The following example starts the load of 3 separate image urls, and places them in individual movieclips, warps their size to 100x100 and caches
+		 * the resulting BitmapData of each image for instant loading for the remainder of the session.</p>
+		 * <listing>
+		 * var image_urls:Array = [ "http://www.mydomain.com/image1.jpg", "http://www.mydomain.com/image2.jpg", "http://www.mydomain.com/image3.jpg" ];
+		 * 
+		 * for ( var i:uint = 0; i &lt; image_urls.length; i++ )
+		 * {
+		 * 	var mc:MovieClip = new MovieClip();
+		 * 	mc.x = i &#42; 100;
+		 * 	mc.y = 50;
+		 * 	this.addChild( mc );
+		 * 
+		 * 	mc.addEventListener( Event.COMPLETE, this.imageLoadHandler );
+		 * 	mc.addEventListener( SmoothImageLoad.CANCEL_LOAD, this.imageLoadHandler );
+		 * 	SmoothImageLoad.imageLoad( image_urls[i], mc, 100, 100, SmoothImageLoad.EXACT, false, true );
+		 * }
+		 * 
+		 * function imageLoadHandler( evt:Event ):void
+		 * {
+		 * 	var mc:MovieClip = evt.currentTarget as MovieClip;
+		 * 	mc.removeEventListener( Event.COMPLETE, this.imageLoadHandler );
+		 * 	mc.removeEventListener( SmoothImageLoad.CANCEL_LOAD, this.imageLoadHandler );
+		 * 
+		 * 	switch ( evt.type )
+		 * 	{
+		 * 		case SmoothImageLoad.CANCEL_LOAD:
+		 * 			// SmoothImageLoad.killCue() was called and the cue load was cancelled. Any code that needs to be executed to handle the cancellation can be placed here
+		 * 			break;
+		 * 
+		 * 		case Event.COMPLETE:
+		 * 			// The load was completed and a Bitmap instance has been placed in to the container
+		 * 			var bmp:Bitmap = mc.getChildAt( mc.numChildren-1 ) as Bitmap;
+		 * 			break;
+		 * 	}
+		 * }
+		 * </listing>
 		 */
 		
 		public static function imageLoad(myURL:String, target:DisplayObjectContainer, maxwidth:Number=0, maxheight:Number=0, scale_type:String="constrain", requiresPolicyFile:Boolean=false, cacheImage:Boolean=false ):void {
@@ -145,7 +211,7 @@
 		
 		public static function killCue():void
 		{
-			trace( SmoothImageLoad, "Called killCue()" );
+			trace( "LaunchPad", SmoothImageLoad, "Called killCue()" );
 			
 			clearTimeout( timeout );
 			
@@ -193,6 +259,10 @@
 			return false;
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function removeHandler(evt:Event):void
 		{
 			evt.currentTarget.removeEventListener(Event.REMOVED_FROM_STAGE, removeHandler);
@@ -226,6 +296,9 @@
 			
 			return null;
 		}
+		/**
+		 * @private
+		 */
 		
 		private static function loadNextSlot():void
 		{
@@ -266,9 +339,13 @@
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function securityHandler( evt:SecurityErrorEvent ):void
 		{
-			trace( SmoothImageLoad, "Security Error loading image:", evt );
+			trace( "LaunchPad", SmoothImageLoad, "Security Error loading image:", evt );
 			
 			myLoader.contentLoaderInfo.removeEventListener( Event.COMPLETE, doneLoad );
 			myLoader.contentLoaderInfo.removeEventListener( ProgressEvent.PROGRESS, progressHandler );
@@ -286,9 +363,13 @@
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function errorHandler( evt:IOErrorEvent ):void
 		{
-			trace( SmoothImageLoad, "Error loading image:", evt );
+			trace( "LaunchPad", SmoothImageLoad, "Error loading image:", evt );
 			
 			myLoader.contentLoaderInfo.removeEventListener( Event.COMPLETE, doneLoad );
 			myLoader.contentLoaderInfo.removeEventListener( ProgressEvent.PROGRESS, progressHandler );
@@ -305,6 +386,10 @@
 			}
 			
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function progressHandler( evt:ProgressEvent ):void
 		{
@@ -312,6 +397,10 @@
 			progress = evt.bytesLoaded / evt.bytesTotal;
 			
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function doneLoad(evt:Event=null):void {
 			
@@ -324,7 +413,7 @@
 					BMPdata.draw(myLoader, null, null, null, null, true);
 				} catch (e:Error) {
 					
-					trace( SmoothImageLoad, "ERROR", e );
+					trace( "LaunchPad", SmoothImageLoad, "ERROR", e );
 					
 					queue[0].target.dispatchEvent( new SecurityErrorEvent(SecurityErrorEvent.SECURITY_ERROR) );
 					

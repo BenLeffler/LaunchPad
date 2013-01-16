@@ -1,12 +1,19 @@
 package com.thirdsense.utils 
 {
 	import com.thirdsense.utils.getClassVariables;
+	
 	/**
-	 * ...
+	 * A variety of tools to help with formatting of String data
 	 * @author Ben Leffler
 	 */
+	
 	public class StringTools 
 	{
+		/**
+		 * Checks if a string is a valid email format
+		 * @param	email	The email address to check
+		 * @return	Boolean value that indicates if it is a valid email format
+		 */
 		
 		public static function isValidEmailFormat( email:String ):Boolean
 		{
@@ -17,6 +24,14 @@ package com.thirdsense.utils
 			return true;
 		}
 		
+		/**
+		 * Adds a string in to another string at a designated position
+		 * @param	target_string	The target string to append to
+		 * @param	pos	The position of where to place the insert_string value. (0 to n-1)
+		 * @param	insert_string	The string to append to target_string
+		 * @return	The resulting string
+		 */
+		
 		public static function insertAt( target_string:String, pos:int, insert_string:String ):String
 		{
 			var str:String;
@@ -26,6 +41,14 @@ package com.thirdsense.utils
 			
 			return str;
 		}
+		
+		/**
+		 * Replaces instances of certain characters in a string with a desired character set
+		 * @param	target_string	The target string to analyse and replace
+		 * @param	searchFor	The character combination to search for
+		 * @param	replaceWith	The character combination that will be replaced with
+		 * @return	The resulting string
+		 */
 		
 		public static function replaceAll( target_string:String, searchFor:String, replaceWith:String ):String
 		{
@@ -50,6 +73,13 @@ package com.thirdsense.utils
 			return target_string;
 			
 		}
+		
+		/**
+		 * Shortens a number with a suffix representation (K for thousands, M for millions and B for billions)
+		 * @param	value	The value to shorten
+		 * @param	digits	The minimum number of digits to allow before creating a suffix
+		 * @return	The string representation of the number
+		 */
 		
 		public static function shortenNumber( value:Number, digits:int=5 ):String
 		{
@@ -85,6 +115,12 @@ package com.thirdsense.utils
 			
 			return String(value);
 		}
+		
+		/**
+		 * Converts an integer value in to a place (ie 1 converts to 1st, 2 converts to 2nd etc.)
+		 * @param	value	The value to convert from
+		 * @return	The string result
+		 */
 		
 		public static function convertToPlace( value:int ):String
 		{
@@ -130,6 +166,14 @@ package com.thirdsense.utils
 			
 			return value + "th";
 		}
+		
+		/**
+		 * Creates a string representation of a class or an instance of a class object.
+		 * @param	cl	The class or object to analyse
+		 * @param	accessorType	The type of accessor to include in the result
+		 * @return	A string representation of the object 'cl'
+		 * @see	com.thirdsense.utils.AccessorType
+		 */
 		
 		public static function toString( cl:*, accessorType:String="" ):String
 		{

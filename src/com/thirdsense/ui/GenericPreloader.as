@@ -15,9 +15,10 @@ package com.thirdsense.ui
 	import flash.utils.getDefinitionByName;
 	
 	/**
-	 * ...
+	 * The generic preloader as used by the LaunchPad framework for asset loading
 	 * @author Ben Leffler
 	 */
+	
 	public class GenericPreloader extends MovieClip 
 	{
 		private var bg:Sprite;
@@ -30,6 +31,10 @@ package com.thirdsense.ui
 			this.create();
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function create():void
 		{
 			this.createBackground();
@@ -37,6 +42,10 @@ package com.thirdsense.ui
 			this.createText();
 			this.createLabel();
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function createBackground():void
 		{
@@ -63,6 +72,10 @@ package com.thirdsense.ui
 			this.addChild( this.bg );
 			
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function createBar():void
 		{
@@ -94,8 +107,8 @@ package com.thirdsense.ui
 				shadow_col = 0xFFFFFF;
 			}
 			
-			//var cl:Class = getDefinitionByName( "ArialRounded" ) as Class;
-			Font.registerFont( ArialRounded );
+			var cl:Class = getDefinitionByName( "ArialRounded" ) as Class;
+			Font.registerFont( cl );
 			var tf:TextFormat = new TextFormat( "Arial Rounded MT Bold", 22, text_col );
 			
 			this.copy = new TextField();
@@ -109,6 +122,10 @@ package com.thirdsense.ui
 			this.copy.filters = [ new BlurFilter(1.05, 1.05, 3), new DropShadowFilter( 2, 45, shadow_col, 1, 3, 3, 0.25, 3) ];
 			this.addChild( this.copy );
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function createLabel():void
 		{

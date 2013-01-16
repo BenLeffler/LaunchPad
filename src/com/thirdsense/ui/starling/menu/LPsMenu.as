@@ -10,7 +10,7 @@ package com.thirdsense.ui.starling.menu
 	import starling.display.Sprite;
 	
 	/**
-	 * The LaunchPad Starling based menu scaffold class
+	 * The LaunchPad Starling based menu scaffold.
 	 * @author Ben Leffler
 	 */
 	
@@ -21,17 +21,27 @@ package com.thirdsense.ui.starling.menu
 		private static var _current_menu:String;
 		private static var _menus_class_path:String;
 		private static var registered_menus:Array;
+		private static var _fading:Boolean;
 		
 		private var onComplete:Function;
 		private var content:Sprite;
+		
+		/**
+		 * Constructor of the LaunchPad Starling based menu framework
+		 */
 		
 		public function LPsMenu() 
 		{
 			instance = this;
 			_last_menu = "";
 			_current_menu = "";
+			_fading = false;
 			
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function addMenu( menu_name:String = "", transition:String = "", onComplete:Function=null ):void
 		{
@@ -55,6 +65,7 @@ package com.thirdsense.ui.starling.menu
 				var pt:Point = LPMenuTransition.translate(transition);
 				var tween:BTween = new BTween( this.content, 20, BTween.EASE_IN_OUT );
 				tween.moveTo( pt.x * Starling.current.stage.stageWidth, pt.y * Starling.current.stage.stageHeight );
+				if ( _fading ) tween.fadeTo(0);
 				tween.onComplete = this.onMenuTransition;
 				tween.onCompleteArgs = [ transition ]
 				tween.start();
@@ -64,6 +75,10 @@ package com.thirdsense.ui.starling.menu
 				this.onMenuTransition( transition );
 			}			
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function onMenuTransition( transition:String ):void
 		{
@@ -95,6 +110,10 @@ package com.thirdsense.ui.starling.menu
 			this.initMenu();
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function getMenuPath( name:String ):String
 		{
 			if ( !registered_menus )	return null;
@@ -110,36 +129,25 @@ package com.thirdsense.ui.starling.menu
 			return null;
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function initMenu():void
 		{
 			if ( this.content )
 			{
-				if ( this.content.numChildren )
-				{
-					var mm:* = this.content.getChildAt(0);
-					if ( mm.onTransition != null )	mm.onTransition();
-					
-				}
-				
 				if ( this.content.x != 0 || this.content.y != 0 )
 				{
 					var tween:BTween = new BTween( this.content, 30, BTween.EASE_OUT );
 					tween.moveTo(0, 0);
-					if ( this.onComplete != null )
-					{
-						tween.onComplete = this.onComplete;
-						this.onComplete = null;
-					}
+					if ( _fading ) tween.fadeFromTo(0, 1);
+					tween.onComplete = this.onTransitionComplete;
 					tween.start();
 				}
 				else
 				{
-					if ( this.onComplete != null )
-					{
-						var fn:Function = this.onComplete;
-						this.onComplete = null;
-						fn();
-					}
+					this.onTransitionComplete();
 				}
 			}
 			
@@ -149,6 +157,26 @@ package com.thirdsense.ui.starling.menu
 				{
 					Analytics.trackScreen( current_menu );
 				}
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		
+		private function onTransitionComplete():void
+		{
+			if ( this.content.numChildren )
+			{
+				var mm:* = this.content.getChildAt(0);
+				if ( mm.onTransition != null )	mm.onTransition();
+			}
+			
+			if ( this.onComplete != null )
+			{
+				var fn:Function = this.onComplete;
+				this.onComplete = null;
+				fn();
 			}
 		}
 		
@@ -199,8 +227,22 @@ package com.thirdsense.ui.starling.menu
 		}
 		
 		/**
+		 * Enables or disables fading of each menu as it transitions (Your app may take a performance hit on mobile devices if it is enabled and your menus are quite busy)
+		 */
+		
+		public static function get fading():Boolean 
+		{
+			return _fading;
+		}
+		
+		public static function set fading(value:Boolean):void 
+		{
+			_fading = value;
+		}
+		
+		/**
 		 * Registers a menu class for use with the LaunchPad Starling Menu system
-		 * @param	menu	The menu class to be called upon via the LPsMenu.navigateTo function
+		 * @param	menu	The menu class to be called upon via the LPsMenu.navigateTo function where the menu_name parameter is the class name as a String.
 		 */
 		
 		public static function registerMenu( menu:Class ):void
@@ -232,6 +274,8 @@ package com.thirdsense.ui.starling.menu
 			
 			trace( "LaunchPad", LPsMenu, arr[arr.length-1] + " successfully registered as a menu" );
 		}
+		
+		
 		
 		
 	}

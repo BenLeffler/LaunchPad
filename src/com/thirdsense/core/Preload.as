@@ -9,7 +9,7 @@ package com.thirdsense.core
 	import flash.events.Event;
 	
 	/**
-	 * ...
+	 * @private	Preloading of project and assets for the LaunchPad framework
 	 * @author Ben Leffler
 	 */
 	
@@ -20,6 +20,12 @@ package com.thirdsense.core
 		private static var onLoadComplete:Function;
 		private static var focus_asset:LPAsset;
 		private static var postload_cue:Vector.<LPAsset>;
+		
+		/**
+		 * Commences a preload activity
+		 * @param	preloader	The preloader to use. If null, the generic preloader is used. If an empty movieclip, none is used
+		 * @param	onComplete	The function to call upon preload completion
+		 */
 		
 		public static function load( preloader:MovieClip = null, onComplete:Function=null ):void
 		{
@@ -46,11 +52,19 @@ package com.thirdsense.core
 			startPreload();
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function startPreload():void
 		{
 			var target:MovieClip = LaunchPad.instance.target;
 			target.addEventListener(Event.ENTER_FRAME, mainLoadHandler, false, 0, true);
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function mainLoadHandler(evt:Event):void
 		{
@@ -88,12 +102,20 @@ package com.thirdsense.core
 			}
 		}
 		
+		/**
+		 * @private	Imports the project configuration xml file
+		 */
+		
 		private static function importConfigXML():void
 		{
 			xml_loader = new XMLLoader();
 			xml_loader.load( LPSettings.LIVE_EXTENSION + "lib/xml/config.xml", onConfigXML );
 			
 		}
+		
+		/**
+		 * @private	Gets called on the load complete of config.xml. Parses the config, sets up the project bones and then loads project assets
+		 */
 		
 		private static function onConfigXML( data:XML ):void
 		{
@@ -112,6 +134,10 @@ package com.thirdsense.core
 				allLoadsComplete();
 			}
 		}
+		
+		/**
+		 * @private	Gets called on an asset having been loaded. Checks for and starts the next asset load, if none remaining - concludes set up of project.
+		 */
 		
 		private static function onAssetLoad( success:Boolean ):void
 		{
@@ -133,6 +159,7 @@ package com.thirdsense.core
 			else
 			{
 				// throw error
+				trace( "LaunchPad", Preload, "Error loading asset." );
 			}
 		}
 		
@@ -206,6 +233,10 @@ package com.thirdsense.core
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private static function startPostLoadCue():void
 		{
 			var asset:LPAsset = postload_cue.shift();
@@ -213,6 +244,10 @@ package com.thirdsense.core
 			asset.loadToAsset( onPostLoadAsset );
 			
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private static function onPostLoadAsset( success:Boolean ):void
 		{

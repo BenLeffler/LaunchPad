@@ -7,10 +7,12 @@ package com.thirdsense.core
 	import com.thirdsense.social.FacebookInterface;
 	import flash.external.ExternalInterface;
 	import flash.system.Security;
+	
 	/**
-	 * ...
+	 * @private	Central parse class that analyses the LaunchPad config.xml file and sets up the project accordingly
 	 * @author Ben Leffler
 	 */
+	
 	public class LPConfig 
 	{
 		private var data:XML;
@@ -19,6 +21,11 @@ package com.thirdsense.core
 		{
 			
 		}
+		
+		/**
+		 * Parses the config xml
+		 * @param	data	The xml object brought in to set up LaunchPad
+		 */
 		
 		public final function parse( data:XML ):void
 		{
@@ -32,6 +39,10 @@ package com.thirdsense.core
 			parseAnalytics();
 		}
 		
+		/**
+		 * @private	Brings in asset info
+		 */
+		
 		private function parseAssets():void
 		{
 			for ( var i:uint = 0; this.data.asset[i]; i++ )
@@ -41,10 +52,21 @@ package com.thirdsense.core
 				asset.label = String( this.data.asset[i].@label );
 				asset.url = String( this.data.asset[i].@url );
 				asset.postload = ( String(this.data.asset[i].@postload).toLowerCase() == "true" );
+				
+				// config.xml asset tags have an optional field "type" which allows the asset type to be stated up-front
+				if ( this.data.asset[i].@type && String(this.data.asset[i].@type).length )
+				{
+					asset.type = String(this.data.asset[i].@type);
+				}
+				
 				LPAsset.addAsset( asset );
 			}
 			
 		}
+		
+		/**
+		 * @private	Sets up values for retrieval through the LaunchPad.getValue call
+		 */
 		
 		private function parseValues():void
 		{
@@ -59,6 +81,10 @@ package com.thirdsense.core
 			}
 		}
 		
+		/**
+		 * @private	Initializes Google Analytics
+		 */
+		
 		private function parseAnalytics():void
 		{
 			if ( this.data.analytics && String(this.data.analytics.@tracking_id).length )
@@ -67,6 +93,10 @@ package com.thirdsense.core
 				Analytics.init();
 			}
 		}
+		
+		/**
+		 * @private	Initializes Facebook connectivity for the app
+		 */
 		
 		private function parseFacebook():void
 		{
@@ -84,6 +114,10 @@ package com.thirdsense.core
 			}
 		}
 		
+		/**
+		 * @private	Brings in custom policy files for crossdomain connectivity
+		 */
+		
 		private function parsePolicies():void
 		{
 			if ( ExternalInterface.available )
@@ -95,6 +129,10 @@ package com.thirdsense.core
 				}
 			}
 		}
+		
+		/**
+		 * @private	Prepares the project info for global retrieval
+		 */
 		
 		private function parseApplication():void
 		{

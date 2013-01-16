@@ -12,7 +12,13 @@ package com.thirdsense.data
 	import flash.utils.getQualifiedSuperclassName;
 	
 	/**
-	 * LaunchPad client class to be used with the Asset swf to allow access to the Launchpad Assets class. Simply create a new instance from your library swf ( eg var client:LPAssetClient = new LPAssetClient(this); )
+	 * <p>Client class to be used with an asset swf to allow the LaunchPad framework access to it's library linkaged MovieClips, Sprites and Sounds. </p>
+	 * <p>Simply create a new LPAssetClient instance on the main timeline of your swf library, compile and reference the swf location in the core LaunchPad project's config.xml</p>
+	 * <listing>
+	 * import com.thirdsense.data.LPAssetClient;
+	 * 
+	 * var client:LPAssetClient = new LPAssetClient( this );
+	 * </listing>
 	 * @author Ben Leffler
 	 */
 	
@@ -59,13 +65,17 @@ package com.thirdsense.data
 			}
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function addAsset(linkage:String):void
 		{
 			var DynamicClass:Class = getDefinitionByName(linkage) as Class;
 			var super_type:String = getQualifiedSuperclassName( DynamicClass );
 			
-			switch ( super_type ) {
-				
+			switch ( super_type ) 
+			{
 				case "flash.display::MovieClip":
 					var mc:MovieClip = new DynamicClass();
 					this.assets[linkage] = mc;

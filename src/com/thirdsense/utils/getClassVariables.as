@@ -3,7 +3,7 @@ package com.thirdsense.utils
 	import flash.utils.describeType;
 	
 	/**
-	 * ...
+	 * Obtains a list of available variables in either a static class or an instance of a class
 	 * @author Ben Leffler
 	 */
 	
@@ -11,6 +11,7 @@ package com.thirdsense.utils
 	 * Retrieves all variables, constants and accessors (if requested) of the passed object.
 	 * @param	cl	The object to examine
 	 * @param	includeAccessors	Pass as true if you want to include accessors (getter/setter)
+	 * @see	com.thirdsense.utils.AccessorType
 	 * @param	asValues	If the array to be returned is to be populated with the var/const values
 	 * @return	An array of vars or var values
 	 */

@@ -9,7 +9,7 @@ package com.thirdsense.ui.starling
 	import starling.events.TouchPhase;
 	
 	/**
-	 * ...
+	 * Simple radio button for Starling based project.
 	 * @author Ben Leffler
 	 */
 	public class LPsRadioButton extends MovieClip 
@@ -47,7 +47,14 @@ package com.thirdsense.ui.starling
 			this.useHandCursor = true;
 			this._value = default_value;
 			
-			!this._value ? this.currentFrame = 0 : this.currentFrame = 1;
+			if (!this._value)
+			{
+				this.currentFrame = 0;
+			}
+			else
+			{
+				this.currentFrame = 1;
+			}
 		}
 		
 		/**
@@ -75,6 +82,14 @@ package com.thirdsense.ui.starling
 		public function get value():Boolean 
 		{
 			return _value;
+		}
+		
+		public function set value(val:Boolean):void
+		{
+			if ( this._value != val )
+			{
+				this.toggle();
+			}
 		}
 		
 		/**
@@ -115,16 +130,28 @@ package com.thirdsense.ui.starling
 			
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function addListeners():void
 		{
 			this.addEventListener(TouchEvent.TOUCH, this.touchHandler);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, this.removeHandler);
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		private function removeHandler(evt:Event):void
 		{
 			this.kill();
 		}
+		
+		/**
+		 * Removes all listeners renders this object inoperable
+		 */
 		
 		public function kill():void
 		{
@@ -132,15 +159,28 @@ package com.thirdsense.ui.starling
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, this.removeHandler);
 		}
 		
+		/**
+		 * @private	Handler for the touch listener
+		 */
+		
 		private function touchHandler( evt:TouchEvent ):void
 		{
 			var touch:Touch = evt.getTouch(this, TouchPhase.ENDED);
 			if ( touch && !this._disabled )
 			{
-				this._value ? this._value = false : this._value = true;
-				!this._value ? this.currentFrame = 0 : this.currentFrame = 1;
+				this.toggle();
 				if ( this.onToggle != null ) this.onToggle();
 			}
+		}
+		
+		/**
+		 * @private	Toggles the radio button
+		 */
+		
+		private function toggle():void
+		{
+			this._value ? this._value = false : this._value = true;
+			!this._value ? this.currentFrame = 0 : this.currentFrame = 1;
 		}
 		
 	}

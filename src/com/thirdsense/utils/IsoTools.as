@@ -8,7 +8,7 @@ package com.thirdsense.utils
 	import com.thirdsense.utils.Trig;
 	
 	/**
-	 * Isometric Tools
+	 * Isometric Tools for use with game design
 	 * @author Ben Leffler
 	 */
 	
