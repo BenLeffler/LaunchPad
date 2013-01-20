@@ -4,6 +4,7 @@ package com.thirdsense.animation
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
 	import starling.events.Event;
@@ -109,6 +110,13 @@ package com.thirdsense.animation
 		
 		public function fromBitmapData(bmpdata:BitmapData, asRenderTexture:Boolean = false, retainBitmapData:Boolean = false ):void
 		{
+			if ( !Starling.context )
+			{
+				trace( "LaunchPad", TexturePack, "Unable to convert to a Texture. You must establish a Stage3D context first by starting a Starling session." );
+				throw ( new Error("Unable to convert to a Texture. You must establish a Stage3D context first by starting a Starling session.") );
+				return void;
+			}
+			
 			this.texture = Texture.fromBitmapData(bmpdata, generate_mipmaps, asRenderTexture);
 			
 			if ( asRenderTexture ) {
@@ -129,6 +137,13 @@ package com.thirdsense.animation
 		public function get spritesheet():BitmapData	{	return this._spritesheet	};
 		public function set spritesheet( bmpdata:BitmapData ):void
 		{
+			if ( !Starling.context )
+			{
+				trace( "LaunchPad", TexturePack, "Unable to convert to a Texture. You must establish a Stage3D context first by starting a Starling session." );
+				throw ( new Error("Unable to convert to a Texture. You must establish a Stage3D context first by starting a Starling session.") );
+				return void;
+			}
+			
 			this._spritesheet = bmpdata;
 			
 			if ( this.texture ) {
