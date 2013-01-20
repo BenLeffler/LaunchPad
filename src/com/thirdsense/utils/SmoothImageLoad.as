@@ -1,5 +1,6 @@
 ﻿package com.thirdsense.utils
 {
+	import com.thirdsense.settings.Profiles;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
@@ -317,6 +318,11 @@
 				return void;
 			}
 			
+			myLoader.contentLoaderInfo.addEventListener( Event.COMPLETE, doneLoad, false, 0, true );
+			myLoader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, progressHandler, false, 0, true );
+			myLoader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, errorHandler, false, 0, true );
+			myLoader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, securityHandler, false, 0, true );
+			
 			if ( queue[0].requiresPolicyFile ) {
 				var context:LoaderContext = new LoaderContext();
 				context.checkPolicyFile = true;
@@ -331,11 +337,6 @@
 			} else {
 				myLoader.load( queue[0].urlrequest );
 			}
-			
-			myLoader.contentLoaderInfo.addEventListener( Event.COMPLETE, doneLoad, false, 0, true );
-			myLoader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, progressHandler, false, 0, true );
-			myLoader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, errorHandler, false, 0, true );
-			myLoader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, securityHandler, false, 0, true );
 			
 		}
 		
