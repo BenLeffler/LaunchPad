@@ -3,6 +3,7 @@ package com.thirdsense.sound
 	import com.thirdsense.animation.BTween;
 	import com.thirdsense.LaunchPad;
 	import com.thirdsense.settings.LPSettings;
+	import com.thirdsense.settings.Profiles;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
@@ -18,6 +19,11 @@ package com.thirdsense.sound
 		private static var _sound_volume:Number = 1;
 		private static var _music_volume:Number = 1;
 		
+		/**
+		 * The relative path to the folder containing your application sounds
+		 */
+		public static var sound_path:String = "lib/mp3/";
+		
 		public function SoundStream() 
 		{
 			
@@ -25,7 +31,8 @@ package com.thirdsense.sound
 		
 		/**
 		 * Plays a a designated sound. This function will first check the availability of a sound within the runtime loaded
-		 * LaunchPad asset library - if one does not exist, it will attempt to load the sound from the lib/mp3/ folder
+		 * LaunchPad asset library - if one does not exist, it will attempt to load the sound from the lib/mp3/ folder (folder 
+		 * location can be altered by changing the value of 'SoundStream.sound_path')
 		 * @param	file	The asset name or the file name of the sound to play
 		 * @param	volume	The volume at which to play the sound
 		 * @param	loops	The number of loops to play the sound for
@@ -42,7 +49,13 @@ package com.thirdsense.sound
 			var snd:Sound = LaunchPad.getAsset( "", file );
 			if ( !snd )
 			{
-				snd = new Sound( new URLRequest(LPSettings.LIVE_EXTENSION + "lib/mp3/" + file) );
+				var request:URLRequest = new URLRequest(LPSettings.LIVE_EXTENSION + sound_path + file);
+				if ( !Profiles.web )
+				{
+					request.useCache = true;
+				}
+				
+				snd = new Sound( request );
 			}
 			
 			if ( snd )
