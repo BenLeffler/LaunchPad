@@ -287,6 +287,15 @@ package com.thirdsense.animation
 		}
 		
 		/**
+		 * Retrieves the progress of the tween represented by a number between 0 and 1. If a tween is in a pre-tween paused state, 0 will be returned.
+		 */
+		
+		public function get progress():Number
+		{
+			return ( this.frame_counter / this.frames );
+		}
+		
+		/**
 		 * @private
 		 * @return	A boolean value indicating if the tween has reached it's final frame
 		 */
