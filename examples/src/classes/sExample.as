@@ -169,8 +169,9 @@
 			var menu:LPsMenu = new LPsMenu();
 			this.addChild( menu );
 			
-			// Let's also enable a nice transition effect in FADING
+			// Let's also enable some nice transition effects in FADING and BLURRING
 			LPsMenu.fading = true;
+			LPsMenu.blurring = true;
 			
 			// Navigate to the first menu class with a random transition
 			LPsMenu.navigateTo( "Menu1", LPMenuTransition.RANDOM );

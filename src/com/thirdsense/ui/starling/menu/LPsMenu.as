@@ -8,6 +8,7 @@ package com.thirdsense.ui.starling.menu
 	import flash.utils.getQualifiedClassName;
 	import starling.core.Starling;
 	import starling.display.Sprite;
+	import starling.filters.BlurFilter;
 	
 	/**
 	 * The LaunchPad Starling based menu scaffold.
@@ -22,6 +23,7 @@ package com.thirdsense.ui.starling.menu
 		private static var _menus_class_path:String;
 		private static var registered_menus:Array;
 		private static var _fading:Boolean;
+		private static var _blurring:Boolean;
 		
 		private var onComplete:Function;
 		private var content:Sprite;
@@ -62,18 +64,37 @@ package com.thirdsense.ui.starling.menu
 			
 			if ( this.content && transition != "" )
 			{
+				this.content.flatten();
 				var pt:Point = LPMenuTransition.translate(transition);
 				var tween:BTween = new BTween( this.content, 20, BTween.EASE_IN_OUT );
 				tween.moveTo( pt.x * Starling.current.stage.stageWidth, pt.y * Starling.current.stage.stageHeight );
+				if ( _blurring )
+				{
+					tween.onTween = this.blurTransitionEffect;
+					tween.onTweenArgs = [ tween, pt ];
+				}
 				if ( _fading ) tween.fadeTo(0);
 				tween.onComplete = this.onMenuTransition;
-				tween.onCompleteArgs = [ transition ]
+				tween.onCompleteArgs = [ transition ];
 				tween.start();
 			}
 			else
 			{
 				this.onMenuTransition( transition );
 			}			
+		}
+		
+		/**
+		 * @private	Provides a blur effect on the content container when transitioning a menu off screen
+		 */
+		
+		private function blurTransitionEffect( tween:BTween, transition:Point ):void
+		{
+			var progress:Number = tween.progress;
+			var blur:int = 15;
+			if ( _fading ) blur *= 2;
+			var filter:BlurFilter = new BlurFilter( progress * blur * Math.abs(transition.x), progress * blur * Math.abs(transition.y), 0.25 );
+			this.content.filter = filter;			
 		}
 		
 		/**
@@ -84,6 +105,8 @@ package com.thirdsense.ui.starling.menu
 		{
 			if ( this.content )
 			{
+				this.content.unflatten();
+				this.content.filter = null;
 				this.content.removeChildren( 0, -1 );
 			}
 			else
@@ -235,9 +258,31 @@ package com.thirdsense.ui.starling.menu
 			return _fading;
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		public static function set fading(value:Boolean):void 
 		{
 			_fading = value;
+		}
+		
+		/**
+		 * Enables or disables a motion blur effect on menu transitions (There may be a performance hit on some mobile devices if enabled)
+		 */
+		
+		public static function get blurring():Boolean 
+		{
+			return _blurring;
+		}
+		
+		/**
+		 * @private
+		 */
+		
+		public static function set blurring(value:Boolean):void 
+		{
+			_blurring = value;
 		}
 		
 		/**
