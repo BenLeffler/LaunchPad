@@ -103,7 +103,7 @@ package com.thirdsense.ui.starling.menu
 		/**
 		 * Navigates to the last detected menu section
 		 * @param	transition	The type of transition to use. By default, it uses LPMenuTransition.TO_RIGHT
-		 * @see	com.thirdsense.ui.startling.menu.LPsBaseMenu
+		 * @see	com.thirdsense.ui.starling.menu.LPMenuTransition
 		 */
 		
 		public function navToPreviousMenu( transition:String = "R" ):void

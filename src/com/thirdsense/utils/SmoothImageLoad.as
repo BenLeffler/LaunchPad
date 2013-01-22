@@ -1,5 +1,6 @@
 ﻿package com.thirdsense.utils
 {
+	import com.thirdsense.animation.BTween;
 	import com.thirdsense.settings.Profiles;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -15,8 +16,6 @@
 	import flash.net.URLRequest;
 	import flash.system.LoaderContext;
 	import flash.system.Security;
-	import flash.utils.clearTimeout;
-	import flash.utils.setTimeout;
 	
 	/**
 	 * Allows remote loading of images in to a bitmap instance utilising dynamic smoothing. Also acts as a load cue manager for multiple image loads.
@@ -67,7 +66,6 @@
 		private static var myURLRequest:URLRequest;
 		private static var queue:Vector.<SmoothImageLoad>;
 		private static var cache:Array;
-		private static var timeout:uint;
 		
 		/**
 		 * The progress of the current image being loaded (between 0 and 1)
@@ -160,7 +158,7 @@
 			target.addEventListener(Event.REMOVED_FROM_STAGE, removeHandler, false, 0, true);
 			
 			if ( queue.length == 1 ) {
-				timeout = setTimeout( loadNextSlot, 100 );
+				BTween.callOnNextFrame( loadNextSlot );
 			}
 			
 		}
@@ -213,8 +211,6 @@
 		public static function killCue():void
 		{
 			trace( "LaunchPad", SmoothImageLoad, "Called killCue()" );
-			
-			clearTimeout( timeout );
 			
 			if ( myLoader && myLoader.contentLoaderInfo ) {
 				
@@ -297,6 +293,29 @@
 			
 			return null;
 		}
+		
+		/**
+		 * Retrieves if a url exists in the session cache
+		 * @param	url	The url of the image to check against
+		 * @return	True if it exists in cache.
+		 */
+		
+		public static function existsInCache( url:String ):Boolean
+		{
+			if ( cache )
+			{
+				for ( var i:uint = 0; i < cache.length; i++ )
+				{
+					if ( cache[i].url == url )
+					{
+						return true;
+					}
+				}
+			}
+			
+			return false;
+		}
+		
 		/**
 		 * @private
 		 */
@@ -312,9 +331,9 @@
 			
 			queue[0].target.removeEventListener(Event.REMOVED_FROM_STAGE, removeHandler);
 			
-			if ( queue[0].bmpdata || getFromCache(queue[0].urlrequest.url) )
+			if ( queue[0].bmpdata || existsInCache(queue[0].urlrequest.url) )
 			{
-				timeout = setTimeout( doneLoad, 100 );
+				BTween.callOnNextFrame( doneLoad );
 				return void;
 			}
 			

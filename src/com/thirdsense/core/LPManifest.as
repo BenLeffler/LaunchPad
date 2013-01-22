@@ -10,6 +10,8 @@ package com.thirdsense.core
 	import com.thirdsense.sound.SoundLabel;
 	import com.thirdsense.sound.SoundShape;
 	import com.thirdsense.sound.SoundStream;
+	import com.thirdsense.ui.menu.LPBaseMenu;
+	import com.thirdsense.ui.menu.LPMenu;
 	import com.thirdsense.ui.starling.LPsButton;
 	import com.thirdsense.ui.starling.LPsCheckList;
 	import com.thirdsense.ui.starling.LPsRadioButton;
@@ -42,10 +44,12 @@ package com.thirdsense.core
 		private var trig:Trig;
 		private var facebook_friend_field:FacebookFriendField;
 		private var lps_menu:LPsMenu;
+		private var lp_menu:LPMenu;
 		private var lp_menu_transition:LPMenuTransition
 		private var iso_tools:IsoTools;
 		private var landscape:Landscape;
 		private var lps_base_menu:LPsBaseMenu;
+		private var lp_base_menu:LPBaseMenu;
 		private var lps_button:LPsButton;
 		private var scroll_control:ScrollControl;
 		private var device_camera:DeviceCamera;

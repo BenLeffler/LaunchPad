@@ -91,11 +91,11 @@ package com.thirdsense
 		 * Initializes and starts application load procedure.
 		 * @param	root	The root class for the application. This can be accessed from calling LaunchPad.root
 		 * @param	onComplete	The function to call once the application has completed initializing
-		 * @param	preloader	The sprite to use for the preloading user interface. Pass as null to use the default generic loader.
+		 * @param	preloader	The MoveiClip to use for the preloading user interface. Pass as null to use the default generic loader.
 		 * @param	profile	The profile of the device to use for this build.
 		 */
 		
-		public function init( target:MovieClip, onComplete:Function, preloader:Sprite=null ):void
+		public function init( target:MovieClip, onComplete:Function, preloader:MovieClip=null ):void
 		{
 			trace( "LaunchPad", LaunchPad, "Launching..." );
 			

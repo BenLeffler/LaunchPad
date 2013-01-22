@@ -21,7 +21,6 @@
 	import flash.text.TextFormat;
 	import starling.core.Starling;
 	import starling.display.Image;
-	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.filters.BlurFilter;
@@ -60,7 +59,6 @@
 			
 			// Add the funky LaunchPad logo, because why the hell not?
 			this.addLogo();
-			
 		}
 		
 		private function createButton( copy:String ):void
@@ -150,6 +148,7 @@
 			// And we can use Starling filters to make it pop a little
 			img.filter = BlurFilter.createDropShadow( 2, Trig.toRadians(45), 0, 0.25, 1, 1 );
 			img.filter.cache();
+			
 		}
 		
 		// *************************************************************************************************
@@ -235,6 +234,7 @@
 		{
 			trace( "The SoundShape object has completed it's transition" );
 		}
+		
 		
 	}
 

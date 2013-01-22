@@ -24,6 +24,7 @@ package com.thirdsense.ui.starling.menu
 		private static var registered_menus:Array;
 		private static var _fading:Boolean;
 		private static var _blurring:Boolean;
+		private static var _stitch:Boolean;
 		
 		private var onComplete:Function;
 		private var content:Sprite;
@@ -37,8 +38,6 @@ package com.thirdsense.ui.starling.menu
 			instance = this;
 			_last_menu = "";
 			_current_menu = "";
-			_fading = false;
-			
 		}
 		
 		/**
@@ -66,7 +65,17 @@ package com.thirdsense.ui.starling.menu
 			{
 				this.content.flatten();
 				var pt:Point = LPMenuTransition.translate(transition);
-				var tween:BTween = new BTween( this.content, 20, BTween.EASE_IN_OUT );
+				
+				if ( _stitch )
+				{
+					var tween_speed:int = 30;
+				}
+				else
+				{
+					tween_speed = 15;
+				}
+				
+				var tween:BTween = new BTween( this.content, tween_speed, BTween.EASE_IN_OUT, 1 );
 				tween.moveTo( pt.x * Starling.current.stage.stageWidth, pt.y * Starling.current.stage.stageHeight );
 				if ( _blurring )
 				{
@@ -74,14 +83,32 @@ package com.thirdsense.ui.starling.menu
 					tween.onTweenArgs = [ tween, pt ];
 				}
 				if ( _fading ) tween.fadeTo(0);
-				tween.onComplete = this.onMenuTransition;
-				tween.onCompleteArgs = [ transition ];
+				if ( _stitch )
+				{
+					this.onMenuTransition( transition );
+					tween.onComplete = this.onStitchedMenuTransitionComplete;
+					tween.onCompleteArgs = [ tween ];
+				}
+				else
+				{
+					tween.onComplete = this.onMenuTransition;
+					tween.onCompleteArgs = [ transition ];
+				}
 				tween.start();
 			}
 			else
 			{
 				this.onMenuTransition( transition );
 			}			
+		}
+		
+		/**
+		 * @private	Handles the removal of the last menu in a stitched instance
+		 */
+		
+		private function onStitchedMenuTransitionComplete( tween:BTween ):void
+		{
+			if ( tween.target.parent ) tween.target.parent.removeChild( tween.target );
 		}
 		
 		/**
@@ -93,8 +120,9 @@ package com.thirdsense.ui.starling.menu
 			var progress:Number = tween.progress;
 			var blur:int = 15;
 			if ( _fading ) blur *= 2;
+			if ( _stitch ) blur /= 4;
 			var filter:BlurFilter = new BlurFilter( progress * blur * Math.abs(transition.x), progress * blur * Math.abs(transition.y), 0.25 );
-			this.content.filter = filter;			
+			tween.target.filter = filter;			
 		}
 		
 		/**
@@ -103,7 +131,7 @@ package com.thirdsense.ui.starling.menu
 		
 		private function onMenuTransition( transition:String ):void
 		{
-			if ( this.content )
+			if ( this.content && !_stitch )
 			{
 				this.content.unflatten();
 				this.content.filter = null;
@@ -162,7 +190,9 @@ package com.thirdsense.ui.starling.menu
 			{
 				if ( this.content.x != 0 || this.content.y != 0 )
 				{
-					var tween:BTween = new BTween( this.content, 30, BTween.EASE_OUT );
+					var tween_type:String = BTween.EASE_OUT;
+					if ( _stitch ) tween_type = BTween.EASE_IN_OUT;
+					var tween:BTween = new BTween( this.content, 30, tween_type, 1 );
 					tween.moveTo(0, 0);
 					if ( _fading ) tween.fadeFromTo(0, 1);
 					tween.onComplete = this.onTransitionComplete;
@@ -283,6 +313,24 @@ package com.thirdsense.ui.starling.menu
 		public static function set blurring(value:Boolean):void 
 		{
 			_blurring = value;
+		}
+		
+		/**
+		 * Enables or disables menu stitching for transitioning
+		 */
+		
+		public static function get stitch():Boolean 
+		{
+			return _stitch;
+		}
+		
+		/**
+		 * @private
+		 */
+		
+		public static function set stitch(value:Boolean):void 
+		{
+			_stitch = value;
 		}
 		
 		/**
