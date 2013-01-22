@@ -21,6 +21,7 @@
 	import flash.text.TextFormat;
 	import starling.core.Starling;
 	import starling.display.Image;
+	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.Touch;
 	import starling.filters.BlurFilter;

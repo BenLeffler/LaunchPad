@@ -50,10 +50,6 @@ package com.thirdsense.sound
 			if ( !snd )
 			{
 				var request:URLRequest = new URLRequest(LPSettings.LIVE_EXTENSION + sound_path + file);
-				if ( !Profiles.web )
-				{
-					request.useCache = true;
-				}
 				
 				snd = new Sound( request );
 			}

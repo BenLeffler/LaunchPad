@@ -90,7 +90,7 @@ package com.thirdsense.ui.starling.menu
 		}
 		
 		/**
-		 * Retrieves a TexturePack object designated by it's sequence. (The pool name will be consisten with this menu's section name)
+		 * Retrieves a TexturePack object designated by it's sequence. (The pool name will be consistent with this menu's section name)
 		 * @param	sequence	The sequence name of the TexturePack to retrieve
 		 * @return	The desired TexturePack object. If one does not exist, null will be returned.
 		 */

@@ -20,16 +20,19 @@ package com.thirdsense.core
 		private static var onLoadComplete:Function;
 		private static var focus_asset:LPAsset;
 		private static var postload_cue:Vector.<LPAsset>;
+		private static var custom_config:XML;
 		
 		/**
 		 * Commences a preload activity
 		 * @param	preloader	The preloader to use. If null, the generic preloader is used. If an empty movieclip, none is used
 		 * @param	onComplete	The function to call upon preload completion
+		 * @param	custom_config	If an embedded config.xml file is to be used (instead of a remote one), pass through the XML here
 		 */
 		
-		public static function load( preloader:MovieClip = null, onComplete:Function=null ):void
+		public static function load( preloader:MovieClip = null, onComplete:Function=null, custom_config:XML = null ):void
 		{
 			if ( onComplete != null )	onLoadComplete = onComplete;
+			if ( custom_config != null )	Preload.custom_config = custom_config;
 			
 			if ( !preloader )
 			{
@@ -108,8 +111,15 @@ package com.thirdsense.core
 		
 		private static function importConfigXML():void
 		{
-			xml_loader = new XMLLoader();
-			xml_loader.load( LPSettings.LIVE_EXTENSION + "lib/xml/config.xml", onConfigXML );
+			if ( Preload.custom_config )
+			{
+				Preload.onConfigXML( Preload.custom_config );
+			}
+			else
+			{
+				xml_loader = new XMLLoader();
+				xml_loader.load( LPSettings.LIVE_EXTENSION + "lib/xml/config.xml", onConfigXML );
+			}
 			
 		}
 		

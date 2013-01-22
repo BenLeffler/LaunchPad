@@ -1,19 +1,33 @@
 ﻿package classes {
 	
-	import classes.sExample;
 	import classes.AppData;
+	import classes.sExample;
 	import com.thirdsense.data.LPLocalData;
 	import com.thirdsense.LaunchPad;
 	import flash.display.MovieClip;
-	
+	import flash.utils.getQualifiedClassName;
+	import flash.utils.getQualifiedSuperclassName;
 	
 	public class Example extends MovieClip {
 		
-		var launchpad:LaunchPad;
+		/**
+		 * LaunchPad will attempt to load the project config.xml file from the lib/xml folder, however you
+		 * can pass through a custom embedded config if you wish to constrain your project to a single swf
+		 * with no external files. The following embed shows how this is achieved...
+		 */
+		[Embed(source="../../bin/lib/xml/config.xml", mimeType="application/octet-stream")]
+		private const config_xml:Class;
+		
+		private var launchpad:LaunchPad;
 		
 		public function Example() {
 			
-			// Start the LaunchPad load handling a preload of assets from the lib folder
+			// If you want to use your embedded config.xml file, you can initiate LaunchPad as follows:
+			// var xml:XML = new XML( new config_xml() );
+			// this.launchpad = new LaunchPad(xml);
+			
+			// But for this example, lets use the external config file so we don't have to recompile the project
+			// every time we change something in it.
 			
 			this.launchpad = new LaunchPad();
 			this.launchpad.init( this, this.onLaunchPadInit );

@@ -31,7 +31,8 @@ package com.thirdsense
 	 * 		private var launchpad:LaunchPad;
 	 * 		
 	 * 		public function Example() {
-	 * 			launchpad.init( this, this.onLaunchPadInit );
+	 * 			this.launchpad = new LaunchPad();
+	 * 			this.launchpad.init( this, this.onLaunchPadInit );
 	 * 		}
 	 * 
 	 * 		private function onLaunchPadInit() {
@@ -54,13 +55,19 @@ package com.thirdsense
 		private var _target:MovieClip;
 		private var onCompleteInit:Function;
 		private var _starling:Starling;
+		private var custom_config:XML;
 		
 		/**
 		 * The base constructor of the LaunchPad framework. Where all good things must come from.
+		 * @param	custom_config	Rather than LaunchPad loading the project config.xml file from a hosted location, you can embed the config.xml file
+		 * and pass it through as a parameter
 		 */
 		
-		public function LaunchPad() 
+		public function LaunchPad( custom_config:XML=null ) 
 		{
+			// Allows a user to pass through an embedded configuration file for a self-contained project
+			if ( custom_config != null ) this.custom_config = custom_config;
+			
 			this.loadLaunchPadLibrary();
 		}
 		
@@ -108,7 +115,7 @@ package com.thirdsense
 			this._target.addEventListener(Event.ENTER_FRAME, this.processEngine, false, 0, true);
 			
 			// Call the preload on the next frame (because the stage size has to initialize first)
-			BTween.callOnNextFrame( Preload.load, [preloader, this.onPreloadComplete] );
+			BTween.callOnNextFrame( Preload.load, [preloader, this.onPreloadComplete, this.custom_config] );
 		}
 		
 		/**
