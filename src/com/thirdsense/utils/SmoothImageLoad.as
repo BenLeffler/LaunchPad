@@ -205,7 +205,8 @@
 		}
 		
 		/**
-		 * Kills the current cue of images waiting to be loaded.
+		 * Kills the current cue of images waiting to be loaded. An event type SmoothImageLoad.CANCEL_LOAD gets dispatched to every target
+		 * DisplayObjectContainer remaining in the cue when this call is made.
 		 */
 		
 		public static function killCue():void
@@ -535,7 +536,7 @@
 					}
 				}
 				
-				if ( queue[0].cache && !getFromCache(queue[0].urlrequest.url) )
+				if ( queue[0].cache && !existsInCache(queue[0].urlrequest.url) )
 				{
 					var obj:Object = {
 						url:queue[0].urlrequest.url,
