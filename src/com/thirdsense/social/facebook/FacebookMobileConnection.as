@@ -3,6 +3,7 @@ package com.thirdsense.social.facebook
 	import com.facebook.graph.data.FacebookSession;
 	import com.facebook.graph.FacebookMobile;
 	import com.thirdsense.LaunchPad;
+	import com.thirdsense.net.Analytics;
 	import com.thirdsense.settings.LPSettings;
 	import com.thirdsense.utils.SmoothImageLoad;
 	import flash.display.Bitmap;
@@ -105,6 +106,11 @@ package com.thirdsense.social.facebook
 			if ( success )
 			{
 				trace( "Connected to Facebook as user: " + FacebookMobile.getSession().user.name );
+				
+				if ( LPSettings.ANALYTICS_TRACKING_ID && LPSettings.ANALYTICS_TRACKING_ID.length )
+				{
+					Analytics.trackSocialMedia( "facebook", "connected" );
+				}
 			}
 			else
 			{
@@ -297,6 +303,11 @@ package com.thirdsense.social.facebook
 				swv.removeEventListener( LocationChangeEvent.LOCATION_CHANGE, inviteFriendsHandler );
 				swv.dispose();
 				swv = null;
+				
+				if ( LPSettings.ANALYTICS_TRACKING_ID && LPSettings.ANALYTICS_TRACKING_ID.length )
+				{
+					Analytics.trackSocialMedia( "facebook", "inviteFriends" );
+				}
 			}
 		}
 		
@@ -414,6 +425,11 @@ package com.thirdsense.social.facebook
 			if ( result )
 			{
 				trace( "Post to Facebook wall reported as successful" );
+				
+				if ( LPSettings.ANALYTICS_TRACKING_ID && LPSettings.ANALYTICS_TRACKING_ID.length )
+				{
+					Analytics.trackSocialMedia( "facebook", "postToWall" );
+				}
 			}
 			else
 			{

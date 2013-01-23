@@ -100,7 +100,8 @@
 		 </div></div><a name="killCache()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">killCache</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function killCache():void</code><p></p><p></p><p>
 		 Clears the session cache of images
 		 </p></div><a name="killCue()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">killCue</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function killCue():void</code><p></p><p></p><p>
-		 Kills the current cue of images waiting to be loaded.
+		 Kills the current cue of images waiting to be loaded. An event type SmoothImageLoad.CANCEL_LOAD gets dispatched to every target
+		 DisplayObjectContainer remaining in the cue when this call is made.
 		 </p></div><a name="urlExistsInCue()"></a><a name="urlExistsInCue(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">urlExistsInCue</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public static function urlExistsInCue(url:String):Boolean</code><p></p><p></p><p>
 		 Reports on if a specified url is currently sitting in the load cue (waiting to be loaded)
 		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">url</span>:String</code> &mdash; The source url of the image
@@ -117,4 +118,4 @@
 		 No matter what, the image will be displayed at the exact width and height of the max_width and max_height values
 		 </p></div><a name="constantDetail"></a><a name="STRETCH"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">STRETCH</td><td class="detailHeaderType">Constant</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static const STRETCH:String = stretch</code><p></p><p></p><p>
 		 If the image is wider than the maximum width, it is set at the maximum width. The same applies to the height of the image
-		 </p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Tue Jan 22 2013, 03:51 PM +11:00  </center></div></body></html><!--<br/>Tue Jan 22 2013, 03:51 PM +11:00  -->
+		 </p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Wed Jan 23 2013, 04:33 PM +11:00  </center></div></body></html><!--<br/>Wed Jan 23 2013, 04:33 PM +11:00  -->

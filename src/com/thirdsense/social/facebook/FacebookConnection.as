@@ -3,6 +3,7 @@ package com.thirdsense.social.facebook
 	import com.facebook.graph.data.FacebookAuthResponse;
 	import com.facebook.graph.data.FacebookSession;
 	import com.facebook.graph.Facebook;
+	import com.thirdsense.net.Analytics;
 	import com.thirdsense.settings.LPSettings;
 	import com.thirdsense.utils.SmoothImageLoad;
 	import flash.display.Bitmap;
@@ -161,6 +162,11 @@ package com.thirdsense.social.facebook
 				else
 				{
 					FacebookConnection.getUser( FacebookConnection.onComplete );
+					
+					if ( LPSettings.ANALYTICS_TRACKING_ID && LPSettings.ANALYTICS_TRACKING_ID.length )
+					{
+						Analytics.trackSocialMedia( "facebook", "connected" );
+					}
 				}
 			}
 		}
@@ -195,6 +201,11 @@ package com.thirdsense.social.facebook
 			{
 				trace( "Session pinged. Connection found!" );
 				FacebookConnection.connected = true;
+				
+				if ( LPSettings.ANALYTICS_TRACKING_ID && LPSettings.ANALYTICS_TRACKING_ID.length )
+				{
+					Analytics.trackSocialMedia( "facebook", "connected" );
+				}
 				
 				// Upon a connection, calls to get user as FacebookSession object doesn't auto-populate with user details like it does in the mobile version.
 				
@@ -469,6 +480,14 @@ package com.thirdsense.social.facebook
 		
 		private static function onFacebookPost(result:Object, fail:Object):void
 		{
+			if ( result != null )
+			{
+				if ( LPSettings.ANALYTICS_TRACKING_ID && LPSettings.ANALYTICS_TRACKING_ID.length )
+				{
+					Analytics.trackSocialMedia( "facebook", "postToWall" );
+				}
+			}
+			
 			if ( FacebookConnection.onWallPost != null ) {
 				
 				var fn:Function = FacebookConnection.onWallPost;
@@ -495,6 +514,10 @@ package com.thirdsense.social.facebook
 			
 			navigateToURL( new URLRequest(url), "_blank" );
 			
+			if ( LPSettings.ANALYTICS_TRACKING_ID && LPSettings.ANALYTICS_TRACKING_ID.length )
+			{
+				Analytics.trackSocialMedia( "facebook", "inviteFriends" );
+			}
 		}
 		
 	}

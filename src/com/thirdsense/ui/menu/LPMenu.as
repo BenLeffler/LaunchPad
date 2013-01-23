@@ -279,7 +279,7 @@ package com.thirdsense.ui.menu
 		}
 		
 		/**
-		 * Enables or disables fading of each menu as it transitions (Your app may take a performance hit on mobile devices if it is enabled and your menus are quite busy)
+		 * Enables or disables fading of each menu as it transitions
 		 */
 		
 		public static function get fading():Boolean 
@@ -297,7 +297,7 @@ package com.thirdsense.ui.menu
 		}
 		
 		/**
-		 * Enables or disables a motion blur effect on menu transitions (There may be a performance hit on some mobile devices if enabled)
+		 * Enables or disables a motion blur effect on menu transitions
 		 */
 		
 		public static function get blurring():Boolean 

@@ -1,5 +1,6 @@
 package com.thirdsense.net 
 {
+	import com.thirdsense.LaunchPad;
 	import com.thirdsense.settings.LPSettings;
 	import flash.events.EventDispatcher;
 	import flash.net.sendToURL;
@@ -35,33 +36,15 @@ package com.thirdsense.net
 				v:1,
 				tid:LPSettings.ANALYTICS_TRACKING_ID,
 				cid:uuid,
+				vp:String( LaunchPad.instance.nativeStage.stageWidth + "x" + LaunchPad.instance.nativeStage.stageHeight ),
+				sr:String( LaunchPad.instance.nativeStage.fullScreenWidth + "x" + LaunchPad.instance.nativeStage.fullScreenHeight ),
 				an:LPSettings.APP_NAME,
 				av:LPSettings.APP_VERSION,
 				cd:screen_name,
 				t:"appview"
 			}
 			
-			var vars:URLVariables = new URLVariables();
-			for ( var str:String in obj )
-			{
-				vars[str] = obj[str];
-			}
-			
-			var url_request:URLRequest = new URLRequest();
-			url_request.method = URLRequestMethod.POST;
-			url_request.data = vars;
-			url_request.url = "http://www.google-analytics.com/collect";
-			
-			var success:Boolean = true;
-			
-			try
-			{
-				sendToURL(url_request);
-			}
-			catch (e:*)
-			{
-				success = false;
-			}
+			var success:Boolean = sendPayload( obj );
 			
 			if ( success )
 			{
@@ -70,6 +53,88 @@ package com.thirdsense.net
 			else
 			{
 				trace( "LaunchPad", Analytics, "Analytics screen tracking failed: '" + screen_name + "'" );
+			}
+			
+			return success;
+		}
+		
+		/**
+		 * Reports a caught exception to Google Analytics
+		 * @param	error	The error thrown by your app that needs reporting
+		 * @return	A boolean value that indicates if the call was made successfully
+		 */
+		
+		public static function trackException( error:Error ):Boolean
+		{
+			if ( !uuid || !uuid.length )
+			{
+				trace( "LaunchPad", Analytics, "Call to trackException failed as a tracking id has not been correctly defined in LaunchPad's config.xml" )
+				return false;
+			}
+			
+			var obj:Object = {
+				v:1,
+				tid:LPSettings.ANALYTICS_TRACKING_ID,
+				cid:uuid,
+				an:LPSettings.APP_NAME,
+				av:LPSettings.APP_VERSION,
+				t:"exception",
+				exd:error.name + "(" + error.errorID + ")",
+				exf:1
+			}
+			
+			var success:Boolean = sendPayload( obj );
+			
+			if ( success )
+			{
+				trace( "LaunchPad", Analytics, "Analytics exception tracked: '" + error.name + "'" );
+			}
+			else
+			{
+				trace( "LaunchPad", Analytics, "Analytics exception tracking failed: '" + error.name + "'" );
+			}
+			
+			return success;
+		}
+		
+		/**
+		 * Reports to Google Analytics that a social media interaction has been initiated from your app
+		 * @param	network	The name of the social media service (eg. "facebook", "twitter", "linkedin" etc)
+		 * @param	action	The type of social media interaction that occured. (eg. "postToWall", "like", "invite")
+		 * @param	target	(Optional) The target url or target specific information contained within the interaction
+		 * @return	A boolean value that indicates if the call was made successfully
+		 */
+		
+		public static function trackSocialMedia( network:String = "facebook", action:String = "postToWall", target:String = "/home" ):Boolean
+		{
+			if ( !uuid || !uuid.length )
+			{
+				trace( "LaunchPad", Analytics, "Call to trackSocialMedia failed as a tracking id has not been correctly defined in LaunchPad's config.xml" )
+				return false;
+			}
+			
+			var obj:Object = {
+				v:1,
+				tid:LPSettings.ANALYTICS_TRACKING_ID,
+				cid:uuid,
+				an:LPSettings.APP_NAME,
+				av:LPSettings.APP_VERSION,
+				t:"social",
+				sn:network,
+				sa:action,
+				st:target
+			}
+			
+			
+			var success:Boolean = sendPayload( obj );
+			
+			if ( success )
+			{
+				trace( "LaunchPad", Analytics, "Analytics social media interaction tracked: '" + network + "'" );
+			}
+			else
+			{
+				trace( "LaunchPad", Analytics, "Analytics social media interaction tracking failed: '" + network + "'" );
 			}
 			
 			return success;
@@ -109,27 +174,7 @@ package com.thirdsense.net
 				obj.ev = value;
 			}
 			
-			var vars:URLVariables = new URLVariables();
-			for ( var str:String in obj )
-			{
-				vars[str] = obj[str];
-			}
-			
-			var url_request:URLRequest = new URLRequest();
-			url_request.method = URLRequestMethod.POST;
-			url_request.data = vars;
-			url_request.url = "http://www.google-analytics.com/collect";
-			
-			var success:Boolean = true;
-			
-			try
-			{
-				sendToURL(url_request);
-			}
-			catch (e:*)
-			{
-				success = false;
-			}
+			var success:Boolean = sendPayload( obj );
 			
 			if ( success )
 			{
@@ -145,7 +190,35 @@ package com.thirdsense.net
 		}
 		
 		/**
-		 * Initializes the Analytics tracking for the app. This is called during the LaunchPad.init process at the load of an app.
+		 * Sends a message to Google Analytics that the user's session has ended. This call is not necessary, as GA makes a calculated guess as to when a user session
+		 * ends based on inactivity. But for more accurate tracking, this can be called when the app has been terminated or a user has logged off within the app.
+		 */
+		
+		public static function trackEndSession():void
+		{
+			if ( !uuid || !uuid.length )
+			{
+				trace( "LaunchPad", Analytics, "Call to trackEvent failed as a tracking id has not been correctly defined in LaunchPad's config.xml" )
+				return void;
+			}
+			
+			var obj:Object = {
+				v:1,
+				tid:LPSettings.ANALYTICS_TRACKING_ID,
+				cid:uuid,
+				an:LPSettings.APP_NAME,
+				av:LPSettings.APP_VERSION,
+				t:"timing",
+				ni:1,
+				sc:"end"
+			}
+			
+			sendPayload( obj );
+		}
+		
+		/**
+		 * Initializes the Analytics tracking for the app. This is called during the LaunchPad.init process at the load of an app. This call also sends a payload
+		 * to GA to flag a session start.
 		 */
 		
 		public static function init():void
@@ -163,6 +236,19 @@ package com.thirdsense.net
 				so.data.uuid = uuid;
 				so.flush();
 			}
+			
+			var obj:Object = {
+				v:1,
+				tid:LPSettings.ANALYTICS_TRACKING_ID,
+				cid:uuid,
+				an:LPSettings.APP_NAME,
+				av:LPSettings.APP_VERSION,
+				t:"timing",
+				ni:1,
+				sc:"start"
+			}
+			
+			sendPayload( obj );
 		}
 		
 		/**
@@ -189,6 +275,39 @@ package com.thirdsense.net
 			}
 			
 			return str;
+		}
+		
+		/**
+		 * @private	Sends an object to Google Analytics for tracking
+		 * @param	obj	The object payload to send
+		 * @return	True is successful. False otherwise.
+		 */
+		
+		private static function sendPayload( obj:Object ):Boolean
+		{
+			var vars:URLVariables = new URLVariables();
+			for ( var str:String in obj )
+			{
+				vars[str] = obj[str];
+			}
+			
+			var url_request:URLRequest = new URLRequest();
+			url_request.method = URLRequestMethod.POST;
+			url_request.data = vars;
+			url_request.url = "http://www.google-analytics.com/collect";
+			
+			var success:Boolean = true;
+			
+			try
+			{
+				sendToURL(url_request);
+			}
+			catch (e:*)
+			{
+				success = false;
+			}
+			
+			return success;
 		}
 		
 	}
