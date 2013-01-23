@@ -86,21 +86,24 @@ package com.thirdsense.core
 				perc = focus_asset.getLoadProgress();
 			}
 			
-			if ( loader_mc.bar )
+			if ( loader_mc )
 			{
-				loader_mc.bar.scaleX = perc;
-			}
-			
-			if ( loader_mc.copy )
-			{
-				loader_mc.copy.text = Math.floor( perc * 100 ) + "%";
-			}
-			
-			if ( loader_mc.label )
-			{
-				if ( focus_asset ) 
+				if ( loader_mc.bar )
 				{
-					loader_mc.label.text = focus_asset.label.toUpperCase();
+					loader_mc.bar.scaleX = perc;
+				}
+				
+				if ( loader_mc.copy )
+				{
+					loader_mc.copy.text = Math.floor( perc * 100 ) + "%";
+				}
+				
+				if ( loader_mc.label )
+				{
+					if ( focus_asset ) 
+					{
+						loader_mc.label.text = focus_asset.label.toUpperCase();
+					}
 				}
 			}
 		}
