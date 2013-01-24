@@ -28,12 +28,13 @@ package com.thirdsense.core
 	import com.thirdsense.utils.Landscape;
 	import com.thirdsense.utils.StringTools;
 	import com.thirdsense.utils.Trig;
+	import flash.display.MovieClip;
 	
 	/**
 	 * @private
 	 */
 	
-	public class LPManifest 
+	public class LPManifest extends MovieClip
 	{
 		private var launchpad:LaunchPad;
 		private var sprite_sequence:SpriteSequence;
