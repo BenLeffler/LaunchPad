@@ -1,7 +1,7 @@
 ﻿package classes {
 	
 	import com.thirdsense.LaunchPad;
-	import com.thirdsense.ui.menu.LPMenu;
+	import com.thirdsense.ui.display.menu.LPMenu;
 	import com.thirdsense.ui.starling.menu.LPMenuTransition;
 	import flash.display.MovieClip;
 	
@@ -36,7 +36,6 @@
 		private function onLaunchPadInit():void
 		{
 			this.createMenu();
-			
 		}
 		
 		private function createMenu():void

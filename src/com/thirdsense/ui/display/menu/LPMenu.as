@@ -1,4 +1,4 @@
-package com.thirdsense.ui.menu 
+package com.thirdsense.ui.display.menu 
 {
 	import com.thirdsense.animation.BTween;
 	import com.thirdsense.LaunchPad;

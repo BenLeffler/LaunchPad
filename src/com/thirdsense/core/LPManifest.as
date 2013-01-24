@@ -10,8 +10,9 @@ package com.thirdsense.core
 	import com.thirdsense.sound.SoundLabel;
 	import com.thirdsense.sound.SoundShape;
 	import com.thirdsense.sound.SoundStream;
-	import com.thirdsense.ui.menu.LPBaseMenu;
-	import com.thirdsense.ui.menu.LPMenu;
+	import com.thirdsense.ui.display.LPButton;
+	import com.thirdsense.ui.display.menu.LPBaseMenu;
+	import com.thirdsense.ui.display.menu.LPMenu;
 	import com.thirdsense.ui.starling.LPsButton;
 	import com.thirdsense.ui.starling.LPsCheckList;
 	import com.thirdsense.ui.starling.LPsRadioButton;
@@ -60,6 +61,7 @@ package com.thirdsense.core
 		private var string_tools:StringTools;
 		private var logos:Logo;
 		private var lp_local_data:LPLocalData;
+		private var lp_button:LPButton;
 		
 		public function LPManifest() 
 		{

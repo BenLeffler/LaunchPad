@@ -1,7 +1,7 @@
 package classes
 {
-	import com.thirdsense.ui.menu.LPBaseMenu;
-	import com.thirdsense.ui.menu.LPMenu;
+	import com.thirdsense.ui.display.menu.LPBaseMenu;
+	import com.thirdsense.ui.display.menu.LPMenu;
 	import com.thirdsense.ui.starling.menu.LPMenuTransition;
 	import com.thirdsense.utils.SmoothImageLoad;
 	import flash.display.Bitmap;

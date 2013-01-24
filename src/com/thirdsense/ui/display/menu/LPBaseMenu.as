@@ -1,4 +1,4 @@
-package com.thirdsense.ui.menu 
+package com.thirdsense.ui.display.menu 
 {
 	import com.thirdsense.controllers.MobilityControl;
 	import com.thirdsense.LaunchPad;
