@@ -214,7 +214,13 @@ package com.thirdsense
 		
 		public static function getValue( name:String ):String
 		{
-			return LPValue.getValue( name ).value;
+			var lpvalue:LPValue = LPValue.getValue( name );
+			if ( lpvalue != null )
+			{
+				return lpvalue.value;
+			}
+			
+			return null;
 		}
 		
 		/**
