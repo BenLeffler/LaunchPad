@@ -141,7 +141,7 @@ package com.thirdsense.settings
 		
 		public static function get web():Boolean
 		{
-			if ( ExternalInterface.available || (!mobile && !desktop) ) {
+			if ( ExternalInterface.available && (!mobile && !desktop) ) {
 				return true;
 			}
 			
