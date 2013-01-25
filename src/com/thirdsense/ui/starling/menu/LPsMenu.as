@@ -368,7 +368,26 @@ package com.thirdsense.ui.starling.menu
 			trace( "LaunchPad", LPsMenu, arr[arr.length-1] + " successfully registered as a menu" );
 		}
 		
+		/**
+		 * Retrieves an array of menu names that have been registered with the LPsMenu.registerMenu function
+		 * @return	Array of menu names
+		 */
 		
+		public static function getRegisteredMenuNames():Array
+		{
+			if ( registered_menus == null )
+			{
+				return null;
+			}
+			
+			var arr:Array = new Array();			
+			for ( var i:uint = 0; i < registered_menus.length; i++ )
+			{
+				arr.push( registered_menus[i].name );
+			}
+			
+			return arr;
+		}
 		
 		
 	}

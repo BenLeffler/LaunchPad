@@ -1,6 +1,5 @@
 package com.thirdsense.ui.starling 
 {
-	import com.thirdsense.animation.TexturePack;
 	import com.thirdsense.ui.starling.LPsRadioButton;
 	import com.thirdsense.utils.Trig;
 	import flash.geom.Point;
