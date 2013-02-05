@@ -134,11 +134,11 @@ package com.thirdsense.ui.display
 					if ( this.content.totalFrames > 1 )
 					{
 						this.content.gotoAndStop(2);
-						this.stage.addEventListener( MouseEvent.MOUSE_UP, this.clickHandler, false, 0, true );
-						this.addEventListener( MouseEvent.MOUSE_UP, this.clickHandler, false, 0, true );
-						this.addEventListener( MouseEvent.MOUSE_OVER, this.hoverHandler, false, 0, true );
-						this.addEventListener( MouseEvent.MOUSE_OUT, this.hoverHandler, false, 0, true );
 					}
+					this.stage.addEventListener( MouseEvent.MOUSE_UP, this.clickHandler, false, 0, true );
+					this.addEventListener( MouseEvent.MOUSE_UP, this.clickHandler, false, 0, true );
+					this.addEventListener( MouseEvent.MOUSE_OVER, this.hoverHandler, false, 0, true );
+					this.addEventListener( MouseEvent.MOUSE_OUT, this.hoverHandler, false, 0, true );
 					break;
 					
 				case MouseEvent.MOUSE_UP:
