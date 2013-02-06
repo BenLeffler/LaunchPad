@@ -131,7 +131,7 @@ package com.thirdsense.ui.starling.menu
 		
 		private function onMenuTransition( transition:String ):void
 		{
-			if ( this.content && !_stitch )
+			if ( this.content && (!_stitch || transition == "") )
 			{
 				this.content.unflatten();
 				this.content.filter = null;

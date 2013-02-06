@@ -58,10 +58,7 @@ package com.thirdsense.ui.display.menu
 				return void;
 			}
 			
-			if ( onComplete != null )
-			{
-				this.onComplete = onComplete;
-			}
+			this.onComplete = onComplete;
 			
 			if ( this.content && transition != "" )
 			{
@@ -130,7 +127,7 @@ package com.thirdsense.ui.display.menu
 		
 		private function onMenuTransition( transition:String ):void
 		{
-			if ( this.content && !_stitch )
+			if ( this.content && (!_stitch || transition == "") )
 			{
 				this.content.cacheAsBitmap = false;
 				this.content.filters = null;
