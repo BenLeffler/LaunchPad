@@ -18,7 +18,7 @@ package com.thirdsense.ui.display
 		private var _source_width:Number;
 		private var _source_height:Number;
 		private var onRelease:Function;
-		private var disabled:Boolean;
+		private var _disabled:Boolean;
 		private var content:MovieClip;
 		
 		/**
@@ -54,7 +54,7 @@ package com.thirdsense.ui.display
 			
 			this.addListeners();
 			
-			this.disabled = false;
+			this._disabled = false;
 			this.mouseEnabled = true;
 			this.mouseChildren = false;
 			
@@ -67,9 +67,9 @@ package com.thirdsense.ui.display
 		
 		public function disable( fade_button:Boolean=true ):void
 		{
-			if ( this.disabled ) return void;
+			if ( this._disabled ) return void;
 			
-			this.disabled = true;
+			this._disabled = true;
 			
 			if ( fade_button )
 			{
@@ -99,8 +99,8 @@ package com.thirdsense.ui.display
 		
 		public function enable():void
 		{
-			if ( this.disabled ) {
-				this.disabled = false;
+			if ( this._disabled ) {
+				this._disabled = false;
 				this.alpha = Math.min( 1, this.alpha * 4 );
 				if ( this.onEnable != null )
 				{
@@ -126,7 +126,7 @@ package com.thirdsense.ui.display
 		
 		private function clickHandler( evt:MouseEvent ):void
 		{
-			if ( this.disabled ) return void;
+			if ( this._disabled ) return void;
 			
 			switch ( evt.type )
 			{
@@ -210,6 +210,15 @@ package com.thirdsense.ui.display
 			this.removeEventListener( MouseEvent.MOUSE_OVER, this.hoverHandler );
 			this.removeEventListener( MouseEvent.MOUSE_OUT, this.hoverHandler );
 			
+		}
+		
+		/**
+		 * Retrieves if the button is currently disabled
+		 */
+		
+		public function get disabled():Boolean 
+		{
+			return _disabled;
 		}
 		
 	}
