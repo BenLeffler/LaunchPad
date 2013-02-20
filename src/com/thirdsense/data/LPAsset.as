@@ -1,6 +1,7 @@
 package com.thirdsense.data 
 {
 	import com.thirdsense.settings.LPSettings;
+	import com.thirdsense.settings.Profiles;
 	import com.thirdsense.utils.AccessorType;
 	import com.thirdsense.utils.DuplicateDisplayObject;
 	import com.thirdsense.utils.getClassVariables;
@@ -14,6 +15,8 @@ package com.thirdsense.data
 	import flash.events.SecurityErrorEvent;
 	import flash.media.Sound;
 	import flash.net.URLRequest;
+	import flash.system.ApplicationDomain;
+	import flash.system.LoaderContext;
 	import flash.utils.ByteArray;
 	import flash.utils.getQualifiedSuperclassName;
 	
@@ -162,7 +165,8 @@ package com.thirdsense.data
 					this.loader.contentLoaderInfo.addEventListener(Event.COMPLETE, this.loadHandler, false, 0, true);
 					this.loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, this.loadHandler, false, 0, true);
 					this.loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, this.loadHandler, false, 0, true);
-					this.loader.load( new URLRequest(LPSettings.LIVE_EXTENSION + this.url) );
+					var context:LoaderContext = new LoaderContext( false, ApplicationDomain.currentDomain, null );
+					this.loader.load( new URLRequest(LPSettings.LIVE_EXTENSION + this.url), context );
 					break;
 					
 				case LPAssetType.XML:

@@ -30,9 +30,10 @@ package com.thirdsense.data
 		/**
 		 * Initializes the calling swf as a LaunchPad asset client
 		 * @param	target	The root of the swf to prepare as a client
+		 * @param	asset_names	For IOS devices, you will need to provide the manifest of linkage names. Pass this through as an array of strings in this param
 		 */
 		
-		public function LPAssetClient( target:MovieClip = null ) 
+		public function LPAssetClient( target:MovieClip = null, asset_names:Array = null ) 
 		{
 			if ( ExternalInterface.available ) {
 				Security.allowDomain("*");
@@ -51,10 +52,17 @@ package com.thirdsense.data
 			
 			this.assets = new Object();
 			
-			for (var i:uint=0; i<linkage.length; i++) {
-				var str:String = String(linkage[i]);
-				if (str != "Finder" && str != "SWFByteArray" && str.indexOf(":") < 0) {
-					this.addAsset( String(linkage[i]) );
+			if ( asset_names != null )
+			{
+				while ( asset_names.length ) this.addAsset( asset_names.shift() );
+			}
+			else
+			{
+				for (var i:uint=0; i<linkage.length; i++) {
+					var str:String = String(linkage[i]);
+					if (str != "Finder" && str != "SWFByteArray" && str.indexOf(":") < 0) {
+						this.addAsset( String(linkage[i]) );
+					}
 				}
 			}
 			

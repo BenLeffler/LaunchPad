@@ -56,10 +56,7 @@ package com.thirdsense.ui.starling.menu
 				return void;
 			}
 			
-			if ( onComplete != null )
-			{
-				this.onComplete = onComplete;
-			}
+			this.onComplete = onComplete;
 			
 			if ( this.content && transition != "" )
 			{
