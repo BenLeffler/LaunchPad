@@ -1,17 +1,12 @@
 package com.thirdsense.data 
 {
 	import com.thirdsense.utils.getDefinitionNames;
-	import flash.display.DisplayObject;
 	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
-	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.external.ExternalInterface;
-	import flash.media.Sound;
-	import flash.net.LocalConnection;
 	import flash.system.Security;
 	import flash.utils.getDefinitionByName;
-	import flash.utils.getQualifiedSuperclassName;
 	
 	/**
 	 * <p>Client class to be used with an asset swf to allow the LaunchPad framework access to it's library linkaged MovieClips, Sprites and Sounds. </p>
@@ -19,11 +14,10 @@ package com.thirdsense.data
 	 * <listing>
 	 * import com.thirdsense.data.LPAssetClient;
 	 * 
-	 * LPAssetClient.start( this );
-	 * </listing>
+	 * LPAssetClient.start( this );</listing>
 	 * <p>For IOS devices, you will need to pass through the linkage names of library assets as an array because the Loader class is not able to auto-detect lib items.</p>
 	 * <listing>
-	 * LPAssetClient.start( this, ["linkage_one", "linkage_two", "linkage_three"] );
+	 * LPAssetClient.start( this, ["linkage_one", "linkage_two", "linkage_three"] );</listing>
 	 * @author Ben Leffler
 	 */
 	
@@ -33,7 +27,7 @@ package com.thirdsense.data
 		private var linkage:Array;
 		
 		/**
-		 * Initializes the calling swf as a LaunchPad asset client. For general use, it's better to use the static start() function.
+		 * @private Initializes the calling swf as a LaunchPad asset client. For general use, it's better to use the static start() function.
 		 * @param	target	The root of the swf to prepare as a client
 		 * @param	asset_names	For IOS devices, you will need to provide the manifest of linkage names. Pass this through as an array of strings in this param
 		 */
@@ -84,36 +78,11 @@ package com.thirdsense.data
 		private function addAsset(linkage:String):void
 		{
 			var DynamicClass:Class = getDefinitionByName(linkage) as Class;
-			var super_type:String = getQualifiedSuperclassName( DynamicClass );
-			
-			switch ( super_type ) 
-			{
-				case "flash.display::MovieClip":
-					var mc:MovieClip = new DynamicClass();
-					this.assets[linkage] = mc;
-					break;
-					
-				case "flash.display::Sprite":
-					var spr:Sprite = new DynamicClass();
-					this.assets[linkage] = spr;
-					break;
-					
-				case "flash.display::DisplayObject":
-					var dispObj:DisplayObject = new DynamicClass();
-					this.assets[linkage] = dispObj;
-					this.target.addChild(dispObj);
-					break;
-					
-				case "flash.media::Sound":
-					var snd:Sound = new DynamicClass();
-					this.assets[linkage] = snd;
-					break;
-			}
-			
+			this.assets[linkage] = DynamicClass;
 		}
 		
 		/**
-		 * Returns an item from the assets package
+		 * @private	Returns an item from the assets package
 		 * @param	linkage	The name of the item to retrieve (A call to listLibraryItems() will give you a list of what's available)
 		 * @return	The requested item. If no item exists with the passed name, returns null
 		 */
@@ -131,7 +100,7 @@ package com.thirdsense.data
 		}
 		
 		/**
-		 * Lists the available library item names in the asset client
+		 * @private	Lists the available library item names in the asset client
 		 * @param	omit_trace	Pass as true if you don't want to trace out the result
 		 * @return	An array of library item names available through the LaunchPad getAsset() call
 		 */
@@ -180,7 +149,6 @@ package com.thirdsense.data
 			var loaderInfo:LoaderInfo = evt.currentTarget as LoaderInfo;
 			var target:MovieClip = loaderInfo.content as MovieClip;
 			target.client = new LPAssetClient( target, target.arr );
-			
 		}
 		
 	}

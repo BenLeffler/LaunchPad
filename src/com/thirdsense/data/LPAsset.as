@@ -1,9 +1,7 @@
 package com.thirdsense.data 
 {
 	import com.thirdsense.settings.LPSettings;
-	import com.thirdsense.settings.Profiles;
 	import com.thirdsense.utils.AccessorType;
-	import com.thirdsense.utils.DuplicateDisplayObject;
 	import com.thirdsense.utils.getClassVariables;
 	import com.thirdsense.utils.JSONUtils;
 	import com.thirdsense.utils.StringTools;
@@ -513,7 +511,8 @@ package com.thirdsense.data
 					{	
 						if ( lpasset.data.assets[linkage] )
 						{
-							return duplicateDisplayObject( lpasset.data.assets[linkage] );
+							var cl:Class = lpasset.data.assets[linkage];
+							return new cl();
 						}
 						else
 						{
@@ -563,7 +562,8 @@ package com.thirdsense.data
 						class_name = class_name.substr( class_name.lastIndexOf("::") + 2 );
 						if ( class_name == "MovieClip" && assets[i].data.assets && assets[i].data.assets[linkage] )
 						{
-							return duplicateDisplayObject( assets[i].data.assets[linkage] );
+							cl = assets[i].data.assets[linkage];
+							return new cl();
 						}
 					}
 				}
@@ -577,27 +577,6 @@ package com.thirdsense.data
 			trace( "LaunchPad", LPAsset, "Retrieval of linkage '" + linkage + "' failed. Could not be found." );
 			
 			return null;
-		}
-		
-		/**
-		 * @private	Used to duplicate a display object when retrieving it. If the object is not a MovieClip, Sprite or DisplayObject, the passed asset is returned unaltered
-		 */
-		
-		private static function duplicateDisplayObject( asset:* ):*
-		{
-			var super_type:String = getQualifiedSuperclassName( asset );
-			
-			switch ( super_type )
-			{
-				case "flash.display::MovieClip":
-				case "flash.display::Sprite":
-				case "flash.display::DisplayObject":
-					return DuplicateDisplayObject.duplicate(asset);
-					break;
-					
-				default:
-					return asset;
-			}
 		}
 		
 		/**
