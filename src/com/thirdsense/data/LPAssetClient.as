@@ -2,8 +2,10 @@ package com.thirdsense.data
 {
 	import com.thirdsense.utils.getDefinitionNames;
 	import flash.display.DisplayObject;
+	import flash.display.LoaderInfo;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.external.ExternalInterface;
 	import flash.media.Sound;
 	import flash.net.LocalConnection;
@@ -13,12 +15,15 @@ package com.thirdsense.data
 	
 	/**
 	 * <p>Client class to be used with an asset swf to allow the LaunchPad framework access to it's library linkaged MovieClips, Sprites and Sounds. </p>
-	 * <p>Simply create a new LPAssetClient instance on the main timeline of your swf library, compile and reference the swf location in the core LaunchPad project's config.xml</p>
+	 * <p>Simply call to LPAssetClient.start root timeline of your swf library, compile and reference the swf location in the core LaunchPad project's config.xml</p>
 	 * <listing>
 	 * import com.thirdsense.data.LPAssetClient;
 	 * 
-	 * var client:LPAssetClient = new LPAssetClient( this );
+	 * LPAssetClient.start( this );
 	 * </listing>
+	 * <p>For IOS devices, you will need to pass through the linkage names of library assets as an array because the Loader class is not able to auto-detect lib items.</p>
+	 * <listing>
+	 * LPAssetClient.start( this, ["linkage_one", "linkage_two", "linkage_three"] );
 	 * @author Ben Leffler
 	 */
 	
@@ -28,7 +33,7 @@ package com.thirdsense.data
 		private var linkage:Array;
 		
 		/**
-		 * Initializes the calling swf as a LaunchPad asset client
+		 * Initializes the calling swf as a LaunchPad asset client. For general use, it's better to use the static start() function.
 		 * @param	target	The root of the swf to prepare as a client
 		 * @param	asset_names	For IOS devices, you will need to provide the manifest of linkage names. Pass this through as an array of strings in this param
 		 */
@@ -39,17 +44,6 @@ package com.thirdsense.data
 				Security.allowDomain("*");
 			}
 			
-			if ( !target ) target = this;
-			
-			if ( !target )
-			{
-				this.linkage = getDefinitionNames( super.loaderInfo );
-			}
-			else
-			{
-				this.linkage = getDefinitionNames( target.loaderInfo );
-			}
-			
 			this.assets = new Object();
 			
 			if ( asset_names != null )
@@ -58,6 +52,16 @@ package com.thirdsense.data
 			}
 			else
 			{
+				if ( !target )
+				{
+					target = this;
+					this.linkage = getDefinitionNames( super.loaderInfo );
+				}
+				else
+				{
+					this.linkage = getDefinitionNames( target.loaderInfo );
+				}
+				
 				for (var i:uint=0; i<linkage.length; i++) {
 					var str:String = String(linkage[i]);
 					if (str != "Finder" && str != "SWFByteArray" && str.indexOf(":") < 0) {
@@ -97,13 +101,13 @@ package com.thirdsense.data
 				case "flash.display::DisplayObject":
 					var dispObj:DisplayObject = new DynamicClass();
 					this.assets[linkage] = dispObj;
+					this.target.addChild(dispObj);
 					break;
 					
 				case "flash.media::Sound":
 					var snd:Sound = new DynamicClass();
 					this.assets[linkage] = snd;
 					break;
-				
 			}
 			
 		}
@@ -150,6 +154,33 @@ package com.thirdsense.data
 			}
 			
 			return arr;
+		}
+		
+		/**
+		 * Initializes the LPAssetClient library for use with the LaunchPad framework. Once the swf that this is called from is loaded by LaunchPad, the client will auto-populate with library assets
+		 * @param	root	The root timeline of the external swf
+		 * @param	asset_names	For IOS devices, you will need to pass through an array of the asset linkage names as limitations to the Loader class prevent auto-detection of library linkage items.
+		 */
+		
+		public static function start( root:MovieClip, asset_names:Array = null ):void
+		{
+			root.arr = asset_names;
+			root.loaderInfo.addEventListener( Event.COMPLETE, completeHandler, false, 0, true );
+			
+		}
+		
+		/**
+		 * @private
+		 */
+		
+		private static function completeHandler( evt:Event ):void
+		{
+			evt.currentTarget.removeEventListener( Event.COMPLETE, completeHandler );
+			
+			var loaderInfo:LoaderInfo = evt.currentTarget as LoaderInfo;
+			var target:MovieClip = loaderInfo.content as MovieClip;
+			target.client = new LPAssetClient( target, target.arr );
+			
 		}
 		
 	}
