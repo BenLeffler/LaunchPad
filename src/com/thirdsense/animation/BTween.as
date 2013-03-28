@@ -678,6 +678,22 @@ package com.thirdsense.animation
 			tween.start();
 		}
 		
+		/**
+		 * Executes a function (with optional arguments) at a designated number of frames down the timeline
+		 * @param	frames	The number of frames to pause before executing a function
+		 * @param	fn	The function to call
+		 * @param	fnArgs	(Optional) arguments to feed through to the function when it is called
+		 */
+		
+		public static function callOnFrame( frames:int, fn:Function, fnArgs:Array = null ):void
+		{
+			var tween:BTween = new BTween( { tick:0 }, frames + 1 );
+			tween.animate( "tick", 1 );
+			tween.onComplete = fn;
+			if ( fnArgs ) tween.onCompleteArgs = fnArgs;
+			tween.start();
+		}
+		
 	}
 
 }

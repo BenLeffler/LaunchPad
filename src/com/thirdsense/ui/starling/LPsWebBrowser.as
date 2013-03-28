@@ -4,6 +4,7 @@ package com.thirdsense.ui.starling
 	import com.thirdsense.animation.TexturePack;
 	import com.thirdsense.utils.Trig;
 	import flash.display.MovieClip;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.LocationChangeEvent;
 	import flash.geom.Rectangle;
@@ -293,6 +294,7 @@ package com.thirdsense.ui.starling
 				this.swv.removeEventListener( Event.COMPLETE, this.loadComplete );
 				this.swv.removeEventListener( LocationChangeEvent.LOCATION_CHANGING, this.locationChangingHandler );
 				this.swv.removeEventListener( LocationChangeEvent.LOCATION_CHANGE, this.locationChangingHandler );
+				this.swv.removeEventListener(ErrorEvent.ERROR, this.errorHandler );
 				
 				try {
 					this.swv.stage = null;
@@ -335,6 +337,7 @@ package com.thirdsense.ui.starling
 			}
 			
 			this.swv.loadURL( url );
+			
 		}
 		
 		/**
@@ -350,7 +353,19 @@ package com.thirdsense.ui.starling
 			this.swv.addEventListener( Event.COMPLETE, this.loadComplete, false, 0, true );
 			this.swv.addEventListener( LocationChangeEvent.LOCATION_CHANGING, this.locationChangingHandler, false, 0, true );
 			this.swv.addEventListener( LocationChangeEvent.LOCATION_CHANGE, this.locationChangingHandler, false, 0, true );
+			this.swv.addEventListener(ErrorEvent.ERROR, this.errorHandler, false, 0, true );
 			this.addEventListener(EnterFrameEvent.ENTER_FRAME, this.timeline);
+		}
+		
+		/**
+		 * @private	Error handler
+		 * @param	e
+		 */
+		
+		private function errorHandler(e:ErrorEvent):void 
+		{
+			trace( "An error occured with the LPsWebBrowser location. Potential 404?" );
+			trace( e );
 		}
 		
 		/**
@@ -382,6 +397,7 @@ package com.thirdsense.ui.starling
 			this.updateAddressText( this.swv.location );
 			
 			this.loading_icon.visible = false;
+			
 		}
 		
 		/**

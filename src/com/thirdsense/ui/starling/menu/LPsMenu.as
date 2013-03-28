@@ -25,6 +25,7 @@ package com.thirdsense.ui.starling.menu
 		private static var _fading:Boolean;
 		private static var _blurring:Boolean;
 		private static var _stitch:Boolean;
+		private static var onTransitionStart:Function;
 		
 		private var onComplete:Function;
 		private var content:Sprite;
@@ -96,7 +97,12 @@ package com.thirdsense.ui.starling.menu
 			else
 			{
 				this.onMenuTransition( transition );
-			}			
+			}
+			
+			if ( onTransitionStart != null )
+			{
+				onTransitionStart();
+			}
 		}
 		
 		/**
@@ -386,7 +392,15 @@ package com.thirdsense.ui.starling.menu
 			return arr;
 		}
 		
+		/**
+		 * Sets a call back function when a menu transition is detected
+		 * @param	fn	The function to call when a menu transitions
+		 */
 		
+		public static function set callOnTransitionStart( fn:Function ):void
+		{
+			onTransitionStart = fn;
+		}
 	}
 
 }

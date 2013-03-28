@@ -184,7 +184,7 @@ package com.thirdsense.animation
 			if ( this.sprites ) {
 				if ( this.sprites.length > 1 ) {
 					
-					var max_width:int = Math.min( this.sprites.length, Math.floor(2048 / this.cell_width), 8 );
+					var max_width:int = Math.floor( this.getBestPowerOfTwo() / this.cell_width );
 					var bmpdata:BitmapData = new BitmapData( this.cell_width * Math.min(this.total_cells, max_width), this.cell_height * Math.ceil(this.total_cells / max_width), true, 0 );
 					
 					for ( var i:uint = 0; i < this.sprites.length; i++ ) {
@@ -207,6 +207,50 @@ package com.thirdsense.animation
 			return null;
 		}
 		
+		private function getBestPowerOfTwo():int
+		{
+			var heur:int = 1;
+			
+			while ( heur < Math.max(this.cell_height, this.cell_width) )
+			{
+				heur *= 2;
+			}
+			
+			var cells:int = this.total_cells;
+			var rows:int = 0;
+			var cols:int = 0;
+			
+			var complete:Boolean = false;
+			
+			while ( !complete )
+			{
+				var tr:Rectangle = new Rectangle();
+				var br:Rectangle = new Rectangle(0, 0, 0, this.cell_height);
+				
+				for ( var i:uint = 0; i < cells; i++ )
+				{
+					br.width += this.cell_width;
+					if ( br.width > heur )
+					{
+						br.width -= this.cell_width;
+						tr = tr.union(br);
+						br = new Rectangle(0, tr.height, this.cell_width, this.cell_height);
+					}
+				}
+				tr = tr.union(br);
+				if ( tr.width > heur || tr.height > heur )
+				{
+					heur *= 2;
+				}
+				else
+				{
+					complete = true;
+				}
+			}
+			
+			return heur;
+		}
+		
 		/**
 		 * Formats an XML object to Sparrow specifications for use with the Starling Framework
 		 * @return	An Sparrow XML object
@@ -215,7 +259,7 @@ package com.thirdsense.animation
 		public function getSparrowXML():XML
 		{
 			var str:String = "<TextureAtlas imagePath=''>";
-			var max_width:int = Math.min( 8, Math.floor(2048 / this.cell_width) );
+			var max_width:int = Math.floor( this.getBestPowerOfTwo() / this.cell_width );
 			
 			for ( var i:uint = 0; i < this.total_cells; i++ ) {
 				

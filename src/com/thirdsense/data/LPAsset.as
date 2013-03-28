@@ -574,7 +574,10 @@ package com.thirdsense.data
 				return void;
 			}
 			
-			trace( "LaunchPad", LPAsset, "Retrieval of linkage '" + linkage + "' failed. Could not be found." );
+			if ( linkage.indexOf(".mp3") < 0 )
+			{
+				trace( "LaunchPad", LPAsset, "Retrieval of linkage '" + linkage + "' failed. Could not be found." );
+			}
 			
 			return null;
 		}

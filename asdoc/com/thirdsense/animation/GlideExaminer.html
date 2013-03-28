@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../override.css" type="text/css"><meta name="keywords" content="GlideExaminer,com.thirdsense.animation.GlideExaminer,EASE_IN,EASE_IN_ELASTIC,EASE_IN_OUT,EASE_OUT,EASE_OUT_ELASTIC,EASE_OUT_IN,LINEAR,LOOPS_FOREVER,atlas,autoPlayMovieClipChildren,cell_height,cell_offset,cell_width,currentFrame,direction,disposeExaminerOnRemove,fps,generate_mipmaps,ignoreColorTransforms,isPlaying,looping,loops,max_width,metadata,offset,onComplete,onCompleteArgs,onStart,onStartArgs,onTween,onTweenArgs,paused,pool,pool,progress,remainingLoops,render_texture,repeatCount,sequence,sequence,source_height,source_height,source_width,source_width,sparrow_xml,sprites,spritesheet,target,texture,totalElements,totalFrames,totalFrames,total_cells,addTexturePack,advanceTime,animate,callOnFrame,callOnNextFrame,create,createFromMovieClip,deleteAllTexturePacks,deleteTexturePack,dispose,dispose,fadeFromTo,fadeTo,fromBitmapData,getAllFrameLabels,getColorTransform,getDimensions,getElementNames,getExaminer,getFrameLabelEnd,getFrameLabelStart,getImage,getIndex,getMatrix,getMovieClip,getRandomImage,getSparrowXML,getSpriteSheet,getTexturePack,getTextures,getVisibleBounds,kill,killCue,moveFromTo,moveTo,nextFrame,overrideAsset,pause,play,prevFrame,processCue,removeAssetOverride,removeFromCue,resume,reverse,rotateFromTo,rotateTo,scaleFromTo,scaleTo,start,stop,stop,traceAllTexturePacks"><title>com.thirdsense.animation.GlideExaminer</title></head><body><script language="javascript" type="text/javascript" src="../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'GlideExaminer - API Documentation';
+				var baseRef = '../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">LaunchPad v0.9.0 Framework</td><td class="titleTableTopNav" align="right"><a href="../../../package-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../class-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../all-index-A.html" onclick="loadClassListFrame('../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../index.html?com/thirdsense/animation/GlideExaminer.html&amp;com/thirdsense/animation/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">GlideExaminer</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("GlideExaminer"); titleBar_setSubNav(false,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.thirdsense.animation</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  GlideExaminer</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">GlideExaminer  <img src="../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> Object</td></tr></table><p></p><p></p><p></p>
+	              <p>Timeline examiner class for use with GlideConstruct objects. This class examines and converts classic MovieClips and their tweens to Starling.</p>
+	              <p>Essentially this class cycles through every frame in a target MovieClip, capturing transformation matrix, colorTransform, clip index and creates
+	 a run-time spritesheet and texture atlas.</p>
+	              <p>Because Starling is yet to officially supporting masking, the GlideExaminer will not treat masks within the target clips timeline as desired.
+	 Also worth noting is that color transformations are psuedo-emulated by using the starling display object 'color' property, but it will not look
+	 exactly the same and it will cause an extra draw command per asset if you use tinting in the target clip's timeline (alternatively, set the GlideConstruct
+	 'ignoreColorTransform' property to 'true' to ignore tinting transformations during render)</p>
+	              <p>The following example converts a traditional MovieClip for use in Starling. For example purpose, in the resulting construct we will also want to use
+	 an asset that is on the second frame of the target's child clip named "helmet", so passing 'true' for the constructor argument 'includeChildren' is needed</p>
+	              <div class="listing"><pre>
+     import com.thirdsense.animation.GlideExaminer;
+     import com.thirdsense.animation.GlideConstruct;
+     import starling.events.TouchEvent;
+     import starling.events.Touch;
+     import starling.events.TouchPhase;
+     
+     var examiner:GlideExaminer = new GlideExaminer( new myAvatar_mc(), true );
+     
+     var avatar:GlideConstruct = new GlideConstruct( examiner );
+     avatar.x = 100;
+     avatar.y = 100;
+     avatar.helmet.currentFrame = 1;    // Can also be referenced with avatar.getChildByName("helmet") as starling.display.MovieClip
+     this.addChild( avatar );
+     this.avatar.play();
+     
+     // When the user taps the avatar, remove it from the stage. Because we no longer need the examiner, we should dispose of it to free up GPU memory.
+     avatar.addEventListener(TouchEvent.TOUCH, this.touchHandler);
+     
+     function touchHandler(e:TouchEvent):void
+     {
+         var    target_avatar:GlideConstruct = e.currentTarget as GlideConstruct;
+         var touch:Touch = e.getTouch( target_avatar, TouchPhase.ENDED );
+         if ( touch )
+         {
+             var examiner:GlideExaminer = target_avatar.getExaminer();
+             examiner.dispose();
+             target_avatar.removeFromParent();
+         }
+     }</pre></div>
+	 
+	           <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#totalElements" class="signatureLink">totalElements</a> : int<div class="summaryTableDescription">[read-only] 
+		 Obtains the total number of children encountered in the timeline
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#totalFrames" class="signatureLink">totalFrames</a> : int<div class="summaryTableDescription">[read-only] 
+		 Retrieves the total number of frames in the original timeline
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#GlideExaminer()" class="signatureLink">GlideExaminer</a>(target:MovieClip, includeChildren:Boolean = true)</div><div class="summaryTableDescription">
+		 Constructor for the GlideExaminer
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#dispose()" class="signatureLink">dispose</a>():void</div><div class="summaryTableDescription">
+		 Disposes of all textures from the GPU and flags for garbage collection
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getAllFrameLabels()" class="signatureLink">getAllFrameLabels</a>():Array</div><div class="summaryTableDescription">
+		 Gets an array of available frame labels in the timeline
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getColorTransform()" class="signatureLink">getColorTransform</a>(asset_name:String, frame:int):ColorTransform</div><div class="summaryTableDescription">
+		 Retrieves the ColorTransform of an asset at the desired frame
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getDimensions()" class="signatureLink">getDimensions</a>():Object</div><div class="summaryTableDescription">
+		 Obtains the original dimensions of the MovieClip that was processed.</div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getElementNames()" class="signatureLink">getElementNames</a>():Array</div><div class="summaryTableDescription">
+		 Retrieves an array of all available visual elements collected by the examiner instance
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getFrameLabelEnd()" class="signatureLink">getFrameLabelEnd</a>(label:String):int</div><div class="summaryTableDescription">
+		 Obtains the end frame number value of a frame label stanza
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getFrameLabelStart()" class="signatureLink">getFrameLabelStart</a>(label:String):int</div><div class="summaryTableDescription">
+		 Obtains the initial frame number value of a frame label stanza
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getIndex()" class="signatureLink">getIndex</a>(asset_name:String, frame:int):int</div><div class="summaryTableDescription">
+		 Retrieves the index of an asset at the desired frame.</div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#getMatrix()" class="signatureLink">getMatrix</a>(asset_name:String, frame:int):Matrix</div><div class="summaryTableDescription">
+		 Gets the transformation matrix of an asset at the desired frame
+		 </div></td><td class="summaryTableOwnerCol">GlideExaminer</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="totalElements"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">totalElements</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>totalElements:int</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
+		 Obtains the total number of children encountered in the timeline
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get totalElements():int</code><br/></div><a name="propertyDetail"></a><a name="totalFrames"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">totalFrames</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>totalFrames:int</code>&nbsp;&nbsp;[read-only] <p></p><p></p><p>
+		 Retrieves the total number of frames in the original timeline
+		 </p><br/><span class="label"> Implementation </span><br/><code>&nbsp;&nbsp;&nbsp;&nbsp;public function get totalFrames():int</code><br/></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="GlideExaminer()"></a><a name="GlideExaminer(flash.display.MovieClip,Boolean)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">GlideExaminer</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function GlideExaminer(target:MovieClip, includeChildren:Boolean = true)</code><p></p><p>
+		 Constructor for the GlideExaminer
+		 </p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">target</span>:MovieClip</code> &mdash; The MovieClip to analyse and convert for use with the GlideConstruct
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">includeChildren</span>:Boolean</code> (default = <code>true</code>)<code></code> &mdash; If MovieClips within the target parameter contains multiple frames that need to be enabled for use, pass this as true.
+		 Otherwise a false value will only snapshot the first frame and the resulting asset in Starling will be of starling.display.Image type.
+		 </td></tr></table></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="dispose()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">dispose</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public function dispose():void</code><p></p><p></p><p>
+		 Disposes of all textures from the GPU and flags for garbage collection
+		 </p></div><a name="getAllFrameLabels()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getAllFrameLabels</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function getAllFrameLabels():Array</code><p></p><p></p><p>
+		 Gets an array of available frame labels in the timeline
+		 </p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Array</code> &mdash; An array of strings
+		 </td></tr></table></div><a name="getColorTransform()"></a><a name="getColorTransform(String,int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getColorTransform</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public final function getColorTransform(asset_name:String, frame:int):ColorTransform</code><p></p><p></p><p>
+		 Retrieves the ColorTransform of an asset at the desired frame
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">asset_name</span>:String</code> &mdash; The name of the asset
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">frame</span>:int</code> &mdash; The number of the frame
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>ColorTransform</code> &mdash; A ColorTransform object for use with alpha and psuedo asset tinting in the animation construct
+		 </td></tr></table></div><a name="getDimensions()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getDimensions</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public final function getDimensions():Object</code><p></p><p></p><p>
+		 Obtains the original dimensions of the MovieClip that was processed.
+		 </p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Object</code> &mdash; An object representation of the width and height. eg { width:100, height:100 }
+		 </td></tr></table></div><a name="getElementNames()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getElementNames</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function getElementNames():Array</code><p></p><p></p><p>
+		 Retrieves an array of all available visual elements collected by the examiner instance
+		 </p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Array</code> &mdash; Array of strings
+		 </td></tr></table></div><a name="getFrameLabelEnd()"></a><a name="getFrameLabelEnd(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getFrameLabelEnd</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function getFrameLabelEnd(label:String):int</code><p></p><p></p><p>
+		 Obtains the end frame number value of a frame label stanza
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">label</span>:String</code> &mdash; The name of the frame label to check for
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>int</code> &mdash; The number of the end frame. If the frame label hasn't been found on the timeline, a value of -1 is returned.
+		 </td></tr></table></div><a name="getFrameLabelStart()"></a><a name="getFrameLabelStart(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getFrameLabelStart</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public final function getFrameLabelStart(label:String):int</code><p></p><p></p><p>
+		 Obtains the initial frame number value of a frame label stanza
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">label</span>:String</code> &mdash; The name of the frame label to check for
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>int</code> &mdash; The number of the first frame. If the frame label hasn't been found on the timeline, a value of -1 is returned.
+		 </td></tr></table></div><a name="getIndex()"></a><a name="getIndex(String,int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getIndex</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public final function getIndex(asset_name:String, frame:int):int</code><p></p><p></p><p>
+		 Retrieves the index of an asset at the desired frame.
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">asset_name</span>:String</code> &mdash; The name of the asset
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">frame</span>:int</code> &mdash; The number of the frame to check
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>int</code> &mdash; The index of the asset. If the asset does not exist on the timeline at the desired frame, a value of -1 is returned.
+		 </td></tr></table></div><a name="getMatrix()"></a><a name="getMatrix(String,int)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">getMatrix</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public final function getMatrix(asset_name:String, frame:int):Matrix</code><p></p><p></p><p>
+		 Gets the transformation matrix of an asset at the desired frame
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">asset_name</span>:String</code> &mdash; The name of the asset
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">frame</span>:int</code> &mdash; The number of the frame
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code>Matrix</code> &mdash; A Matrix object for use with asset transformation in the animation construct
+		 </td></tr></table></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Thu Mar 28 2013, 12:00 PM +11:00  </center></div></body></html><!--<br/>Thu Mar 28 2013, 12:00 PM +11:00  -->

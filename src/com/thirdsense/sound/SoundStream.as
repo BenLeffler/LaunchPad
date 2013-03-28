@@ -37,14 +37,17 @@ package com.thirdsense.sound
 		 * @param	volume	The volume at which to play the sound
 		 * @param	loops	The number of loops to play the sound for
 		 * @param	label	The type of sound this is labelled as (as defined by the SoundLabel class). The sound will be assigned a volume multiplier based on type
-		 * @return	The SoundChannel object of the sound. This object can be used to apply a SoundShape to for fade effects and panning
+		 * @return	The SoundChannel object of the sound. This object can be used to apply a SoundShape to for fade effects and panning. Null will be returned if the volume or static sound_volume value is set to 0.
 		 * @see	com.thirdsense.sound.SoundShape
 		 * @see com.thirdsense.sound.SoundLabel
 		 */
 		
 		public static function play( file:String, volume:Number = 1, loops:int = 0, label:String="sound" ):SoundChannel
 		{
-			var st:SoundTransform = new SoundTransform( volume * SoundStream[label + "_volume"] );
+			var vol:Number = volume * SoundStream[label + "_volume"];
+			if ( vol == 0 ) return null;
+			
+			var st:SoundTransform = new SoundTransform( vol );
 			
 			var snd:Sound = LaunchPad.getAsset( "", file );
 			if ( !snd )

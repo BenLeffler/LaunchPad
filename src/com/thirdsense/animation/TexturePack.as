@@ -397,16 +397,20 @@ package com.thirdsense.animation
 		 * @param	pool	If you wish to limit the traced results to a specific pool, pass through the pool name
 		 */
 		
-		public static function traceAllTexturePacks( pool:String = "" ):void
+		public static function traceAllTexturePacks( pool:String = "" ):int
 		{
+			var counter:int = 0;
 			for ( var i:uint = 0; i < texture_packs.length; i++ )
 			{
 				var tp:TexturePack = texture_packs[i];
 				if ( pool == "" || tp.pool == pool )
 				{
 					trace( "TEXTURE PACK - POOL:", tp.pool, ", SEQ:", tp.sequence );
+					counter++;
 				}
 			}
+			
+			return counter;
 		}
 		
 	}

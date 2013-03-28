@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../override.css" type="text/css"><meta name="keywords" content="GenericAlert,com.thirdsense.ui.GenericAlert,background_gradient,background_gradient,background_stroke_color,background_stroke_color,bar,button_hue,button_hue,button_saturation,button_saturation,cancel_button,copy,copy,copy,copy_font,copy_font,copy_font_color,copy_font_color,copy_font_size,copy_font_size,heading,heading,heading_background_gradient,heading_background_gradient,heading_font,heading_font,heading_font_color,heading_font_color,heading_font_size,heading_font_size,heading_shadow_color,heading_shadow_color,label,ok_button,ok_button,create,create,setButtonLabel,setButtonLabels"><title>com.thirdsense.ui.GenericAlert</title></head><body><script language="javascript" type="text/javascript" src="../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'GenericAlert - API Documentation';
+				var baseRef = '../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">LaunchPad v0.9.0 Framework</td><td class="titleTableTopNav" align="right"><a href="../../../package-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../class-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../all-index-A.html" onclick="loadClassListFrame('../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../index.html?com/thirdsense/ui/GenericAlert.html&amp;com/thirdsense/ui/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">GenericAlert</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("GenericAlert"); titleBar_setSubNav(false,true,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">com.thirdsense.ui</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  GenericAlert</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">GenericAlert  <img src="../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> flash.display.MovieClip</td></tr></table><p></p><p></p><p></p>
+	              <p>A LaunchPad generic ui alert which can be customized to your application colour palette and appearance. </p>
+	              <p>This object can be called for use with either the LPAppUI class or the LPsAppUI Starling class as follows:</p>
+	              <div class="listing"><pre>
+     LPAppUI.addAlert( "My Alert Heading", "This is the body of the alert which will convey important information", null, this.onAlertComplete );
+     
+     function onAlertComplete():void
+     {
+         trace( "The user tapped the button" );
+     }</pre></div>
+	              <p>As I have passed null in the above call, an unaltered generic alert ui element is displayed. But if you want to customize the element to better
+	 suit the design of your project, you can alter the alert element and call it as follows:</p>
+	              <div class="listing"><pre>
+     // create a custom alert with 'yes' as my button label
+     var alert:GenericAlert = new GenericAlert();
+     alert.setButtonLabels( "Yes" );
+     
+     // define my alterations to the look of the element to better match my project
+     GenericAlert.heading_font_size = 18;
+     GenericAlert.heading_font_color = 0xDDDDDD;
+     GenericAlert.button_hue = 120;
+     GenericAlert.button_saturation = -50;
+     
+     // call my custom alert from anywhere in my project.
+     LPAppUI.addAlert( "My Alert Heading", "This is the body of the alert which will convey important information", alert, this.onAlertComplete );</pre></div>
+	              <p>You can also pass through your own MovieClip as a custom alert, as long as it contains two textfields named 'heading' and 'copy' and it contains
+	 a MovieClip named 'ok_button' to serve as the element button.</p>
+	              <div class="listing"><pre>
+     LPAppUI.addAlert( "My Alert Heading", "This is the body of the alert which will convey important information", new myMovieClip(), this.onAlertComplete );</pre></div>
+	           <p></p><br/><hr></div><a name="propertySummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Properties</div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableProperty"><tr><th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#background_gradient" class="signatureLink">background_gradient</a> : Array<div class="summaryTableDescription">[static] 
+		 The gradient (top-to-bottom linear) colors of the element's box background
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#background_stroke_color" class="signatureLink">background_stroke_color</a> : uint = 0xFFFFFF<div class="summaryTableDescription">[static] 
+		 The color of the single pixel stroke to use on the element's box background
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#button_hue" class="signatureLink">button_hue</a> : int = 0<div class="summaryTableDescription">[static] 
+		 The hue value to apply to the element's button ColorMatrixFilter
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#button_saturation" class="signatureLink">button_saturation</a> : int = 0<div class="summaryTableDescription">[static] 
+		 The saturation value to apply to the element's button ColorMatrixFilter
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#copy" class="signatureLink">copy</a> : TextField<div class="summaryTableDescription">
+		 The textfield used as the copy
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#copy_font" class="signatureLink">copy_font</a> : String = Arial Rounded MT Bold<div class="summaryTableDescription">[static] 
+		 The font family of the main copy
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#copy_font_color" class="signatureLink">copy_font_color</a> : uint = 0x999999<div class="summaryTableDescription">[static] 
+		 The font color of the main copy textfield
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#copy_font_size" class="signatureLink">copy_font_size</a> : int = 18<div class="summaryTableDescription">[static] 
+		 The font size of the main copy
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#heading" class="signatureLink">heading</a> : TextField<div class="summaryTableDescription">
+		 The textfield used as the heading
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#heading_background_gradient" class="signatureLink">heading_background_gradient</a> : Array<div class="summaryTableDescription">[static] 
+		 The gradient (top-to-bottom linear) colors of the heading background
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#heading_font" class="signatureLink">heading_font</a> : String = Arial Rounded MT Bold<div class="summaryTableDescription">[static] 
+		 The font family that is used in the heading
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#heading_font_color" class="signatureLink">heading_font_color</a> : uint = 0xFFFFFF<div class="summaryTableDescription">[static] 
+		 The font color applied to the heading textfield
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#heading_font_size" class="signatureLink">heading_font_size</a> : int = 22<div class="summaryTableDescription">[static] 
+		 The font size used in the heading
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#heading_shadow_color" class="signatureLink">heading_shadow_color</a> : uint = 0x000000<div class="summaryTableDescription">[static] 
+		 The color of the drop shadow that is applied to the heading field
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a href="#ok_button" class="signatureLink">ok_button</a> : MovieClip<div class="summaryTableDescription">
+		 The MovieClip that will serve as the element's button
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr></table></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#GenericAlert()" class="signatureLink">GenericAlert</a>()</div><div class="summaryTableDescription">
+		 Constructor
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#create()" class="signatureLink">create</a>(heading:String, copy:String):void</div><div class="summaryTableDescription">
+		 Creates the element and sizes according to stage size and length of copy
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#setButtonLabel()" class="signatureLink">setButtonLabel</a>(label:String):void</div><div class="summaryTableDescription">
+		 Sets the copy that will adorn the element's button
+		 </div></td><td class="summaryTableOwnerCol">GenericAlert</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><div class="detailSectionHeader">Property Detail</div><a name="propertyDetail"></a><a name="background_gradient"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">background_gradient</td><td class="detailHeaderType">property</td></tr></table><div class="detailBody"><code>public static var background_gradient:Array</code><p></p><p></p><p>
+		 The gradient (top-to-bottom linear) colors of the element's box background
+		 </p></div><a name="propertyDetail"></a><a name="background_stroke_color"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">background_stroke_color</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var background_stroke_color:uint = 0xFFFFFF</code><p></p><p></p><p>
+		 The color of the single pixel stroke to use on the element's box background
+		 </p></div><a name="propertyDetail"></a><a name="button_hue"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">button_hue</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var button_hue:int = 0</code><p></p><p></p><p>
+		 The hue value to apply to the element's button ColorMatrixFilter
+		 </p></div><a name="propertyDetail"></a><a name="button_saturation"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">button_saturation</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var button_saturation:int = 0</code><p></p><p></p><p>
+		 The saturation value to apply to the element's button ColorMatrixFilter
+		 </p></div><a name="propertyDetail"></a><a name="copy"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">copy</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var copy:TextField</code><p></p><p></p><p>
+		 The textfield used as the copy
+		 </p></div><a name="propertyDetail"></a><a name="copy_font"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">copy_font</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var copy_font:String = Arial Rounded MT Bold</code><p></p><p></p><p>
+		 The font family of the main copy
+		 </p></div><a name="propertyDetail"></a><a name="copy_font_color"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">copy_font_color</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var copy_font_color:uint = 0x999999</code><p></p><p></p><p>
+		 The font color of the main copy textfield
+		 </p></div><a name="propertyDetail"></a><a name="copy_font_size"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">copy_font_size</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var copy_font_size:int = 18</code><p></p><p></p><p>
+		 The font size of the main copy
+		 </p></div><a name="propertyDetail"></a><a name="heading"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">heading</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var heading:TextField</code><p></p><p></p><p>
+		 The textfield used as the heading
+		 </p></div><a name="propertyDetail"></a><a name="heading_background_gradient"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">heading_background_gradient</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var heading_background_gradient:Array</code><p></p><p></p><p>
+		 The gradient (top-to-bottom linear) colors of the heading background
+		 </p></div><a name="propertyDetail"></a><a name="heading_font"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">heading_font</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var heading_font:String = Arial Rounded MT Bold</code><p></p><p></p><p>
+		 The font family that is used in the heading
+		 </p></div><a name="propertyDetail"></a><a name="heading_font_color"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">heading_font_color</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var heading_font_color:uint = 0xFFFFFF</code><p></p><p></p><p>
+		 The font color applied to the heading textfield
+		 </p></div><a name="propertyDetail"></a><a name="heading_font_size"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">heading_font_size</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var heading_font_size:int = 22</code><p></p><p></p><p>
+		 The font size used in the heading
+		 </p></div><a name="propertyDetail"></a><a name="heading_shadow_color"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">heading_shadow_color</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public static var heading_shadow_color:uint = 0x000000</code><p></p><p></p><p>
+		 The color of the drop shadow that is applied to the heading field
+		 </p></div><a name="propertyDetail"></a><a name="ok_button"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">ok_button</td><td class="detailHeaderType">property</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code>public var ok_button:MovieClip</code><p></p><p></p><p>
+		 The MovieClip that will serve as the element's button
+		 </p></div><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="GenericAlert()"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">GenericAlert</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function GenericAlert()</code><p></p><p>
+		 Constructor
+		 </p></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="create()"></a><a name="create(String,String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">create</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public function create(heading:String, copy:String):void</code><p></p><p></p><p>
+		 Creates the element and sizes according to stage size and length of copy
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">heading</span>:String</code> &mdash; The text that appears in the heading field
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">copy</span>:String</code> &mdash; The text that appears in the main copy field
+		 </td></tr></table></p></div><a name="setButtonLabel()"></a><a name="setButtonLabel(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">setButtonLabel</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function setButtonLabel(label:String):void</code><p></p><p></p><p>
+		 Sets the copy that will adorn the element's button
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">label</span>:String</code> &mdash; The string that will appear on the element button
+		 </td></tr></table></p></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Thu Mar 28 2013, 12:00 PM +11:00  </center></div></body></html><!--<br/>Thu Mar 28 2013, 12:00 PM +11:00  -->

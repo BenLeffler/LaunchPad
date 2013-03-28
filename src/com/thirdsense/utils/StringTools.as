@@ -192,6 +192,26 @@ package com.thirdsense.utils
 			return str;
 			
 		}
+		
+		/**
+		 * Generates a Lorem Ipsum placeholder string for use with temporary textfield content
+		 * @param	max_chars	The maximum number of characters the string is to return
+		 * @return	A String representing the Lorem Ipsum text
+		 */
+		
+		public static function generateLoremIpsum( max_chars:int = 100 ):String
+		{
+			var str:String = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam quis ipsum lacinia libero convallis semper. Ut vulputate sem id leo. In sollicitudin aliquet eros. Duis ornare sodales lorem. Duis ullamcorper. Donec ac magna. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
+			
+			if ( max_chars < 0 )
+			{
+				return str;
+			}
+			else
+			{
+				return str.substr( 0, max_chars - 1 );
+			}
+		}
 	}
 
 }
