@@ -530,7 +530,7 @@ package com.thirdsense.data
 			else if ( linkage.length )
 			{
 				var assets:Vector.<LPAsset> = LPAsset.getAllAssets();
-				for ( var i:uint = 0; i < assets.length; i++ )
+				for ( var i:uint = 0; assets && i < assets.length; i++ )
 				{
 					if ( assets[i].type == LPAssetType.ZIP || assets[i].type == LPAssetType.THIRD )
 					{
