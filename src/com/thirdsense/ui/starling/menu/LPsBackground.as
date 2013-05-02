@@ -92,6 +92,7 @@ package com.thirdsense.ui.starling.menu
 				instance.transitionTo(id);
 			}
 			
+			instance.visible = true;
 			_hidden = false;
 			
 			return instance;

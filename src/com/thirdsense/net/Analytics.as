@@ -157,6 +157,12 @@ package com.thirdsense.net
 				return false;
 			}
 			
+			if ( !category || !category.length )
+			{
+				trace( "LaunchPad", Analytics, "Call to trackEvent failed as a the category was passed as an empty or nulled string" )
+				return false;
+			}
+			
 			var obj:Object = {
 				v:1,
 				tid:LPSettings.ANALYTICS_TRACKING_ID,

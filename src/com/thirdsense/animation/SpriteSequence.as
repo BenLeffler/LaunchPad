@@ -179,25 +179,45 @@ package com.thirdsense.animation
 		 * @return	The bitmapdata grid of the spritesequence
 		 */
 		
-		public function getSpriteSheet():BitmapData
+		public function getSpriteSheet( usePowerOfTwo:Boolean = false ):BitmapData
 		{
 			if ( this.sprites ) {
 				if ( this.sprites.length > 1 ) {
 					
 					var max_width:int = Math.floor( this.getBestPowerOfTwo() / this.cell_width );
-					var bmpdata:BitmapData = new BitmapData( this.cell_width * Math.min(this.total_cells, max_width), this.cell_height * Math.ceil(this.total_cells / max_width), true, 0 );
+					
+					var w:Number = this.cell_width * Math.min(this.total_cells, max_width);
+					var h:Number = this.cell_height * Math.ceil(this.total_cells / max_width);
+					
+					if ( usePowerOfTwo )
+					{
+						var p2:int = this.getNextPowerOfTwo( Math.max(w, h) );
+						var bmpdata:BitmapData = new BitmapData( p2, p2, true, 0 );
+					}
+					else
+					{
+						bmpdata = new BitmapData( w, h, true, 0 );
+					}
 					
 					for ( var i:uint = 0; i < this.sprites.length; i++ ) {
 						var row:int = Math.floor(i / max_width);
 						var col:int = i - (row * max_width);
 						bmpdata.copyPixels( this.sprites[i], this.sprites[i].rect, new Point(col * this.cell_width, row * this.cell_height), null, null, true );
 					}
-					
 					return bmpdata;
 					
 				} else if ( this.sprites.length == 1 ) {
 					
-					bmpdata = new BitmapData( sprites[0].width, sprites[0].height, true, 0 );
+					if ( usePowerOfTwo )
+					{
+						p2 = this.getNextPowerOfTwo( Math.max(sprites[0].width, sprites[0].height) );
+						bmpdata = new BitmapData( p2, p2, true, 0 );
+					}
+					else
+					{
+						bmpdata = new BitmapData( sprites[0].width, sprites[0].height, true, 0 );
+					}
+					
 					bmpdata.copyPixels( sprites[0], sprites[0].rect, new Point() );
 					return bmpdata;
 					
@@ -205,6 +225,22 @@ package com.thirdsense.animation
 			}
 			
 			return null;
+		}
+		
+		/**
+		 * @private	Borrowed from Starling utils
+		 */
+		
+		private function getNextPowerOfTwo(number:int):int
+		{
+			if (number > 0 && (number & (number - 1)) == 0) // see: http://goo.gl/D9kPj
+				return number;
+			else
+			{
+				var result:int = 1;
+				while (result < number) result <<= 1;
+				return result;
+			}
 		}
 		
 		private function getBestPowerOfTwo():int

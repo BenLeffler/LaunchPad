@@ -18,7 +18,8 @@ package com.thirdsense.animation
 	import starling.utils.Color;
 	
 	/**
-	 * ...
+	 * The Glide construct that can be used as a display object in Starling. Allows runtime examined classic MovieClip objects to be used with a Starling project
+	 * translating motion, transformation and alpha/color tweens. [ALPHA]
 	 * @author Ben Leffler
 	 */
 	
@@ -466,10 +467,20 @@ package com.thirdsense.animation
 			_ignoreColorTransforms = value;
 		}
 		
+		/**
+		 * Once this instance has been removed from stage, if this value is set to true then the examiner associated with this instance will
+		 * be disposed of.
+		 * @default	false
+		 */
+		
 		public function get disposeExaminerOnRemove():Boolean 
 		{
 			return _disposeExaminerOnRemove;
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		public function set disposeExaminerOnRemove(value:Boolean):void 
 		{
@@ -485,15 +496,28 @@ package com.thirdsense.animation
 			_disposeExaminerOnRemove = value;
 		}
 		
+		/**
+		 * If the examiner was created to include asset children, passing this as true will autoplay through the children
+		 * frames upon playing this instance
+		 */
+		
 		public function get autoPlayMovieClipChildren():Boolean 
 		{
 			return _autoPlayMovieClipChildren;
 		}
 		
+		/**
+		 * @private
+		 */
+		
 		public function set autoPlayMovieClipChildren(value:Boolean):void 
 		{
 			_autoPlayMovieClipChildren = value;
 		}
+		
+		/**
+		 * @private
+		 */
 		
 		private function examinerRemoveHandler(e:Event):void 
 		{
@@ -586,6 +610,11 @@ package com.thirdsense.animation
 			}
 			
 		}
+		
+		/**
+		 * Obtains the bounds of all visible children in the construct instance for the current frame
+		 * @return	Rectangle bounds
+		 */
 		
 		public function getVisibleBounds():Rectangle
 		{

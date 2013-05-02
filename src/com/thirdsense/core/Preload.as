@@ -1,5 +1,6 @@
 package com.thirdsense.core 
 {
+	import com.thirdsense.animation.BTween;
 	import com.thirdsense.data.LPAsset;
 	import com.thirdsense.LaunchPad;
 	import com.thirdsense.settings.LPSettings;
@@ -221,8 +222,6 @@ package com.thirdsense.core
 			
 			if ( postload_cue.length )
 			{
-				startPostLoadCue();
-				
 				if ( !preloader )
 				{
 					loader_mc = new GenericPreloader();
@@ -235,6 +234,7 @@ package com.thirdsense.core
 					loader_mc = preloader;
 				}
 				
+				startPostLoadCue();				
 				startPreload();
 			}
 			else if ( onComplete != null )
@@ -254,8 +254,7 @@ package com.thirdsense.core
 		{
 			var asset:LPAsset = postload_cue.shift();
 			focus_asset = asset;
-			asset.loadToAsset( onPostLoadAsset );
-			
+			asset.loadToAsset( onPostLoadAsset );			
 		}
 		
 		/**

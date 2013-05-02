@@ -57,6 +57,8 @@ package com.thirdsense.data
 		private var xmlloader:XMLLoader;
 		private var onLoadComplete:Function;
 		private var fzip:FZipExtra;
+		private var temp_zip:FZip;
+		
 		
 		public function LPAssets():void 
 		{
@@ -184,7 +186,7 @@ package com.thirdsense.data
 					fz.formatAsDisplayObject( ".swf" );
 					fz.formatAsDisplayObject( ".SWF" );
 					fz.addEventListener(Event.COMPLETE, this.onZipLoad, false, 0, true);
-					var zip:FZip = new FZip();
+					var zip:FZip = this.temp_zip = new FZip();
 					zip.load( new URLRequest(LPSettings.LIVE_EXTENSION + this.url) );
 					fz.addZip( zip );
 					break;
@@ -227,6 +229,7 @@ package com.thirdsense.data
 		private function onZipLoad( evt:Event ):void
 		{
 			evt.currentTarget.removeEventListener(Event.COMPLETE, this.onZipLoad);
+			this.temp_zip = null;
 			
 			this.data = new Object();
 			trace( "LaunchPad", LPAsset, "Asset " + this.id + " loaded successfully" );
@@ -333,6 +336,17 @@ package com.thirdsense.data
 				if ( this.xmlloader )
 				{
 					return this.xmlloader.progress;
+				}
+			}
+			else if ( this.type == LPAssetType.THIRD || this.type == LPAssetType.ZIP )
+			{
+				if ( this.temp_zip )
+				{
+					return this.temp_zip.progress;
+				}
+				else
+				{
+					return 1;
 				}
 			}
 			
@@ -532,7 +546,7 @@ package com.thirdsense.data
 				var assets:Vector.<LPAsset> = LPAsset.getAllAssets();
 				for ( var i:uint = 0; assets && i < assets.length; i++ )
 				{
-					if ( assets[i].type == LPAssetType.ZIP || assets[i].type == LPAssetType.THIRD )
+					if ( assets[i].fzip && (assets[i].type == LPAssetType.ZIP || assets[i].type == LPAssetType.THIRD) )
 					{
 						asset = assets[i].fzip.getBitmapData(linkage);
 					
@@ -556,10 +570,11 @@ package com.thirdsense.data
 						
 						if ( asset ) return asset;
 					}
-					else
+					else if ( assets[i].data )
 					{
 						class_name = getQualifiedSuperclassName(assets[i].data)
 						class_name = class_name.substr( class_name.lastIndexOf("::") + 2 );
+						
 						if ( class_name == "MovieClip" && assets[i].data.assets && assets[i].data.assets[linkage] )
 						{
 							cl = assets[i].data.assets[linkage];

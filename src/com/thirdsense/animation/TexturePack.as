@@ -1,9 +1,12 @@
 package com.thirdsense.animation
 {
+	import com.thirdsense.animation.atf.Encoder;
+	import com.thirdsense.animation.atf.EncodingOptions;
 	import com.thirdsense.animation.SpriteSequence;
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.ByteArray;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
@@ -11,6 +14,7 @@ package com.thirdsense.animation
 	import starling.textures.RenderTexture;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
+	import starling.utils.getNextPowerOfTwo;
 	
 	/**
 	 * The TexturePack class enables you to convert during runtime a MovieClip to a texture packed object primarily for use with the Starling Framework. This class also
@@ -76,6 +80,11 @@ package com.thirdsense.animation
 		public static var generate_mipmaps:Boolean = false;
 		
 		/**
+		 * Utilises runtime ATF generation (especially handy for minimal iPad 1 memory footprint)
+		 */
+		public static var generate_atf:Boolean = false;
+		
+		/**
 		 * Constructor class for a Texture Pack
 		 * @param	sprite_sequence	The SpriteSequence object that the Texture Pack is to be generated from.
 		 * @param	disposeOnImport	Dispose the spritesheet bitmapData from the Texture Pack upon import.
@@ -84,14 +93,16 @@ package com.thirdsense.animation
 		public function TexturePack( sprite_sequence:SpriteSequence=null, disposeOnImport:Boolean = true )
 		{
 			if ( sprite_sequence ) {
-				this.spritesheet = sprite_sequence.getSpriteSheet();
+				this.spritesheet = sprite_sequence.getSpriteSheet( generate_atf );
 				this.sparrow_xml = sprite_sequence.getSparrowXML();
 				this.pool = sprite_sequence.pool;
 				this.sequence = sprite_sequence.sequence;
 				this.offset = new Point( sprite_sequence.cell_offset.x, sprite_sequence.cell_offset.y );
 				this.source_width = sprite_sequence.source_width;
 				this.source_height = sprite_sequence.source_height;
-			} else {
+			}
+			else
+			{
 				this.offset = new Point(0, 0);
 			}
 			
@@ -106,9 +117,10 @@ package com.thirdsense.animation
 		 * @param	bmpdata	The bitmapdata object to convert from
 		 * @param	asRenderTexture	Creates a texture as a render texture for runtime alteration
 		 * @param	retainBitmapData	Retains the bitmapdata object in the TexturePack object for collision detection etc.
+		 * @param	disposeOnComplete	Disposes of the bitmapdata object at the close of the function
 		 */
 		
-		public function fromBitmapData(bmpdata:BitmapData, asRenderTexture:Boolean = false, retainBitmapData:Boolean = false ):void
+		public function fromBitmapData(bmpdata:BitmapData, asRenderTexture:Boolean = false, retainBitmapData:Boolean = false, disposeOnComplete:Boolean = true ):void
 		{
 			if ( !Starling.context )
 			{
@@ -117,15 +129,43 @@ package com.thirdsense.animation
 				return void;
 			}
 			
-			this.texture = Texture.fromBitmapData(bmpdata, generate_mipmaps, asRenderTexture);
+			if ( !generate_atf )
+			{
+				this.texture = Texture.fromBitmapData(bmpdata, generate_mipmaps, asRenderTexture);
+			}
+			else
+			{
+				var options:EncodingOptions = new EncodingOptions();
+				options.mipmap = generate_mipmaps;
+				var max:Number = Math.max( bmpdata.width, bmpdata.height );
+				var p2:int = getNextPowerOfTwo(max);
+				var bmd:BitmapData = new BitmapData(p2, p2, bmpdata.transparent, 0 );
+				bmd.copyPixels( bmpdata, bmpdata.rect, new Point(), null, null, false );
+				var data:ByteArray = Encoder.encode( bmd, options, null );
+				this.texture = Texture.fromAtfData( data, 1, generate_mipmaps );
+			}
 			
 			if ( asRenderTexture ) {
 				this.render_texture = new RenderTexture(bmpdata.width, bmpdata.height);
 				this.render_texture.draw( new Image(this.texture) );
+				this.texture.dispose();
+				this.texture = null;
 			}
 			
 			if ( retainBitmapData ) {
-				this._spritesheet = bmpdata;
+				if ( bmd )
+				{
+					this._spritesheet = bmd;
+				}
+				else
+				{
+					this._spritesheet = bmpdata;
+				}
+			}
+			else if ( disposeOnComplete )
+			{
+				bmpdata.dispose();
+				if ( bmd ) bmd.dispose();
 			}
 			
 		}
@@ -150,7 +190,17 @@ package com.thirdsense.animation
 				this.texture.dispose();
 			}
 			
-			this.texture = Texture.fromBitmapData(bmpdata, generate_mipmaps);
+			if ( !generate_atf )
+			{
+				this.texture = Texture.fromBitmapData(bmpdata, generate_mipmaps);
+			}
+			else
+			{
+				var options:EncodingOptions = new EncodingOptions();
+				options.mipmap = generate_mipmaps;
+				var data:ByteArray = Encoder.encode( bmpdata, options, null );
+				this.texture = Texture.fromAtfData( data, 1, generate_mipmaps );
+			}
 			
 		}
 		
