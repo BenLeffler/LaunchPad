@@ -1,6 +1,7 @@
 package com.thirdsense.animation 
 {
 	import com.thirdsense.animation.TexturePack;
+	import com.thirdsense.utils.DuplicateDisplayObject;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.geom.ColorTransform;
@@ -137,7 +138,9 @@ package com.thirdsense.animation
 				disp = this.target.getChildByName( this.assets[i].name );
 				if ( !disp )
 				{
-					disp = this.target.getChildAt( this.assets[i].index );
+					var mc:MovieClip = DuplicateDisplayObject.duplicate(this.target) as MovieClip;
+					mc.gotoAndStop( this.assets[i].frame );
+					disp = mc.getChildAt( this.assets[i].index );
 				}
 				
 				this.convertToTexture( disp, i, includeChildren, temp_name );

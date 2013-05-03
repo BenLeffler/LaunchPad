@@ -643,6 +643,56 @@ package com.thirdsense.animation
 		}
 		
 		/**
+		 * Removes from the tweening cue all currently active tweens associated with a target
+		 * @param	target	The object that is being tweened that requires removal
+		 */
+		
+		public static function removeTargetFromCue( target:Object ):void
+		{
+			if ( !bTweeners ) return void;
+			
+			var length:int = bTweeners.length;
+			var i:uint;
+			
+			for ( var i:uint = 0; i < length; i++ )
+			{
+				if ( bTweeners[i]._target == target )
+				{
+					bTweeners.splice(i, 1);
+					i--;
+					length--;
+				}
+			}
+		}
+		
+		/**
+		 * Retrieves all running tweens that are associated with a specified object
+		 * @param	target	The target object
+		 * @return	Vector of BTween objects associated with the target. The vector will be empty if no running tweens are found.
+		 */
+		
+		public static function getAllTargetTweens( target:Object ):Vector.<BTween>
+		{
+			var vec:Vector.<BTween> = new Vector.<BTween>;
+			
+			if ( !bTweeners ) return vec;
+			
+			var length:int = bTweeners.length;
+			var i:uint;
+			
+			for ( var i:uint = 0; i < length; i++ )
+			{
+				if ( bTweeners[i]._target == target )
+				{
+					vec.push( bTweeners[i] );
+				}
+			}
+			
+			return vec;
+			
+		}
+		
+		/**
 		 * Removes and purges all tweens currently in the engine cue
 		 */
 		
