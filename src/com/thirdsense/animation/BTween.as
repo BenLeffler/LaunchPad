@@ -57,9 +57,19 @@ package com.thirdsense.animation
 		public static const EASE_IN_ELASTIC:String = "easeInElastic";
 		
 		/**
+		 * Applies an ease in-out overshot of the target value by 25% then an ease back to the target value
+		 */
+		public static const SINGLE_ELASTIC:String = "singleElastic";
+		
+		/**
 		 * Applies a linear tween loop to continue until the tween is removed from the cue with the BTween.removeFromCue() call
 		 */
 		public static const LOOPS_FOREVER:String = "loopsForever";
+		
+		/**
+		 * Designates that the tween is to be of a custom type. Ensure that you call useCustomWorker() before starting the transition.
+		 */
+		public static const CUSTOM_TWEEN:String = "customTween";
 		
 		/**
 		 * A function that is called upon the tween reaching it's completed phase
@@ -111,9 +121,24 @@ package com.thirdsense.animation
 			this.transition = transition;
 			this.frame_pause = pause;
 			this.frame_counter = 0;
-			this.transition_worker = this[transition];
+			if ( transition != BTween.CUSTOM_TWEEN )
+			{
+				this.transition_worker = this[transition];
+			}
 			this.loops = 0;
 			
+		}
+		
+		/**
+		 * If a tween is to utilise a custom transition worker, pass it through in this call BEFORE calling start() on the tween object.
+		 * @param	worker	The worker function that is invoked on each frame of a tween, controlling the percentage of the target value to place an object at.
+		 * The worker must accept a number argument (value between 0 and 1) which indicates how far in to a tween the object is.
+		 * The worker must also return a number value which indicates the percentage of the target value to place the target object at.
+		 */
+		
+		public function useCustomWorker( worker:Function ):void
+		{
+			this.transition_worker = worker;
 		}
 		
 		/**
@@ -135,7 +160,6 @@ package com.thirdsense.animation
 					targetValue:targetValue
 				} );
 			}
-			
 		}
 		
 		/**
@@ -439,7 +463,7 @@ package com.thirdsense.animation
 		private function easeOut( ratio:Number ):Number
 		{
 			var invRatio:Number = ratio - 1.0;
-            return Math.pow( invRatio, 3 ) + 1;
+            return -Math.abs(Math.pow( invRatio, 2 )) + 1;
 			
 		}
 		
@@ -449,7 +473,7 @@ package com.thirdsense.animation
 		
 		private function easeIn( ratio:Number ):Number
 		{
-			return Math.pow( ratio, 3 );
+			return Math.pow( ratio, 2 );
 			
 		}
 		
@@ -504,6 +528,34 @@ package com.thirdsense.animation
                 var s:Number = p/4.0;
                 var invRatio:Number = ratio - 1;
                 return -1.0 * Math.pow(2.0, 10.0*invRatio) * Math.sin((invRatio-s)*(2.0*Math.PI)/p);                
+            }
+		}
+		
+		/**
+		 * @private
+		 */
+		
+		private function singleElastic(ratio:Number):Number
+		{
+			if (ratio == 0 || ratio == 1) 
+			{
+				return ratio;
+			}
+            else
+            {
+				const peak:Number = 0.65;
+				const max:Number = 1.5;
+				
+                if ( ratio < peak )
+				{
+					var p:Number = this.easeOut( ratio / peak ) * max;
+					return p;
+				}
+				else
+				{
+					p = this.easeIn( (ratio - peak) / (1-peak) ) * (max - 1);
+					return max - p;
+				}
             }
 		}
 		
