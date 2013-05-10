@@ -1,6 +1,7 @@
 # Build and Release Folders
 bin-debug/
 bin-release/
+*.docProj
 
 # Other files and folders
 .settings/

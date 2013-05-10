@@ -12,6 +12,7 @@ package com.thirdsense.core
 	import com.thirdsense.sound.SoundLabel;
 	import com.thirdsense.sound.SoundShape;
 	import com.thirdsense.sound.SoundStream;
+	import com.thirdsense.starfx.DisplaceWave;
 	import com.thirdsense.ui.display.LPAppUI;
 	import com.thirdsense.ui.display.LPButton;
 	import com.thirdsense.ui.display.menu.LPBaseMenu;
@@ -81,6 +82,7 @@ package com.thirdsense.core
 		private var swipe_control:SwipeControl;
 		private var generic_alert:GenericAlert;
 		private var generic_prompt:GenericPrompt;
+		private var displace_wave:DisplaceWave;
 		
 		public function LPManifest() 
 		{
