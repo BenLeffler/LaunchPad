@@ -654,7 +654,7 @@ package com.thirdsense.animation
 			var length:int = bTweeners.length;
 			var i:uint;
 			
-			for ( var i:uint = 0; i < length; i++ )
+			for ( i = 0; i < length; i++ )
 			{
 				if ( bTweeners[i]._target == target )
 				{
@@ -680,7 +680,7 @@ package com.thirdsense.animation
 			var length:int = bTweeners.length;
 			var i:uint;
 			
-			for ( var i:uint = 0; i < length; i++ )
+			for ( i = 0; i < length; i++ )
 			{
 				if ( bTweeners[i]._target == target )
 				{
