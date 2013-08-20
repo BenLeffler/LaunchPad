@@ -26,6 +26,7 @@ package com.thirdsense.ui.starling.menu
 		private static var _blurring:Boolean;
 		private static var _stitch:Boolean;
 		private static var onTransitionStart:Function;
+		private static var _transitioning:Boolean;
 		
 		private var onComplete:Function;
 		private var content:Sprite;
@@ -39,6 +40,7 @@ package com.thirdsense.ui.starling.menu
 			instance = this;
 			_last_menu = "";
 			_current_menu = "";
+			_transitioning = false;
 		}
 		
 		/**
@@ -58,6 +60,7 @@ package com.thirdsense.ui.starling.menu
 			}
 			
 			this.onComplete = onComplete;
+			_transitioning = true;
 			
 			if ( this.content && transition != "" )
 			{
@@ -222,6 +225,8 @@ package com.thirdsense.ui.starling.menu
 		
 		private function onTransitionComplete():void
 		{
+			_transitioning = false;
+			
 			if ( this.content.numChildren )
 			{
 				var mm:* = this.content.getChildAt(0);
@@ -400,6 +405,15 @@ package com.thirdsense.ui.starling.menu
 		public static function set callOnTransitionStart( fn:Function ):void
 		{
 			onTransitionStart = fn;
+		}
+		
+		/**
+		 * Retrieves if the menu system is currently in the act of transitioning
+		 */
+		
+		static public function get transitioning():Boolean 
+		{
+			return _transitioning;
 		}
 	}
 

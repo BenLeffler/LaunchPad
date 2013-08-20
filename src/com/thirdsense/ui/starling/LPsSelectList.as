@@ -76,9 +76,19 @@ package com.thirdsense.ui.starling
 		public static var box_width:int = 400;
 		
 		/**
+		 * The height of each line item box in pixels
+		 */
+		public static var line_height:int = 50;
+		
+		/**
 		 * The color of the quad that gets overlayed behind this ui element (will be set to 0.75 alpha)
 		 */
 		public static var background_color:uint = 0x000000;
+		
+		/**
+		 * Classic display list filters to apply to the OK and CANCEL buttons
+		 */
+		public static var button_filters:Array;
 		
 		private static var instance:LPsSelectList;
 		
@@ -173,11 +183,11 @@ package com.thirdsense.ui.starling
 				spr.name = String(i);
 				this.canvas.addChild( spr );
 				
-				spr.addEventListener(TouchEvent.TOUCH, this.touchHandler);
-				
 				tween = new BTween( spr, 10, BTween.EASE_IN, i*2 );
 				tween.fadeFromTo(0, spr.alpha);
 				tween.moveFromTo( spr.x, spr.y + 25, spr.x, spr.y );
+				tween.onComplete = spr.addEventListener;
+				tween.onCompleteArgs = [ TouchEvent.TOUCH, this.touchHandler ];
 				tween.start();
 			}
 			
@@ -227,14 +237,14 @@ package com.thirdsense.ui.starling
 		{
 			var spr:Sprite = new Sprite();
 			
-			var quad:Quad = new Quad( 20, 50 );
+			var quad:Quad = new Quad( 20, line_height );
 			quad.setVertexColor( 0, select_border[0] );
 			quad.setVertexColor( 1, select_border[0] );
 			quad.setVertexColor( 2, select_border[select_border.length - 1] );
 			quad.setVertexColor( 3, select_border[select_border.length - 1] );
 			spr.addChild( quad );
 			
-			quad = new Quad( 16, 46 );
+			quad = new Quad( 16, line_height - 4 );
 			quad.x = 2;
 			quad.y = 2;
 			quad.setVertexColor( 0, select_gradient[0] );
@@ -243,7 +253,7 @@ package com.thirdsense.ui.starling
 			quad.setVertexColor( 3, select_gradient[select_gradient.length - 1] );
 			spr.addChild( quad );
 			
-			quad = new Quad( box_width, 50 );
+			quad = new Quad( box_width, line_height );
 			quad.x = 25;
 			quad.y = 0;
 			spr.addChild( quad );
@@ -264,7 +274,7 @@ package com.thirdsense.ui.starling
 			}
 			
 			
-			quad = new Quad( box_width - 4, 46 );
+			quad = new Quad( box_width - 4, line_height - 4 );
 			quad.x = 27;
 			quad.y = 2;
 			spr.addChild( quad );
@@ -286,11 +296,11 @@ package com.thirdsense.ui.starling
 			
 			if ( is_on )
 			{
-				var tf:TextField = new TextField( box_width - 14, 46, copy, font_type, font_size, select_text_color, font_bold );
+				var tf:TextField = new TextField( box_width - 14, line_height - 4, copy, font_type, font_size, select_text_color, font_bold );
 			}
 			else
 			{
-				tf = new TextField( box_width - 14, 46, copy, font_type, font_size, unselect_text_color, font_bold );
+				tf = new TextField( box_width - 14, line_height - 4, copy, font_type, font_size, unselect_text_color, font_bold );
 			}
 			
 			tf.hAlign = HAlign.LEFT;
@@ -313,11 +323,13 @@ package com.thirdsense.ui.starling
 		private function adjustText( tf:TextField ):void
 		{
 			var copy:String = tf.text;
+			var counter:int = copy.length;
 			
-			while ( tf.textBounds.height > 30 )
+			while ( tf.textBounds.height > tf.height && counter > 0 )
 			{
 				copy = copy.substr( 0, copy.length - 1 );
 				tf.text = copy + "...";
+				counter--;
 			}
 		}
 		
@@ -392,6 +404,8 @@ package com.thirdsense.ui.starling
 		
 		private function switchOff( target:Sprite ):void
 		{
+			if ( target == null ) return void;
+			
 			target.removeEventListeners( TouchEvent.TOUCH );
 			this.canvas.removeChild(target);
 			
@@ -475,7 +489,7 @@ package com.thirdsense.ui.starling
 		private function addButtons():void
 		{
 			var button_width:Number = (box_width + 17) / 2;
-			var button_height:Number = 48;
+			var button_height:Number = line_height - 2;
 			
 			var cl:Class = getDefinitionByName( "lp_button1" ) as Class;
 			
@@ -484,6 +498,8 @@ package com.thirdsense.ui.starling
 			mc.bg.width = button_width;
 			mc.bg.height = button_height;
 			mc.label_txt.x = button_width - mc.label_txt.width >> 1;
+			mc.label_txt.y = button_height - mc.label_txt.height >> 1;
+			mc.filters = button_filters;
 			TexturePack.createFromMovieClip( mc, "LPsSelectList", "ok_button", null, 1, 2, null, 2 );
 			
 			mc = new cl();
@@ -491,12 +507,14 @@ package com.thirdsense.ui.starling
 			mc.bg.width = button_width;
 			mc.bg.height = button_height;
 			mc.label_txt.x = button_width - mc.label_txt.width >> 1;
+			mc.label_txt.y = button_height - mc.label_txt.height >> 1;
+			mc.filters = button_filters;
 			TexturePack.createFromMovieClip( mc, "LPsSelectList", "cancel_button", null, 1, 2, null, 2 );
 			
 			this.buttons = new Sprite();
 			this.addChild( this.buttons );
 			
-			var quad:Quad = new Quad( box_width + 25, 52 );
+			var quad:Quad = new Quad( box_width + 25, line_height + 2 );
 			quad.setVertexColor(0, unselect_border[0]);
 			quad.setVertexColor(1, unselect_border[0]);
 			quad.setVertexColor(2, unselect_border[1]);

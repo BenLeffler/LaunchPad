@@ -1,7 +1,6 @@
 package com.thirdsense.ui 
 {
 	import com.thirdsense.LaunchPad;
-	import com.thirdsense.ui.display.LPButton;
 	import com.thirdsense.utils.AdjustColors;
 	import com.thirdsense.utils.Trig;
 	import flash.display.CapsStyle;

@@ -2,6 +2,7 @@
 bin-debug/
 bin-release/
 *.docProj
+LaunchPad*.zip
 
 # Other files and folders
 .settings/

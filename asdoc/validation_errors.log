@@ -1,0 +1,3 @@
+Text for description in starling.events:TouchProcessor/enqueueMouseLeftStage is not valid.
+org.xml.sax.SAXParseException; lineNumber: 11; columnNumber: 12; The element type "p" must be terminated by the matching end-tag "</p>".
+

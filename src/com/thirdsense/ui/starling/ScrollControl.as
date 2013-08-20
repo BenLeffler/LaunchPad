@@ -26,6 +26,7 @@ package com.thirdsense.ui.starling
 		private var x_padding:Number;
 		
 		private var offset:Point;
+		private var global_origin:Point;
 		private var dx:Number;
 		private var dy:Number;
 		private var vx:Number;
@@ -35,17 +36,24 @@ package com.thirdsense.ui.starling
 		private var _tapArea:Rectangle;
 		private var _scrollWheelEnabled:Boolean;
 		private var _active:Boolean;
+		private var _pixel_sensitivity:int;
 		
 		/**
 		 * This function is executed on each frame a scrolling movement takes place.
 		 */
 		public var onMove:Function;
 		
+		/**
+		 * This function is called when the user releases the tap area during a detected scroll
+		 */
+		public var onRelease:Function;
+		
 		public function ScrollControl() 
 		{
 			this.restrictTapArea = true;
 			this._scrollWheelEnabled = false;
 			this._active = false;
+			this._pixel_sensitivity = 5;
 		}
 		
 		/**
@@ -139,14 +147,38 @@ package com.thirdsense.ui.starling
 		{
 			this._active = false;
 			
-			this.target.removeEventListener(Event.REMOVED_FROM_STAGE, this.removeHandler);
-			this.target.stage.removeEventListener(TouchEvent.TOUCH, this.touchHandler);
-			this.target.removeEventListener( EnterFrameEvent.ENTER_FRAME, this.timeline );
-			
-			if ( this._scrollWheelEnabled )
+			if ( this.target )
 			{
-				Starling.current.nativeStage.removeEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
+				this.target.removeEventListener(Event.REMOVED_FROM_STAGE, this.removeHandler);
+				this.target.stage.removeEventListener(TouchEvent.TOUCH, this.touchHandler);
+				this.target.removeEventListener( EnterFrameEvent.ENTER_FRAME, this.timeline );
+			
+				if ( this._scrollWheelEnabled )
+				{
+					Starling.current.nativeStage.removeEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
+				}
 			}
+		}
+		
+		public function enable():void
+		{
+			if ( this.target )
+			{
+				this.target.addEventListener(Event.REMOVED_FROM_STAGE, this.removeHandler);
+				this.target.stage.addEventListener(TouchEvent.TOUCH, this.touchHandler);
+				this.target.addEventListener( EnterFrameEvent.ENTER_FRAME, this.timeline );
+				
+				if ( this._scrollWheelEnabled )
+				{
+					Starling.current.nativeStage.addEventListener(MouseEvent.MOUSE_WHEEL, this.mouseWheelHandler);
+				}
+				this._active = true;
+			}
+		}
+		
+		public function disable():void
+		{
+			this.kill();
 		}
 		
 		/**
@@ -157,7 +189,7 @@ package com.thirdsense.ui.starling
 		{
 			var touch:Touch = evt.getTouch( this.target.stage );
 			
-			if ( !touch || (this.restrictTapArea && !this.tapArea.contains( touch.globalX, touch.globalY )) )
+			if ( !touch )
 			{
 				return void;
 			}
@@ -165,31 +197,54 @@ package com.thirdsense.ui.starling
 			switch( touch.phase )
 			{
 				case TouchPhase.BEGAN:
+					if (this.restrictTapArea && !this.tapArea.contains( touch.globalX, touch.globalY )) return void;
 					this.offset = touch.getLocation(this.target.parent);
 					this.offset.x -= this.target.x;
 					this.offset.y -= this.target.y;
 					this.dx = target.x;
 					this.dy = target.y;
 					this.vx = 0;
-					this.vy = 0;					
+					this.vy = 0;
+					if ( !this.global_origin )
+					{
+						this.global_origin = new Point( touch.globalX, touch.globalY );
+					}
+					else
+					{
+						this.global_origin.x = touch.globalX;
+						this.global_origin.y = touch.globalY;
+					}
 					break;
 					
 				case TouchPhase.ENDED:
+					if ( this.onRelease != null && this._scrolling )
+					{
+						this.onRelease();
+					}
 					this.offset = null;
 					this._scrolling = false;
 					break;
 					
 				case TouchPhase.MOVED:
+					if (this.restrictTapArea && !this.tapArea.contains( touch.globalX, touch.globalY )) return void;
 					if ( this.offset )
 					{
 						if ( this.type == ScrollType.HORIZONTAL )
 						{
 							this.dx = touch.getLocation(this.target.parent).x - this.offset.x;
+							if ( Math.abs(touch.globalX - this.global_origin.x) > 50 )
+							{
+								this._scrolling = true;
+							}
 						}
 						
 						if ( this.type == ScrollType.VERTICAL ) 
 						{
 							this.dy = touch.getLocation(this.target.parent).y - this.offset.y;
+							if ( Math.abs(touch.globalY - this.global_origin.y) > 50 )
+							{
+								this._scrolling = true;
+							}
 						}
 					}
 					break;
@@ -209,11 +264,11 @@ package com.thirdsense.ui.starling
 				this.vx = (this.dx - this.target.x) / 8;
 				this.vy = (this.dy - this.target.y) / 8;
 				
-				if ( Math.abs(this.vx) > 5 && this.type == ScrollType.HORIZONTAL )
+				if ( Math.abs(this.vx) > this._pixel_sensitivity && this.type == ScrollType.HORIZONTAL )
 				{
 					this._scrolling = true;
 				}
-				if ( Math.abs(this.vy) > 5 && this.type == ScrollType.VERTICAL )
+				if ( Math.abs(this.vy) > this._pixel_sensitivity && this.type == ScrollType.VERTICAL )
 				{
 					this._scrolling = true;
 				}
@@ -339,6 +394,16 @@ package com.thirdsense.ui.starling
 		public function get active():Boolean 
 		{
 			return _active;
+		}
+		
+		public function get pixel_sensitivity():int 
+		{
+			return _pixel_sensitivity;
+		}
+		
+		public function set pixel_sensitivity(value:int):void 
+		{
+			_pixel_sensitivity = value;
 		}
 		
 		/**

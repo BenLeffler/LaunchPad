@@ -1,6 +1,8 @@
 package com.thirdsense.animation 
 {
+	import com.thirdsense.utils.getClassVariables;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -85,6 +87,13 @@ package com.thirdsense.animation
 		{
 			if ( !timeline ) {
 				timeline = clip;
+			}
+			
+			if ( !checkIfUsingDefaultMatrix(clip) )
+			{
+				var cont:MovieClip = new MovieClip();
+				cont.addChild( clip );
+				clip = cont;
 			}
 			
 			if ( !end_frame ) {
@@ -175,6 +184,34 @@ package com.thirdsense.animation
 		}
 		
 		/**
+		 * @private	Checks if the clip is using default values (unaltered transformation matrix)
+		 * @param	clip	The clip to examine
+		 * @return	Boolean value if the clip is using the default transformation matrix
+		 */
+		
+		private static function checkIfUsingDefaultMatrix( clip:DisplayObject ):Boolean
+		{
+			var dMatrix:Matrix = new MovieClip().transform.matrix;
+			var matrix:Matrix = clip.transform.matrix;
+			
+			var arr:Array = getClassVariables(matrix);
+			while ( arr.length )
+			{
+				if ( dMatrix[arr[0]] != matrix[arr[0]] )
+				{
+					arr = new Array();
+					return false;
+				}
+				else
+				{
+					arr.shift();
+				}
+			}
+			
+			return true;
+		}
+		
+		/**
 		 * Compiles the vector of bitmapdata snapshots in to a single spritesheet
 		 * @return	The bitmapdata grid of the spritesequence
 		 */
@@ -242,6 +279,10 @@ package com.thirdsense.animation
 				return result;
 			}
 		}
+		
+		/**
+		 * @private	
+		 */
 		
 		private function getBestPowerOfTwo():int
 		{

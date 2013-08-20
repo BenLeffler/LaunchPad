@@ -3,6 +3,7 @@ package com.thirdsense.core
 	import com.thirdsense.animation.GlideConstruct;
 	import com.thirdsense.animation.GlideExaminer;
 	import com.thirdsense.animation.SpriteSequence;
+	import com.thirdsense.animation.SpriteSheetHelper;
 	import com.thirdsense.animation.TexturePack;
 	import com.thirdsense.data.LPLocalData;
 	import com.thirdsense.display.Logo;
@@ -32,6 +33,7 @@ package com.thirdsense.core
 	import com.thirdsense.ui.starling.menu.LPsMenu;
 	import com.thirdsense.ui.starling.ScrollControl;
 	import com.thirdsense.ui.starling.SwipeControl;
+	import com.thirdsense.utils.ContextSupport;
 	import com.thirdsense.utils.DeviceCamera;
 	import com.thirdsense.utils.getDefinitionNames;
 	import com.thirdsense.utils.IsoTools;
@@ -83,6 +85,8 @@ package com.thirdsense.core
 		private var generic_alert:GenericAlert;
 		private var generic_prompt:GenericPrompt;
 		private var displace_wave:DisplaceWave;
+		private var context_support:ContextSupport;
+		private var sprite_sheet_helper:SpriteSheetHelper;
 		
 		public function LPManifest() 
 		{

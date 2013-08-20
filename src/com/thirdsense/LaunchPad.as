@@ -178,16 +178,18 @@ package com.thirdsense
 		 * @param	handleLostContext	Handles the device losing Stage3D context (requires more device memory)
 		 * @param	showStats	Show a stats dialogue in the top-left corner of the stage
 		 * @param	enableMultiTouch	Enable multitouch within the project
+		 * @param	profile	The Context3DProfile to use with the project
 		 * @return	The resulting Starling instance.
+		 * @see	flash.display3D.Context3DProfile
 		 */
 		
-		public final function startStarlingSession( rootClass:Class, handleLostContext:Boolean=false, showStats:Boolean=false, enableMultiTouch:Boolean=false ):Starling
+		public final function startStarlingSession( rootClass:Class, handleLostContext:Boolean=false, showStats:Boolean=false, enableMultiTouch:Boolean=false, profile:String = "baselineConstrained" ):Starling
 		{
 			trace( "LaunchPad", LaunchPad, "Starling session started." );
 			Starling.handleLostContext = handleLostContext;
 			Starling.multitouchEnabled = enableMultiTouch;
 			
-			this._starling = new Starling( rootClass, this.nativeStage, new Rectangle(0, 0, this.nativeStage.stageWidth, this.nativeStage.stageHeight) );
+			this._starling = new Starling( rootClass, this.nativeStage, new Rectangle(0, 0, this.nativeStage.stageWidth, this.nativeStage.stageHeight), null, "auto", profile );
 			this._starling.showStats = showStats;
 			this._starling.start();
 			

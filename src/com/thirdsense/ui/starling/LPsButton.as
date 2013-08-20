@@ -51,18 +51,29 @@ package com.thirdsense.ui.starling
 		 * Constructs a custom starling button from a TexturePack
 		 * @param	tp	The TexturePack object to generate the button from
 		 * @param	onRelease	If a click on the button is detected, call this function. Must accept a touch object as it's argument
+		 * @param	helper_sequence	If a helper was used to create the texture pack, pass the desired sequence name here
 		 * @see starling.events.Touch
 		 */
 		
-		public function LPsButton( tp:TexturePack, onRelease:Function ) 
+		public function LPsButton( tp:TexturePack, onRelease:Function, helper_sequence:String="" ) 
 		{
 			this.onRelease = onRelease;
-			this.name = tp.pool + "_" + tp.sequence;
 			
-			super( tp.getTextures() );
+			super( tp.getTextures(helper_sequence) );
 			
-			this.pivotX = -tp.offset.x;
-			this.pivotY = -tp.offset.y;
+			
+			if ( helper_sequence.length )
+			{
+				this.name = tp.pool + "_" + helper_sequence;
+			}
+			else
+			{
+				this.name = tp.pool + "_" + tp.sequence;
+			}
+			
+			var pt:Point = tp.getOffset( helper_sequence );
+			this.pivotX = -pt.x;
+			this.pivotY = -pt.y;
 			
 			this.addListeners();
 			this.currentFrame = 0;

@@ -158,9 +158,21 @@ package com.thirdsense.data
 			this.timestamps[name] = new Date().getTime();
 			
 			var so:SharedObject = SharedObject.getLocal( escape(LPSettings.APP_NAME) );
-			so.data.lp[name] = value;
-			so.data.timestamps[name] = this.timestamps[name];
-			so.flush();
+			
+			if ( so && so.data && !so.data.lp )
+			{
+				so.data.lp = new Object();
+			}
+			if ( so && so.data && !so.data.timestamps )
+			{
+				so.data.timestamps = new Object();
+			}
+			if ( so && so.data && so.data.lp && so.data.timestamps )
+			{
+				so.data.lp[name] = value;
+				so.data.timestamps[name] = this.timestamps[name];
+				so.flush();
+			}
 			
 		}
 		

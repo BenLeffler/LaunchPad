@@ -162,6 +162,38 @@ package com.thirdsense.animation
 			}
 		}
 		
+		public function getTargetValue( property:String ):Number
+		{
+			if ( this.animations )
+			{
+				for ( var i:uint = 0; i < this.animations.length; i++ )
+				{
+					if ( this.animations[i].property == property )
+					{
+						return this.animations[i].targetValue;
+					}
+				}
+			}
+			
+			return parseInt("NaN");
+		}
+		
+		public function getOriginalValue( property:String ):Number
+		{
+			if ( this.animations )
+			{
+				for ( var i:uint = 0; i < this.animations.length; i++ )
+				{
+					if ( this.animations[i].property == property )
+					{
+						return this.animations[i].defaultValue;
+					}
+				}
+			}
+			
+			return parseInt("NaN");
+		}
+		
 		/**
 		 * Adds an x and y tween property to the animation cue
 		 * @param	x	The desired x value
@@ -199,6 +231,18 @@ package com.thirdsense.animation
 		}
 		
 		/**
+		 * Moves the target from a designated point to it's current point
+		 * @param	from_x	The x co-ord to move the target from
+		 * @param	from_y	The y co-ord to move the target from
+		 * @param	applyNow	Pass as true to apply the initial traslation immediately.
+		 */
+		
+		public function moveFrom( from_x:Number, from_y:Number, applyNow:Boolean = true ):void
+		{
+			this.moveFromTo( from_x, from_y, this._target.x, this._target.y, applyNow );
+		}
+		
+		/**
 		 * Adds a scaleX and scaleY property to the animation cue
 		 * @param	scale	The value to scale the object to.
 		 */		
@@ -209,7 +253,7 @@ package com.thirdsense.animation
 		}
 		
 		/**
-		 * Adds a scale property to the animation cue from an initial state
+		 * Adds a scale property to the animation cue from an initial state. Assumes that scaleX and scaleY values are the same.
 		 * @param	start_scale	The start scale of the target
 		 * @param	end_scale	The end scale of the target
 		 * @param	applyNow	Should the start scale be immediately applied, pass as true
@@ -229,6 +273,17 @@ package com.thirdsense.animation
 				this._target["scaleX"] = oscalex;
 				this._target["scaleY"] = oscaley;
 			}
+		}
+		
+		/**
+		 * Adds a scale transformation to the tween from the passed value to the targets current one
+		 * @param	start_scale	The scale value to start the transformation tween from
+		 * @param	applyNow	Should the start scale be immediately applied, pass as true
+		 */
+		
+		public function scaleFrom( start_scale:Number, applyNow:Boolean = true ):void
+		{
+			this.scaleFromTo( start_scale, this._target.scaleX, applyNow );
 		}
 		
 		/**
@@ -261,6 +316,17 @@ package com.thirdsense.animation
 		}
 		
 		/**
+		 * Adds a rotation transformation to the tween from the passed value to the targets current one
+		 * @param	start_value	The rotation value to start the transformation tween from
+		 * @param	applyNow	Should the start rotation be immediately applied, pass as true
+		 */
+		
+		public function rotateFrom( start_value:Number, applyNow:Boolean = true ):void
+		{
+			this.rotateFromTo( start_value, this._target.rotation, applyNow );
+		}
+		
+		/**
 		 * Adds an alpha fade to the the animation cue
 		 * @param	alpha	The desired alpha value
 		 */
@@ -288,6 +354,17 @@ package com.thirdsense.animation
 			{
 				this._target["alpha"] = oalpha;
 			}
+		}
+		
+		/**
+		 * Adds an alpha transformation to the tween from the passed value to the targets current one
+		 * @param	start_alpha	The scale alpha to start the transformation tween from
+		 * @param	applyNow	Should the start alpha be immediately applied, pass as true
+		 */
+		
+		public function fadeFrom( start_alpha:Number, applyNow:Boolean = true ):void
+		{
+			this.fadeFromTo( start_alpha, this._target.alpha, applyNow );
 		}
 		
 		/**
@@ -787,13 +864,15 @@ package com.thirdsense.animation
 		 * @param	fnArgs	(Optional) arguments to feed through to the function when it is called
 		 */
 		
-		public static function callOnFrame( frames:int, fn:Function, fnArgs:Array = null ):void
+		public static function callOnFrame( frames:int, fn:Function, fnArgs:Array = null ):BTween
 		{
 			var tween:BTween = new BTween( { tick:0 }, frames + 1 );
 			tween.animate( "tick", 1 );
 			tween.onComplete = fn;
 			if ( fnArgs ) tween.onCompleteArgs = fnArgs;
 			tween.start();
+			
+			return tween;
 		}
 		
 	}

@@ -78,38 +78,44 @@ package com.thirdsense.utils
 		 * Shortens a number with a suffix representation (K for thousands, M for millions and B for billions)
 		 * @param	value	The value to shorten
 		 * @param	digits	The minimum number of digits to allow before creating a suffix
+		 * @param	decimals	The number of decimals to allow
+		 * @param	long	If passed as true, 'B', 'M' and 'K' will be replaced with "Billion", "Million" and "Thousand"
 		 * @return	The string representation of the number
 		 */
 		
-		public static function shortenNumber( value:Number, digits:int=5 ):String
+		public static function shortenNumber( value:Number, digits:int=5, decimals:int = 2, long:Boolean=false ):String
 		{
 			var str:String = "1";
 			for ( var i:uint = 1; i < digits; i++ ) {
 				str += "0";
 			}
 			var max:Number = Number(str);
+			var dec:int = Math.pow(10, decimals);
 			
 			if ( value < max ) {
 				return String(value);
 			}
 			
-			if ( value > 1000000000 ) {
+			if ( value >= 1000000000 ) {
 				value /= 1000000000;
-				value = Math.round( value * 100 );
-				value /= 100;
+				value = Math.round( value * dec );
+				value /= dec;
+				if ( long ) return value + " Billion";
 				return value + "B";
 			}
 			
-			if ( value > 1000000 ) {
+			if ( value >= 1000000 ) {
 				value /= 1000000;
-				value = Math.round( value * 100 );
-				value /= 100;
+				value = Math.round( value * dec );
+				value /= dec;
+				if ( long ) return value + " Million";
 				return value + "M";
 			}
 			
-			if ( value > 1000 ) {
+			if ( value >= 1000 ) {
 				value /= 1000;
 				value = Math.round( value );
+				if ( long ) return value + ",000";
 				return value + "K";
 			}
 			
@@ -211,6 +217,72 @@ package com.thirdsense.utils
 			{
 				return str.substr( 0, max_chars - 1 );
 			}
+		}
+		
+		/**
+		 * Obtains a gregorian calender name for the desired month (0 = January)
+		 * @param	month	The integer representation of the month
+		 * @param	shorten	Should the result be the shortened format of the month name?
+		 * @return	The name of the month
+		 */
+		
+		public static function getMonthName( month:int, shorten:Boolean = false ):String
+		{
+			var arr:Array = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber" ];
+			var arr2:Array = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+			
+			if ( shorten ) return arr2[month];
+			else return arr[month];
+		}
+		
+		/**
+		 * Retrieves a string representation of a given day
+		 * @param	day	The day as an integer (from the Date.getDay call)
+		 * @param	shorten	Shorten the result to an abbreviated form
+		 * @return	The name of the day
+		 */
+		
+		public static function getDayName( day:int, shorten:Boolean = false ):String
+		{
+			if ( shorten )
+			{
+				var arr:Array = [ "Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat" ];
+			}
+			else
+			{
+				arr = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+			}
+			
+			return arr[day];
+		}
+		
+		/**
+		 * Returns a random one or two word praise/adulation for use with UI titles
+		 * @return	String
+		 */
+		
+		public static function getRandomPraise():String
+		{
+			var arr:Array = [
+				"Congratulations",
+				"Well Done",
+				"Terrific Job",
+				"Nice Work",
+				"Awesome Effort",
+				"Great Work",
+				"Great Job",
+				"Well Played",
+				"Fine Work",
+				"Fine Job",
+				"Fine Effort",
+				"Nice Job",
+				"Good Going",
+				"Good Show",
+				"Amazing",
+				"Inspirational"
+			];
+			
+			return arr[ Math.floor(Math.random() * arr.length) ];
 		}
 	}
 

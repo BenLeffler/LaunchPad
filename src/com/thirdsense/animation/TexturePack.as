@@ -53,7 +53,8 @@ package com.thirdsense.animation
 		public var atlas:TextureAtlas;
 		
 		/**
-		 * The x/y co-ordinate offset of the source sprite. Use the to correctly calculate the pivot point
+		 * The x/y co-ordinate offset of the source sprite. Use the to correctly calculate the pivot point. If a helper was used to
+		 * create the Texture Pack, it is best to use the getOffset function to retrieve this data
 		 */
 		public var offset:Point;
 		
@@ -71,6 +72,11 @@ package com.thirdsense.animation
 		 * Dynamic metadata that can be configured to carry any kind of data to be attached with this specific TexturePack object
 		 */
 		public var metadata:Object;
+		
+		/**
+		 * If a helper was used to create the Texture Pack, it will be stored here
+		 */
+		private var helper:SpriteSheetHelper;
 		
 		private static var texture_packs:Vector.<TexturePack>;
 		
@@ -171,6 +177,33 @@ package com.thirdsense.animation
 		}
 		
 		/**
+		 * Creates a texture pack from a SpriteSheetHelper object
+		 * @param	helper	The helper to use to create a TexturePack object
+		 * @param	disposeOnImport	Pass as true if you want to dispose of the helper and sprite sequence bitmapdata once the texture is on the GPU
+		 */
+		
+		public function fromHelper( helper:SpriteSheetHelper, disposeOnImport:Boolean = true ):void
+		{
+			this.helper = helper;
+			
+			if ( !Starling.context )
+			{
+				trace( "LaunchPad", TexturePack, "Unable to convert to a Texture. You must establish a Stage3D context first by starting a Starling session." );
+				throw ( new Error("Unable to convert to a Texture. You must establish a Stage3D context first by starting a Starling session.") );
+				return void;
+			}
+			
+			this.spritesheet = helper.spritesheet;
+			this.sparrow_xml = helper.sparrow_xml;
+			
+			if ( disposeOnImport )
+			{
+				helper.dispose();
+			}
+			
+		}
+		
+		/**
 		 * The bitmapdata spritesheet used in the texture. The can be kept in resident memory for use in collision detection and render texture writing.
 		 */
 		
@@ -221,36 +254,48 @@ package com.thirdsense.animation
 		}
 		
 		/**
+		 * If a helper was used to create the texture pack, this will return true.
+		 */
+		
+		public function get isHelper():Boolean 
+		{
+			return (this.helper != null);
+		}
+		
+		/**
 		 * Gets the Texture Atlas of the Texture Pack
+		 * @param	If the texture pack has been created with a helper, pass the sequence name to return a specific set of textures
 		 * @return	Texture Atlas for use with a Starling Display Object.
 		 */
-		public function getTextures():Vector.<Texture>
+		public function getTextures( helper_sequence:String = "" ):Vector.<Texture>
 		{
-			return this.atlas.getTextures();
+			return this.atlas.getTextures( helper_sequence );
 			
 		}
 		
 		/**
 		 * Creates a movieclip based on the texture pack.
 		 * @param	fps	The frames per second this clip will run at
+		 * @param	helper_sequence	If a helper has been used to create the texture pack, pass the name of the texture set here
 		 * @return	A Starling MovieClip object
 		 */
-		public function getMovieClip( fps:int = 30):MovieClip
+		public function getMovieClip( fps:int = 30, helper_sequence:String = "" ):MovieClip
 		{
-			var mc:MovieClip = new MovieClip( this.getTextures(), fps );
-			mc.pivotX = -this.offset.x;
-			mc.pivotY = -this.offset.y;
+			var mc:MovieClip = new MovieClip( this.getTextures(helper_sequence), fps );
+			var pt:Point = this.getOffset( helper_sequence );
+			mc.pivotX = -pt.x;
+			mc.pivotY = -pt.y;
 			return mc;
-			
 		}
 		
 		/**
 		 * Retrieves an Image object from the texture pack
 		 * @param	asRenderTexture	The image is retrieved as a render texture object (dynamic and can be written to)
 		 * @param	frame	If the source is a multiframe texture atlas (eg. MovieClip), you can designate which frame to output as an Image. Default is 0.
+		 * @param	helper_sequence	If a helper was used to create the Texture Pack, pass through the desired sequence name here
 		 * @return	The Image object for use in the Starling Framework
 		 */
-		public function getImage( asRenderTexture:Boolean=false, frame:int=0 ):Image
+		public function getImage( asRenderTexture:Boolean=false, frame:int=0, helper_sequence:String = "" ):Image
 		{
 			var img:Image;
 			
@@ -261,13 +306,13 @@ package com.thirdsense.animation
 					img = new Image( this.texture );
 				}
 			} else {
-				img = new Image( this.atlas.getTextures()[frame] );
+				var textures:Vector.<Texture> = this.atlas.getTextures( helper_sequence );
+				img = new Image( textures[frame] );
 			}
 			
-			if ( this.offset ) {
-				img.pivotX = -this.offset.x;
-				img.pivotY = -this.offset.y;
-			}
+			var pt:Point = this.getOffset( helper_sequence );
+			img.pivotX = -pt.x;
+			img.pivotY = -pt.y;
 			
 			img.name = this.pool + "_" + this.sequence;
 			
@@ -276,27 +321,45 @@ package com.thirdsense.animation
 		
 		/**
 		 * Gets a random image from a multiframe texture
+		 * @param	If a helper was used to create the texture pack, pass the desired sequence name here
 		 * @return	An Image object generated from the multiframe texture atlas
 		 */
 		
-		public function getRandomImage():Image
+		public function getRandomImage( helper_sequence:String = "" ):Image
 		{
 			if ( !this.atlas ) {
 				img = new Image( this.texture );
 				
 			} else {
 			
-				var choice:int = Math.floor( Math.random() * this.atlas.getTextures().length );
-				var img:Image = new Image( this.atlas.getTextures()[choice] );
+				var choice:int = Math.floor( Math.random() * this.atlas.getTextures(helper_sequence).length );
+				var img:Image = new Image( this.atlas.getTextures(helper_sequence)[choice] );
 				
 			}
 			
-			if ( this.offset ) {
-				img.pivotX = -this.offset.x;
-				img.pivotY = -this.offset.y;
-			}
+			var pt:Point = this.getOffset( helper_sequence );
+			img.pivotX = -pt.x;
+			img.pivotY = -pt.y;
 			
 			return img;
+		}
+		
+		/**
+		 * Retrieves the texture's x/y offset to translate the display object's pivot values
+		 * @param	helper_sequence	If a helper was used to create the texture pack object, pass the desired sequence name here
+		 * @return	The Point representation of the offset
+		 */
+		
+		public function getOffset( helper_sequence:String = "" ):Point
+		{
+			if ( this.isHelper && helper_sequence.length )
+			{
+				return this.helper.getOffset(helper_sequence);
+			}
+			else
+			{
+				return this.offset;
+			}
 		}
 		
 		/**
@@ -308,6 +371,7 @@ package com.thirdsense.animation
 			if ( this._spritesheet ) {
 				this._spritesheet.dispose();
 				this._spritesheet = null;
+				if ( this.helper ) this.helper.dispose();
 				if ( spritesheet_only ) {
 					return void;
 				}
@@ -355,6 +419,41 @@ package com.thirdsense.animation
 			sq.dispose();
 			
 			return tp;			
+		}
+		
+		/**
+		 * Create a Texture Pack from a series of Sprite Sequences
+		 * @param	sprite_sequences	Array of sprite sequence objects
+		 * @param	pool	The name of the pool to be associated with the resulting texture pack
+		 * @param	sequence_names	Array of sequence names to apply to each sprite_sequence. If left as null, the inherited sequence name will apply if there is one
+		 * @return	A texture pack object
+		 */
+		
+		public static function createFromHelper( sprite_sequences:Array, pool:String, sequence:String = "", sequence_names:Array=null ):TexturePack
+		{
+			if ( sequence_names )
+			{
+				for ( var i:uint = 0; i < sequence_names.length; i++ )
+				{
+					var ss:SpriteSequence = sprite_sequences[i] as SpriteSequence;
+					ss.sequence = sequence_names[i];
+				}
+			}
+			
+			for ( i = 0; i < sprite_sequences.length; i++ )
+			{
+				ss = sprite_sequences[i] as SpriteSequence;
+				ss.pool = pool;
+			}
+			
+			var helper:SpriteSheetHelper = SpriteSheetHelper.consolidateSprites( sprite_sequences );
+			var tp:TexturePack = new TexturePack();
+			tp.pool = helper.pool;
+			tp.sequence = sequence;
+			tp.fromHelper( helper, true );
+			addTexturePack( tp );
+			
+			return tp;
 		}
 		
 		/**

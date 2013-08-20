@@ -37,6 +37,16 @@ package com.thirdsense.ui.starling
 		public static var createQuadBackground:Boolean = true;
 		
 		/**
+		 * Sets the tween type to use on invoking visual assets
+		 */
+		public static var tween_type:String = BTween.EASE_OUT_ELASTIC;
+		
+		/**
+		 * Sets the speed of the tween being used when invoking visual assets
+		 */
+		public static var tween_speed:int = 90;
+		
+		/**
 		 * Constructor
 		 */
 		
@@ -402,7 +412,7 @@ package com.thirdsense.ui.starling
 			spr.x = Starling.current.stage.stageWidth - spr.width >> 1;
 			spr.y = Starling.current.stage.stageHeight - spr.height >> 1;
 			
-			var tween:BTween = new BTween( spr, Math.round(90 * (LaunchPad.instance.nativeStage.frameRate / 60)), BTween.EASE_OUT_ELASTIC );
+			var tween:BTween = new BTween( spr, Math.round(tween_speed * (LaunchPad.instance.nativeStage.frameRate / 60)), tween_type );
 			tween.moveFromTo( spr.x + pt.x, spr.y + pt.y, spr.x, spr.y );
 			tween.scaleFromTo( 0, 1 );
 			tween.start();

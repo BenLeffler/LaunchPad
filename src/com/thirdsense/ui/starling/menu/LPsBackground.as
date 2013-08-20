@@ -32,6 +32,7 @@ package com.thirdsense.ui.starling.menu
 		
 		private function transitionTo( id:int ):void
 		{
+			var last:int = current_background;
 			current_background = id;
 			
 			var mc:MovieClip = DuplicateDisplayObject.duplicate(LPsBackground.source) as MovieClip;
@@ -48,10 +49,17 @@ package com.thirdsense.ui.starling.menu
 			img.name = tp.sequence;
 			this.addChild( img );
 			
-			var tween:BTween = new BTween( img, 20 );
-			tween.fadeFromTo( 0, 1 );
-			tween.onComplete = this.onTransitionComplete;
-			tween.start();
+			if ( last >= 0 )
+			{
+				var tween:BTween = new BTween( img, 20 );
+				tween.fadeFromTo( 0, 1 );
+				tween.onComplete = this.onTransitionComplete;
+				tween.start();
+			}
+			else
+			{
+				BTween.callOnNextFrame( this.onTransitionComplete );
+			}
 		}
 		
 		/**
@@ -137,6 +145,16 @@ package com.thirdsense.ui.starling.menu
 		public static function init( source:MovieClip ):void
 		{
 			LPsBackground.source = source;
+		}
+		
+		/**
+		 * Returns the integer id of the currently displayed background.
+		 * @return
+		 */
+		
+		public static function getCurrentMenuId():int
+		{
+			return current_background;
 		}
 		
 	}

@@ -532,7 +532,7 @@
 				{
 					if ( queue[i].urlrequest.url == url )
 					{
-						queue[i].bmpdata = BMP.bitmapData;
+						queue[i].bmpdata = BMP.bitmapData.clone();
 					}
 				}
 				
